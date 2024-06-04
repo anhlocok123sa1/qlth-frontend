@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="loginUser()">
+  <form @submit.prevent="loginUser">
     <a-card title="Đăng nhập" style="width: 100%">
       <div class="row mb-3">
         <div class="col-12 col-sm-3 text-start text-sm-end">
@@ -7,23 +7,23 @@
             <span class="text-danger me-1">*</span>
             <span
               :class="{
-                'text-danger': errors.email,
+                'text-danger': errors.ma_gv,
               }"
             ></span>
-            <span>Email:</span>
+            <span>Mã GV:</span>
           </label>
         </div>
         <div class="col-12 col-sm-5">
           <a-input
-            placeholder="Email"
+            placeholder="Mã GV"
             allow-clear
-            v-model:value="email"
+            v-model:value="ma_gv"
             :class="{
-              input_danger: errors.email,
+              input_danger: errors.ma_gv,
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.email" class="text-danger">{{ errors.email[0] }}</small>
+          <small v-if="errors.ma_gv" class="text-danger">{{ errors.ma_gv[0] }}</small>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
             <span class="text-danger me-1">*</span>
             <span
               :class="{
-                'text-danger': errors.password,
+                'text-danger': errors.mat_khau,
               }"
             ></span>
             <span>Mật khẩu:</span>
@@ -42,13 +42,13 @@
         <div class="col-12 col-sm-5">
           <a-input-password
             placeholder="Mật khẩu"
-            v-model:value="password"
+            v-model:value="mat_khau"
             :class="{
-              input_danger: errors.password,
+              input_danger: errors.mat_khau,
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.password" class="text-danger">{{ errors.password[0] }}</small>
+          <small v-if="errors.mat_khau" class="text-danger">{{ errors.mat_khau[0] }}</small>
         </div>
       </div>
 
@@ -79,15 +79,15 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const user = reactive({
-      email: '',
-      password: '',
+      ma_gv: '',
+      mat_khau: '',
     });
 
     const errors = ref({});
 
     const loginUser = () => {
       axios
-        .post('login', user)
+        .post('/login', user)
         .then((response) => {
           if (response.status === 200) {
             message.success('Đăng nhập thành công');

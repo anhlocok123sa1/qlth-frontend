@@ -15,6 +15,8 @@ import {
   List,
   Menu,
   message,
+  RadioGroup,
+  Radio,
   Select,
   Tabs,
   Table,
@@ -45,6 +47,8 @@ app.use(Input);
 app.use(InputPassword);
 app.use(List);
 app.use(Menu);
+app.use(Radio);
+app.use(RadioGroup);
 app.use(Select);
 app.use(Tabs);
 app.use(Table);

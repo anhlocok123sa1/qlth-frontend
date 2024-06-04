@@ -25,7 +25,7 @@
 
             <template v-if="column.key === 'actions'">
               <router-link
-                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
+                :to="{ name: 'admin-users-edit', params: { id: record.ma_gv } }"
               >
                 <a-button type="primary" class="me-sm-2">
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -48,7 +48,8 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
+import axios from '../../../axios.js';
 import { Modal } from "ant-design-vue";
 import { message } from "ant-design-vue";
 import { useMenu } from "../../../stores/use-menu.js";
@@ -104,10 +105,10 @@ export default defineComponent({
     const getUsers = () => {
       axios
         // .get("https://backend.quanlytruonghoc.id.vn/api/users")
-        .get("http://127.0.0.1:8000/api/taikhoangvs")
+        .get("taikhoangvs")
         .then((response) => {
           users.value = response.data;
-          console.log(response);
+          // console.log(response);
         })
         .catch((error) => {
           console.log(error);

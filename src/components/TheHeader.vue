@@ -20,6 +20,7 @@
       </div>
       <div class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end">
         <span>Admin</span>
+        <a-button type="primary" class="ms-2" @click="logout">Đăng xuất</a-button>
       </div>
 
       <div class="col-1 d-flex d-sm-none align-items-center justify-content-center">
@@ -42,12 +43,16 @@
 
 <script>
 import TheMenu from "../components/TheMenu.vue";
+import axios from '../axios'; // Import axios instance
+import { message } from 'ant-design-vue';
+import { useRouter } from 'vue-router';
 import { defineComponent, ref } from "vue";
 export default defineComponent({
   components: {
     TheMenu,
   },
   setup() {
+    const router = useRouter();
     const open = ref(false);
     const open_user = ref(false);
     const showDrawer = () => {
@@ -56,11 +61,28 @@ export default defineComponent({
     const showDrawerUser = () => {
       open_user.value = true;
     };
+
+    const logout = () => {
+      // message.success('Đăng xuất thành công');
+      // localStorage.removeItem('token');
+      // router.push({ name: 'login' });
+      axios.post('/logout')
+        .then(() => {
+          message.success('Đăng xuất thành công');
+          localStorage.removeItem('token');
+          router.push({ name: 'login' });
+        })
+        .catch(() => {
+          console.error('Logout failed');
+        });
+    };
+
     return {
       open,
       open_user,
       showDrawer,
       showDrawerUser,
+      logout
     };
   },
 });

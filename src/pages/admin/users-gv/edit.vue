@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="updateUsers()">
-    <a-card title="Cập nhật tài khoản" stlye="width: 100%">
+    <a-card title="Cập nhật tài khoản" style="width: 100%">
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="row">
@@ -24,54 +24,22 @@
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span> Tình trạng: </span>
-              </label>
-            </div>
-            <div class="col-12 col-sm-5">
-              <a-select
-                show-search
-                placeholder="Tình trạng"
-                style="width: 100%"
-                :options="users_status"
-                :filter-option="filterOption"
-                allow-clear
-                v-model:value="status_id"
-                :class="{
-                  select_danger: errors.status_id,
-                }"
-              ></a-select>
-
-              <div class="w-100"></div>
-              <small v-if="errors.status_id" class="text-danger">{{
-                errors.status_id[0]
-              }}</small>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-12 col-sm-3 text-start text-sm-end">
-              <label>
-                <span class="text-danger me-1">*</span>
-                <span
-                  :class="{
-                    'text-danger': errors.username,
-                  }"
-                ></span>
-                <span>Tên tài khoản:</span>
+                <span>Mã GV:</span>
               </label>
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                placeholder="Tên tài khoản"
+                placeholder="Mã GV"
                 allow-clear
-                v-model:value="username"
+                disabled
+                v-model:value="ma_gv"
                 :class="{
-                  input_danger: errors.username,
+                  input_danger: errors.ma_gv,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.username" class="text-danger">{{
-                errors.username[0]
+              <small v-if="errors.ma_gv" class="text-danger">{{
+                errors.ma_gv[0]
               }}</small>
             </div>
           </div>
@@ -80,11 +48,6 @@
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span
-                  :class="{
-                    'text-danger': errors.name,
-                  }"
-                ></span>
                 <span>Họ và tên:</span>
               </label>
             </div>
@@ -92,13 +55,15 @@
               <a-input
                 placeholder="Họ và tên"
                 allow-clear
-                v-model:value="name"
+                v-model:value="ten_gv"
                 :class="{
-                  input_danger: errors.name,
+                  input_danger: errors.ten_gv,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.name" class="text-danger">{{ errors.name[0] }}</small>
+              <small v-if="errors.ten_gv" class="text-danger">{{
+                errors.ten_gv[0]
+              }}</small>
             </div>
           </div>
 
@@ -106,11 +71,103 @@
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span
-                  :class="{
-                    'text-danger': errors.email,
-                  }"
-                ></span>
+                <span>Ngày sinh:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <!-- <a-input
+                placeholder="Ngày sinh"
+                allow-clear
+                v-model:value="ngay_sinh"
+                :class="{
+                  input_danger: errors.ngay_sinh,
+                }"
+              /> -->
+              <a-date-picker
+                placeholder="Ngày sinh"
+                style="width: 100%"
+                v-model:value="ngay_sinh"
+                :class="{ input_danger: errors.ngay_sinh }"
+              />
+              <div class="w-100"></div>
+              <small v-if="errors.ngay_sinh" class="text-danger">{{
+                errors.ngay_sinh[0]
+              }}</small>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span class="text-danger me-1">*</span>
+                <span>Phái:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <a-radio-group
+                v-model:value="phai"
+                :class="{ input_danger: errors.phai }"
+              >
+                <a-radio value="1">Nam</a-radio>
+                <a-radio value="0">Nữ</a-radio>
+              </a-radio-group>
+              <div class="w-100"></div>
+              <small v-if="errors.phai" class="text-danger">{{
+                errors.phai[0]
+              }}</small>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span class="text-danger me-1">*</span>
+                <span>Địa chỉ:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <a-input
+                placeholder="Địa chỉ"
+                allow-clear
+                v-model:value="dia_chi"
+                :class="{
+                  input_danger: errors.dia_chi,
+                }"
+              />
+              <div class="w-100"></div>
+              <small v-if="errors.dia_chi" class="text-danger">{{
+                errors.dia_chi[0]
+              }}</small>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span class="text-danger me-1">*</span>
+                <span>Số điện thoại:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <a-input
+                placeholder="Số điện thoại"
+                allow-clear
+                v-model:value="sdt"
+                :class="{
+                  input_danger: errors.sdt,
+                }"
+              />
+              <div class="w-100"></div>
+              <small v-if="errors.sdt" class="text-danger">{{
+                errors.sdt[0]
+              }}</small>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span class="text-danger me-1">*</span>
                 <span>Email:</span>
               </label>
             </div>
@@ -124,38 +181,8 @@
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.email" class="text-danger">{{ errors.email[0] }}</small>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-12 col-sm-3 text-start text-sm-end">
-              <label>
-                <span class="text-danger me-1">*</span>
-                <span
-                  :class="{
-                    'text-danger': errors.department_id,
-                  }"
-                ></span>
-                <span>Phòng ban:</span>
-              </label>
-            </div>
-            <div class="col-12 col-sm-5">
-              <a-select
-                show-search
-                placeholder="Phòng ban"
-                style="width: 100%"
-                :options="departments"
-                :filter-option="filterOption"
-                allow-clear
-                v-model:value="department_id"
-                :class="{
-                  select_danger: errors.department_id,
-                }"
-              ></a-select>
-              <div class="w-100"></div>
-              <small v-if="errors.department_id" class="text-danger">{{
-                errors.department_id[0]
+              <small v-if="errors.email" class="text-danger">{{
+                errors.email[0]
               }}</small>
             </div>
           </div>
@@ -163,19 +190,16 @@
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end"></div>
             <div class="col-12 col-sm-5">
-              <a-checkbox v-model:checked="change_password"> Đổi mật khẩu </a-checkbox>
+              <a-checkbox v-model:checked="change_password">
+                Đổi mật khẩu
+              </a-checkbox>
             </div>
           </div>
 
-          <div class="row mb-3" v-if="change_password == true">
+          <div class="row mb-3" v-if="change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span
-                  :class="{
-                    'text-danger': errors.password,
-                  }"
-                ></span>
                 <span>Mật khẩu:</span>
               </label>
             </div>
@@ -194,7 +218,7 @@
             </div>
           </div>
 
-          <div class="row mb-3" v-if="change_password == true">
+          <div class="row mb-3" v-if="change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -209,7 +233,7 @@
             </div>
           </div>
 
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span>Lần đăng nhập gần đây:</span>
@@ -229,7 +253,7 @@
             <div class="col-12 col-sm-5">
               <span>{{ change_password_at }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -241,7 +265,11 @@
             </a-button>
           </router-link>
 
-          <a-button type="primary" html-type="submit" class="ms-0 ms-sm-2 mt-3 mt-sm-0">
+          <a-button
+            type="primary"
+            html-type="submit"
+            class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+          >
             <span>Lưu</span>
           </a-button>
         </div>
@@ -249,12 +277,14 @@
     </a-card>
   </form>
 </template>
+
+
 <script>
 import { message } from "ant-design-vue";
 import { defineComponent, ref, reactive, toRefs } from "vue";
 import { useMenu } from "../../../stores/use-menu.js";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import axios from "../../../axios.js";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -267,40 +297,44 @@ export default defineComponent({
     const users_status = ref([]);
     const departments = ref([]);
     const users = reactive({
-      username: "",
-      name: "",
+      ma_gv: "",
+      ten_gv: "",
+      ngay_sinh: "",
+      phai: null,
+      dia_chi: "",
+      sdt: "",
       email: "",
       password: "",
       password_confirmation: "",
-      department_id: [],
-      status_id: [],
       change_password: false,
-      login_at: "",
-      change_password_at: "",
+      // login_at: "",
+      // change_password_at: "",
     });
 
     const errors = ref({});
-
+    const dateFormat = "YYYY-MM-DD";
     const getUsersEdit = () => {
       axios
-        // .get(`https://backend.quanlytruonghoc.id.vn/api/users/${route.params.id}/edit`)
-        .get(`http://127.0.0.1:8000/api/users/${route.params.id}/edit`)
+        .get(`taikhoangv/${route.params.id}/edit`)
         .then((response) => {
-          users.username = response.data.users.username;
-          users.name = response.data.users.name;
-          users.email = response.data.users.email;
-          users.department_id = response.data.users.department_id;
-          users.status_id = response.data.users.status_id;
+          users.ma_gv = response.data.ma_gv;
+          users.ten_gv = response.data.name;
+          users.ngay_sinh = dayjs(response.data.ngay_sinh, dateFormat);
+          // users.ngay_sinh = dayjs(response.data.ngay_sinh).format(dateFormat);
+          users.phai = response.data.phai ? "1" : "0";
+          // response.data.phai ? (users.phai = "Nam") : (users.phai = "Nữ");
+          users.dia_chi = response.data.dia_chi;
+          users.sdt = response.data.sdt;
+          users.email = response.data.email;
 
-          response.data.users.login_at
-            ? (users.login_at = dayjs(response.data.users.login_at).format('DD/MM/YYYY - HH:mm'))
-            : (users.login_at = "Chưa có lượt đăng nhập");
-          response.data.users.change_password_at
-            ? (users.change_password_at = dayjs(response.data.users.change_password_at).format('DD/MM/YYYY - HH:mm'))
-            : (users.change_password_at = "Chưa có lượt đổi mật khẩu");
-
-          users_status.value = response.data.users_status;
-          departments.value = response.data.departments;
+          // response.data.users.login_at
+          //   ? (users.login_at = dayjs(response.data.users.login_at).format('DD/MM/YYYY - HH:mm'))
+          //   : (users.login_at = "Chưa có lượt đăng nhập");
+          // response.data.users.change_password_at
+          //   ? (users.change_password_at = dayjs(response.data.users.change_password_at).format('DD/MM/YYYY - HH:mm'))
+          //   : (users.change_password_at = "Chưa có lượt đổi mật khẩu");
+          console.log(response);
+          console.log(users);
         })
         .catch((error) => {
           console.log(error);
@@ -309,12 +343,22 @@ export default defineComponent({
 
     const updateUsers = () => {
       axios
-        // .put(`https://backend.quanlytruonghoc.id.vn/api/users/${route.params.id}`, users)
-        .put(`http://127.0.0.1:8000/api/users/${route.params.id}`, users)
+        .put(`/taikhoangv/${route.params.id}`, {
+          ten_gv: users.ten_gv,
+          ngay_sinh: dayjs(users.ngay_sinh).format(dateFormat),
+          phai: users.phai == "1" ? 1 : 0,
+          dia_chi: users.dia_chi,
+          sdt: users.sdt,
+          email: users.email,
+          password: users.change_password ? users.password : null,
+          password_confirmation: users.change_password
+            ? users.password_confirmation
+            : null,
+        })
         .then((response) => {
           if (response.status == 200) {
-            message.success("Cập nhật thành công!")
-            router.push({name: "admin-users"})
+            message.success("Cập nhật thành công!");
+            router.push({ name: "admin-users" });
           }
         })
         .catch((error) => {
@@ -328,18 +372,18 @@ export default defineComponent({
     };
 
     getUsersEdit();
-
     return {
       users_status,
       departments,
       ...toRefs(users),
       errors,
       filterOption,
-      updateUsers
+      updateUsers,
     };
   },
 });
 </script>
+
 <style>
 .select_danger {
   border: 1px solid red;
