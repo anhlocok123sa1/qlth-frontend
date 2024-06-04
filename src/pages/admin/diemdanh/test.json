@@ -1,0 +1,65 @@
+{
+  "hocKy1": {
+    "monHoc1": {
+      "caDay1": {
+        "hocSinh1": {
+          "mssv": "161303071",
+          "firstname": "Lê Bảo",
+          "name": "Ân",
+          "class": "DS16DH-QL2"
+        },
+        "hocSinh2": {
+          "mssv": "181303310",
+          "firstname": "Phạm Thị Kim",
+          "name": "Anh",
+          "class": "DS18DH-QL3"
+        },
+        "hocSinh3": {
+          "mssv": "161303280",
+          "firstname": "Trần Đại",
+          "name": "Bão",
+          "class": "DS16DH-QL2"
+        },
+        "hocSinh4": {
+          "mssv": "181303073",
+          "firstname": "Bùi Thanh",
+          "name": "Bình",
+          "class": "DS18DH-QL2"
+        },
+        "hocSinh5": {
+          "mssv": "201303274",
+          "firstname": "Vũ Khắc Minh",
+          "name": "Châu",
+          "class": "DS20DH-QL4"
+        }
+      },
+      "caDay2": {
+        "hocSinh1": {
+          "mssv": "171303358",
+          "firstname": "Nguyễn Lê",
+          "name": "Đạt",
+          "class": "DS17DH-QL1"
+        },
+        "hocSinh2": {
+          "mssv": "181303091",
+          "firstname": "Lê Quốc",
+          "name": "Duy",
+          "class": "DS18DH-QL2"
+        },
+        // Thêm các học sinh khác nếu cần
+      }
+    },
+    "monHoc2": {
+      // Thêm thông tin các ca dạy cho môn học thứ 2 tương tự như môn học thứ 1
+    },
+    "monHoc3": {
+      // Thêm thông tin các ca dạy cho môn học thứ 3 tương tự như môn học thứ 1
+    }
+  },
+  "hocKy2": {
+    // Thêm thông tin các môn học cho học kỳ 2 tương tự như học kỳ 1
+  },
+  "hocKy3": {
+    // Thêm thông tin các môn học cho học kỳ 3 tương tự như học kỳ 1
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "dataSource":[
+    {
+      "key": 1,
+      "mssv": "161303071",
+      "firstname": "Lê Bảo",
+      "name": "Ân",
+      "class": "DS16DH-QL2",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 2,
+      "mssv": "181303310",
+      "firstname": "Phạm Thị Kim",
+      "name": "Anh",
+      "class": "DS18DH-QL3",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 3,
+      "mssv": "161303280",
+      "firstname": "Trần Đại",
+      "name": "Bão",
+      "class": "DS16DH-QL2",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 4,
+      "mssv": "181303073",
+      "firstname": "Bùi Thanh",
+      "name": "Bình",
+      "class": "DS18DH-QL2",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 5,
+      "mssv": "201303274",
+      "firstname": "Vũ Khắc Minh",
+      "name": "Châu",
+      "class": "DS20DH-QL4",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 6,
+      "mssv": "171303358",
+      "firstname": "Nguyễn Lê",
+      "name": "Đạt",
+      "class": "DS17DH-QL1",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    },
+    {
+      "key": 7,
+      "mssv": "181303091",
+      "firstname": "Lê Quốc",
+      "name": "Duy",
+      "class": "DS18DH-QL2",
+      "comat": false,
+      "cophep": false,
+      "khongphep": false,
+      "nhapsotiet": "",
+      "ghichu": "",
+      "vangcophep": 0,
+      "vangkhongphep": 0,
+      "tongsotiet": 60,
+      "tilevang": 0
+    }
+  ],
+  "columns": [
+    {
+      "title": "STT",
+      "dataIndex": "stt",
+      "key": "stt",
+      "fixed": true
+    },
+    {
+      "title": "MSSV",
+      "dataIndex": "mssv",
+      "key": "mssv"
+    },
+    {
+      "title": "Họ đệm",
+      "dataIndex": "firstname",
+      "key": "firstname"
+    },
+    {
+      "title": "Tên",
+      "dataIndex": "name",
+      "key": "name"
+    },
+    {
+      "title": "Lớp học",
+      "dataIndex": "class",
+      "key": "class"
+    },
+    {
+      "title": "Có phép",
+      "dataIndex": "cophep",
+      "key": "cophep"
+    },
+    {
+      "title": "Không phép",
+      "dataIndex": "khongphep",
+      "key": "khongphep"
+    },
+    {
+      "title": "Nhập số tiết",
+      "dataIndex": "nhapsotiet",
+      "key": "nhapsotiet"
+    },
+    {
+      "title": "Ghi chú",
+      "dataIndex": "ghichu",
+      "key": "ghichu"
+    },
+    {
+      "title": "Vắng có phép",
+      "dataIndex": "vangcophep",
+      "key": "vangcophep"
+    },
+    {
+      "title": "Vắng không phép",
+      "dataIndex": "vangkhongphep",
+      "key": "vangkhongphep"
+    },
+    {
+      "title": "Tổng số tiết",
+      "dataIndex": "tongsotiet",
+      "key": "tongsotiet"
+    },
+    {
+      "title": "Tỉ lệ vắng",
+      "dataIndex": "tilevang",
+      "key": "tilevang"
+    }
+  ]
+}
+
