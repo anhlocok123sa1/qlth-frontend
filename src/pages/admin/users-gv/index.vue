@@ -35,7 +35,7 @@
                 type="primary"
                 danger
                 class="mt-2"
-                @click="deleteUsers(record.id)"
+                @click="deleteUsers(record.ma_gv)"
               >
                 <i class="fa-solid fa-trash"></i>
               </a-button>
@@ -131,7 +131,7 @@ export default defineComponent({
         onOk() {
           axios
             // .delete(`https://backend.quanlytruonghoc.id.vn/api/users/${id}`)
-            .delete(`http://127.0.0.1:8000/api/users/${id}`)
+            .delete(`/taikhoangv/${id}`)
             .then((response) => {
               if (response.status == 200) {
                 message.success("Xóa tài khoản thành công!");
