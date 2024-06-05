@@ -100,7 +100,7 @@
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span>Phái:</span>
+                <span>Giới tính:</span>
               </label>
             </div>
             <div class="col-12 col-sm-5">
