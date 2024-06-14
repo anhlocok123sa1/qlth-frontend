@@ -1,8 +1,11 @@
+import { useRoute } from "vue-router";
+
 const admin = [
   {
     path: "/admin",
     name: "admin",
     component: () => import("../layouts/admin.vue"),
+    props: true,
     children: [
       //Quản lý users giao vien
       {
@@ -43,9 +46,10 @@ const admin = [
         path: "thoikhoabieu",
         name: "admin-thoikhoabieu",
         component: () => import("../pages/admin/thoikhoabieu/index.vue"),
+        props: (route) => ({ query: route.query.q }),
       },
     ],
-  }
+  },
 ];
 
 export default admin;

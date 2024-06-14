@@ -295,6 +295,7 @@ export default defineComponent({
             error.response.data.errors
           ) {
             errors.value = error.response.data.errors;
+            console.log(errors);
           }
         });
     };

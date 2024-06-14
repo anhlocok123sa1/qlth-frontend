@@ -1,7 +1,12 @@
 <template>
   <div class="container-fuild">
-    <div class="row text-white" style="background-color: #0c713d; padding: 1rem">
-      <div class="col-1 d-flex d-sm-none align-items-center justify-content-center">
+    <div
+      class="row text-white"
+      style="background-color: #0c713d; padding: 1rem"
+    >
+      <div
+        class="col-1 d-flex d-sm-none align-items-center justify-content-center"
+      >
         <span @click="showDrawer()">
           <i class="fa-solid fa-align-justify"></i>
         </span>
@@ -18,12 +23,18 @@
         />
         <span class="d-none d-sm-flex">Quản trị</span>
       </div>
-      <div class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end">
-        <span>Admin</span>
-        <a-button type="primary" class="ms-2" @click="logout">Đăng xuất</a-button>
+      <div
+        class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end"
+      >
+        <span>{{ userName }}</span>
+        <a-button type="primary" class="ms-2" @click="logout"
+          >Đăng xuất</a-button
+        >
       </div>
 
-      <div class="col-1 d-flex d-sm-none align-items-center justify-content-center">
+      <div
+        class="col-1 d-flex d-sm-none align-items-center justify-content-center"
+      >
         <span @click="showDrawerUser()">
           <i class="fa-regular fa-user"></i>
         </span>
@@ -43,10 +54,11 @@
 
 <script>
 import TheMenu from "../components/TheMenu.vue";
-import axios from '../axios'; // Import axios instance
-import { message } from 'ant-design-vue';
-import { useRouter } from 'vue-router';
-import { defineComponent, ref } from "vue";
+import axios from "../axios"; // Import axios instance
+import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
+import { defineComponent, ref, computed } from "vue";
+import { useUser } from "../stores/use-menu";
 export default defineComponent({
   components: {
     TheMenu,
@@ -63,26 +75,28 @@ export default defineComponent({
     };
 
     const logout = () => {
-      // message.success('Đăng xuất thành công');
-      // localStorage.removeItem('token');
-      // router.push({ name: 'login' });
-      axios.post('/logout')
+      axios
+        .post("/logout")
         .then(() => {
-          message.success('Đăng xuất thành công');
-          localStorage.removeItem('token');
-          router.push({ name: 'login' });
+          message.success("Đăng xuất thành công");
+          localStorage.removeItem("token");
+          router.push({ name: "login" });
         })
         .catch(() => {
-          console.error('Logout failed');
+          console.error("Logout failed");
         });
     };
+    const userStore = useUser();
+    const isAuthenticated = computed(() => userStore.isAuthenticated);
+    const userName = computed(() => userStore.gettengv);
 
     return {
       open,
       open_user,
       showDrawer,
       showDrawerUser,
-      logout
+      logout,
+      userName,
     };
   },
 });

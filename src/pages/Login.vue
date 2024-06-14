@@ -96,8 +96,9 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          errors.value = error.response.data.errors || {};
-          message.error('Đăng nhập thất bại');
+          errors.value = error.response.data.error || {};
+          console.log(errors);
+          message.error(errors.value);
         });
     };
 

@@ -25,20 +25,35 @@
 </template>
 
 <script>
-import { useMenu } from "../../../stores/use-menu.js";
-import { ref } from "vue";
+import { useMenu,useUser } from "../../../stores/use-menu.js";
+import { computed, defineComponent, ref } from "vue";
 import { columnstest, datatest } from "./data.json";
-// import axios from "axios";
-export default {
+import axios from "../../../axios.js";
+export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
+    const userStore = useUser();
+    const isAuthenticated = computed(() => userStore.isAuthenticated);
+    const magv = computed(() => userStore.getmagv);
+    console.log(magv);
+
+    const getLichGD = () => {
+      axios
+        .get(`http://127.0.0.1:8000/api/lichgd/${magv.value}`)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+
+    getLichGD();
 
     const value1 = ref("Học kỳ 1 năm học 2024-2025");
-
     const columns = columnstest;
     const data = datatest;
-
     const datas = ref([
       {
         label: "Học kỳ 1 năm học 2024-2025",
@@ -53,9 +68,7 @@ export default {
         value: "3",
       },
     ]);
-
     const handleChangevalue = ref();
-
     const handleChange = (value) => {
       handleChangevalue.value = value;
       // axios
@@ -69,6 +82,8 @@ export default {
       //     console.log(error);
       //   });
     };
+    
+
 
     return {
       datas,
@@ -76,8 +91,8 @@ export default {
       data,
       columns,
       handleChange,
-      handleChangevalue,
+      handleChangevalue
     };
   },
-};
+});
 </script>
