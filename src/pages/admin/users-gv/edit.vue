@@ -294,8 +294,6 @@ export default defineComponent({
 
     const router = useRouter();
     const route = useRoute();
-    const users_status = ref([]);
-    const departments = ref([]);
     const users = reactive({
       ma_gv: "",
       ten_gv: "",

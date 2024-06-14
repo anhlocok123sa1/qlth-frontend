@@ -1,29 +1,17 @@
 {
   "columnstest" : [
       {
-        "title": "MaMH",
+        "title": "Ma Mon Hoc",
         "dataIndex": "MaMH"
       },
       {
-        "title": "TenMH",
+        "title": "Ten Mon Hoc",
         "dataIndex": "TenMH",
         "width": 180
       },
       {
-        "title": "NMH",
-        "dataIndex": "NMH"
-      },
-      {
-        "title": "STC",
-        "dataIndex": "STC"
-      },
-      {
-        "title": "MaLop",
-        "dataIndex": "MaLop"
-      },
-      {
-        "title": "STCHP",
-        "dataIndex": "STCHP"
+        "title": "So Tiet",
+        "dataIndex": "SoTiet"
       },
       {
         "title": "Thu",

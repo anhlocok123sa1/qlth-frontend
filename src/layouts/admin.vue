@@ -1,11 +1,11 @@
 <template>
-  <TheHeader />
+  <TheHeader/>
   .
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-sm-3 d-none d-sm-flex">
         <a-list bordered style="width: 100%">
-          <TheMenu />
+          <TheMenu/>
           <template #header>
             <div>Bảng điều khiển</div>
           </template>
@@ -19,14 +19,30 @@
 </template>
 
 <script>
+import { onMounted, ref } from "vue";
+import axios from "../axios";
 import TheHeader from "../components/TheHeader.vue";
 import TheMenu from "../components/TheMenu.vue";
-import TheLayout from "../components/TheMenu.vue";
+import { useUser } from "../stores/use-menu";
 export default {
   components: {
     TheHeader,
     TheMenu,
   },
   middleware: "auth-admin",
+  setup() {
+    const userStore = useUser();
+    onMounted(() => {
+      axios
+        .get("/taikhoangv")
+        .then((response) => {
+          const userData = response.data.giaovien;
+          userStore.setUser(userData);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user details", error);
+        });
+    });
+  },
 };
 </script>
