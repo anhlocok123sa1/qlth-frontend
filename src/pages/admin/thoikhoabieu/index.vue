@@ -6,60 +6,80 @@
           ref="select"
           v-model:value="value1"
           :options="hocKy"
-          @change="handleChange"
+          @change="handleChangeSelect"
           >{{ hocKy.value }}</a-select
         >
       </a-card>
     </form>
     <a-card class="mt-2">
-      <a-table
-        :columns="columns"
-        :data-source="data"
-        :scroll="{ x: 1500, y: 300 }"
-      >
-        <template #bodyCell="{ column }">
-          <template v-if="column.key === 'action'">
-            <a>action</a>
-          </template>
-        </template>
-      </a-table>
-      <!-- {{ handleChangevalue }} -->
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Mã môn học</th>
+            <th>Tên môn học</th>
+            <th>Số tiết</th>
+            <th>Thứ</th>
+            <th>Tiết bắt đầu</th>
+            <th>Tiết kết thúc</th>
+            <th>Phòng</th>
+            <th>Tuần</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in data" :key="item.key">
+            <td>{{ item.MaMH }}</td>
+            <td>{{ item.TenMH }}</td>
+            <td>{{ item.SoTiet }}</td>
+            <td>{{ item.Thu }}</td>
+            <td>{{ item.TietBD }}</td>
+            <td>{{ item.ST }}</td>
+            <td>{{ item.Phong }}</td>
+            <td>{{ item.Tuan }}</td>
+            <td><a>action</a></td>
+          </tr>
+        </tbody>
+      </table>
     </a-card>
   </a-card>
 </template>
 
 <script>
 import { useMenu, useUser } from "../../../stores/use-menu.js";
-import { computed, defineComponent, ref, watch } from "vue";
-import { columnstest, datatest } from "./data.json";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+} from "vue";
 import axios from "../../../axios.js";
-// import axios from "axios";
 
 export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
     const userStore = useUser();
-    const isAuthenticated = computed(() => userStore.isAuthenticated);
     const magv = computed(() => userStore.getmagv);
-
     const hocKy = ref([]);
     const value1 = ref("");
     const data = ref([]);
-
+    const dataSource = ref();
     const getHocKy = () => {
-      axios
-        .get(`hocky/${magv.value}`)
-        .then((response) => {
-          extractHocKy(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (magv.value) {
+        axios
+          .get(`http://127.0.0.1:8000/api/hocky/${magv.value}`)
+          .then((response) => {
+            extractHocKy(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
 
     const extractHocKy = (lichValue) => {
-      // Transform the hoc_ky strings to the desired format
       const transformedHocKy = lichValue.map((item) => {
         const parts = item.match(/Học kỳ (\d) năm học (\d{4})-\d{4}/);
         if (parts) {
@@ -77,36 +97,85 @@ export default defineComponent({
 
       if (hocKy.value.length > 0) {
         value1.value = hocKy.value[0].value;
+        fetchLichGDByHocKy(value1.value); // Fetch data for the initial value
       }
     };
 
-    const columns = columnstest;
-
-    const handleChange = (value) => {
-      // fetchLichGDByHocKy(value);
-      console.log(value);
+    const fetchLichGDByHocKy = (hocKy) => {
+      if (magv.value) {
+        axios
+          .get(`http://127.0.0.1:8000/api/lichgd/${magv.value}?hoc_ky=${hocKy}`)
+          .then((response) => {
+            // data.value = response.data;
+            watchEffect(() => {
+              data.value = response.data;
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
 
-    // const fetchLichGDByHocKy = (hocKy) => {
-    //   axios
-    //     .get(`lichgd/${magv.value}?hoc_ky=${hocKy}`)
-    //     .then((response) => {
-    //       data.value = response.data;
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // };
-    getHocKy();
+    const handleChangeSelect = (value) => {
+      fetchLichGDByHocKy(value);
+    };
+    watch(magv, (newMagv) => {
+      if (newMagv) {
+        getHocKy();
+      }
+    });
+    watch(data, (newData) => {
+      if (newData) {
+        dataSource.value = data.value;
+      }
+    });
+    onMounted(() => {
+      getHocKy();
+    });
 
     return {
       value1,
       data,
-      columns,
-      handleChange,
+      handleChangeSelect,
       hocKy,
     };
   },
 });
 </script>
+<style>
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.styled-table thead tr {
+    background-color: #fafafa;
+    color: rgba(0, 0, 0, 0.88);
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+.styled-table th{
+    padding: 12px 15px;
+    font-weight: 600;
+}
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 1px solid #f0f0f0;
+}
+</style>
