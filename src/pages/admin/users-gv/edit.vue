@@ -371,8 +371,6 @@ export default defineComponent({
 
     getUsersEdit();
     return {
-      users_status,
-      departments,
       ...toRefs(users),
       errors,
       filterOption,
