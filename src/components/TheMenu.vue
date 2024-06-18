@@ -1,8 +1,13 @@
 <template>
   <a-menu v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys" mode="inline">
-    <a-menu-item key="admin-users">
-      <router-link :to="{ name: 'admin-users' }">
-        <span><i class="fa-solid fa-user me-1"></i>Tài khoản</span>
+    <a-menu-item key="admin-users-gv">
+      <router-link :to="{ name: 'admin-users-gv' }">
+        <span><i class="fa-solid fa-user me-1"></i>Tài khoản giáo viên</span>
+      </router-link>
+    </a-menu-item>
+    <a-menu-item key="admin-users-sv">
+      <router-link :to="{ name: 'admin-users-sv' }">
+        <span><i class="fa-solid fa-user me-1"></i>Tài khoản sinh viên</span>
       </router-link>
     </a-menu-item>
     <a-menu-item key="admin-diemdanh">

@@ -7,23 +7,23 @@
             <span class="text-danger me-1">*</span>
             <span
               :class="{
-                'text-danger': errors.ma_gv,
+                'text-danger': errors.username,
               }"
             ></span>
-            <span>Mã GV:</span>
+            <span>Username:</span>
           </label>
         </div>
         <div class="col-12 col-sm-5">
           <a-input
-            placeholder="Mã GV"
+            placeholder="Username"
             allow-clear
-            v-model:value="ma_gv"
+            v-model:value="username"
             :class="{
-              input_danger: errors.ma_gv,
+              input_danger: errors.username,
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.ma_gv" class="text-danger">{{ errors.ma_gv[0] }}</small>
+          <small v-if="errors.username" class="text-danger">{{ errors.username[0] }}</small>
         </div>
       </div>
 
@@ -33,32 +33,32 @@
             <span class="text-danger me-1">*</span>
             <span
               :class="{
-                'text-danger': errors.mat_khau,
+                'text-danger': errors.password,
               }"
             ></span>
-            <span>Mật khẩu:</span>
+            <span>Password:</span>
           </label>
         </div>
         <div class="col-12 col-sm-5">
           <a-input-password
-            placeholder="Mật khẩu"
-            v-model:value="mat_khau"
+            placeholder="Password"
+            v-model:value="password"
             :class="{
-              input_danger: errors.mat_khau,
+              input_danger: errors.password,
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.mat_khau" class="text-danger">{{ errors.mat_khau[0] }}</small>
+          <small v-if="errors.password" class="text-danger">{{ errors.password[0] }}</small>
         </div>
       </div>
 
       <div class="row">
         <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
-          <router-link :to="{ name: 'admin-users' }">
+          <!-- <router-link :to="{ name: 'admin-users' }">
             <a-button class="w-100">
               <span>Hủy</span>
             </a-button>
-          </router-link>
+          </router-link> -->
 
           <a-button type="primary" html-type="submit" class="ms-0 ms-sm-2 mt-3 mt-sm-0">
             <span>Đăng nhập</span>
@@ -79,8 +79,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const user = reactive({
-      ma_gv: '',
-      mat_khau: '',
+      username: '',
+      password: '',
     });
 
     const errors = ref({});
@@ -92,7 +92,12 @@ export default defineComponent({
           if (response.status === 200) {
             message.success('Đăng nhập thành công');
             localStorage.setItem('token', response.data.token);
-            router.push({ name: 'admin-users' });
+            console.log(response.data);
+            if (response.data.role == 'teacher') {
+              router.push({ name: 'admin-users-gv' });
+            } else if(response.data.role == 'student') {
+              router.push({ name: 'admin-users-sv' });
+            }
           }
         })
         .catch((error) => {

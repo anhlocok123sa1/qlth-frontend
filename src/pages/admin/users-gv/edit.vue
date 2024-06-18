@@ -259,7 +259,7 @@
 
       <div class="row">
         <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
-          <router-link :to="{ name: 'admin-users' }">
+          <router-link :to="{ name: 'admin-users-gv' }">
             <a-button class="w-100">
               <span>Hủy</span>
             </a-button>
@@ -290,7 +290,7 @@ import dayjs from "dayjs";
 export default defineComponent({
   setup() {
     const store = useMenu();
-    store.onSelectedKeys(["admin-users"]);
+    store.onSelectedKeys(["admin-users-gv"]);
 
     const router = useRouter();
     const route = useRoute();
@@ -318,21 +318,10 @@ export default defineComponent({
           users.ma_gv = response.data.ma_gv;
           users.ten_gv = response.data.name;
           users.ngay_sinh = dayjs(response.data.ngay_sinh, dateFormat);
-          // users.ngay_sinh = dayjs(response.data.ngay_sinh).format(dateFormat);
           users.phai = response.data.phai ? "1" : "0";
-          // response.data.phai ? (users.phai = "Nam") : (users.phai = "Nữ");
           users.dia_chi = response.data.dia_chi;
           users.sdt = response.data.sdt;
           users.email = response.data.email;
-
-          // response.data.users.login_at
-          //   ? (users.login_at = dayjs(response.data.users.login_at).format('DD/MM/YYYY - HH:mm'))
-          //   : (users.login_at = "Chưa có lượt đăng nhập");
-          // response.data.users.change_password_at
-          //   ? (users.change_password_at = dayjs(response.data.users.change_password_at).format('DD/MM/YYYY - HH:mm'))
-          //   : (users.change_password_at = "Chưa có lượt đổi mật khẩu");
-          console.log(response);
-          console.log(users);
         })
         .catch((error) => {
           console.log(error);
@@ -356,7 +345,7 @@ export default defineComponent({
         .then((response) => {
           if (response.status == 200) {
             message.success("Cập nhật thành công!");
-            router.push({ name: "admin-users" });
+            router.push({ name: "admin-users-gv" });
           }
         })
         .catch((error) => {

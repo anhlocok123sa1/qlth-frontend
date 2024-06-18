@@ -18,18 +18,21 @@ export const useMenu = defineStore("menuId", {
 export const useUser = defineStore("user", {
   state: () => ({
     user: null,
+    role: "",
   }),
   actions: {
-    setUser(data) {
+    setUser(data, role) {
       this.user = data;
+      this.role = role;
     },
     clearUser() {
       this.user = null;
+      this.role = "";
     },
   },
   getters: {
     isAuthenticated: (state) => !!state.user,
-    getmagv: (state) => (state.user ? state.user.ma_gv : ""),
-    gettengv: (state) => (state.user ? state.user.ten_gv : ""),
+    getma: (state) => (state.user ? state.user.ma : ""),
+    getten: (state) => (state.user ? state.user.ten : ""),
   },
 });

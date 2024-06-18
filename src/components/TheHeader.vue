@@ -87,8 +87,8 @@ export default defineComponent({
         });
     };
     const userStore = useUser();
-    const isAuthenticated = computed(() => userStore.isAuthenticated);
-    const userName = computed(() => userStore.gettengv);
+    console.log(userStore);
+    const userName = computed(() => userStore.getten);
 
     return {
       open,

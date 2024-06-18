@@ -96,7 +96,7 @@ const cityData = {
     "Nhập môn lập trình",
   ],
 };
-import { useMenu } from "../../../stores/use-menu.js";
+import { useMenu, useUser } from "../../../stores/use-menu.js";
 import { defineComponent, reactive, toRefs, computed, watch, ref, unref } from "vue";
 import data from "./data.json";
 import { Radio, Table } from "ant-design-vue";
@@ -105,6 +105,9 @@ export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-diemdanh"]);
+    const userStore = useUser();
+    const magv = computed(() => userStore.getmagv);
+    const hocKy = ref([]);
 
     const province = provinceData[0];
     const state = reactive({
