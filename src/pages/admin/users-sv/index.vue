@@ -1,8 +1,8 @@
 <template>
-  <a-card title="Tài khoản giáo viên" style="width: 100%">
+  <a-card title="Tài khoản sinh viên" style="width: 100%">
     <div class="row mb-3">
       <div class="col-12 d-flex justify-content-end">
-        <router-link :to="{ name: 'admin-users-gv-create' }">
+        <router-link :to="{ name: 'admin-users-sv-create' }">
           <a-button type="primary">
             <i class="fa-solid fa-plus"></i>
           </a-button>
@@ -11,11 +11,17 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
+        <a-table
+          :dataSource="users"
+          :columns="columns"
+          :pagination="pagination"
+          :loading="loading"
+          :scroll="{ x: 576 }"
+          @change="handleTableChange"
+        >
           <template #bodyCell="{ column, index, record }">
             <template v-if="column.key === 'index'">
-              <span>{{ index + 1 }}</span>
-              <!-- <span>{{ record.id }}</span> -->
+              <span>{{ (currentPage - 1) * pageSize + index + 1 }}</span>
             </template>
 
             <template v-if="column.key == 'sex'">
@@ -25,7 +31,10 @@
 
             <template v-if="column.key === 'actions'">
               <router-link
-                :to="{ name: 'admin-users-gv-edit', params: { id: record.ma_gv } }"
+                :to="{
+                  name: 'admin-users-sv-edit',
+                  params: { id: record.ma_sv },
+                }"
               >
                 <a-button type="primary" class="me-sm-2">
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -35,7 +44,7 @@
                 type="primary"
                 danger
                 class="mt-2"
-                @click="deleteUsers(record.ma_gv)"
+                @click="deleteUsers(record.ma_sv)"
               >
                 <i class="fa-solid fa-trash"></i>
               </a-button>
@@ -48,20 +57,24 @@
 </template>
 
 <script>
-// import axios from "axios";
-import axios from '../../../axios.js';
+import axios from "../../../axios.js";
 import { Modal } from "ant-design-vue";
 import { message } from "ant-design-vue";
 import { useMenu } from "../../../stores/use-menu.js";
-import { defineComponent, ref, createVNode } from "vue";
+import { defineComponent, ref, createVNode, computed } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   setup() {
     const store = useMenu();
-    store.onSelectedKeys(["admin-users-gv"]);
+    store.onSelectedKeys(["admin-users-sv"]);
 
     const users = ref([]);
+    const totalUsers = ref(0);
+    const currentPage = ref(1);
+    const pageSize = ref(10);
+    const loading = ref(false);
+
     const columns = [
       {
         title: "#",
@@ -71,20 +84,14 @@ export default defineComponent({
       },
       {
         title: "Tài khoản",
-        dataIndex: "ma_gv",
+        dataIndex: "ma_sv",
         key: "username",
       },
       {
         title: "Họ tên",
-        dataIndex: "name",
+        dataIndex: "ten_sv",
         key: "name",
       },
-      // {
-      //   title: "Phòng ban",
-      //   dataIndex: "departments",
-      //   key: "departments",
-      //   responsive: ["sm"],
-      // },
       {
         title: "Email",
         dataIndex: "email",
@@ -102,15 +109,39 @@ export default defineComponent({
       },
     ];
 
-    const getUsers = () => {
+    const getUsers = (params = {}) => {
+      loading.value = true;
       axios
-        .get("taikhoangvs")
+        .get("taikhoansvs", { params })
         .then((response) => {
-          users.value = response.data;
+          users.value = response.data.data;
+          totalUsers.value = response.data.total;
+          currentPage.value = response.data.current_page;
+          pageSize.value = response.data.per_page;
+          loading.value = false;
         })
         .catch((error) => {
           console.log(error);
+          loading.value = false;
         });
+    };
+
+    const pagination = computed(() => ({
+      total: totalUsers.value,
+      current: currentPage.value,
+      pageSize: pageSize.value,
+      showSizeChanger: false,
+    }));
+
+    const handleTableChange = (pagination, filters, sorter) => {
+      const params = {
+        page: pagination.current,
+        per_page: pagination.pageSize,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters,
+      };
+      getUsers(params);
     };
 
     const deleteUsers = (id) => {
@@ -119,18 +150,17 @@ export default defineComponent({
         icon: createVNode(ExclamationCircleOutlined),
         onOk() {
           axios
-            .delete(`/taikhoangv/${id}`)
+            .delete(`/taikhoansv/${id}`)
             .then((response) => {
               if (response.status == 200) {
                 message.success("Xóa tài khoản thành công!");
-                getUsers();
+                getUsers({ page: currentPage.value, per_page: pageSize.value });
               }
             })
             .catch((error) => {
               console.log(error);
             });
         },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         cancelText: "Hủy",
         onCancel() {
           Modal.destroyAll();
@@ -138,8 +168,19 @@ export default defineComponent({
       });
     };
 
-    getUsers();
-    return { users, columns, deleteUsers };
+    getUsers({ page: currentPage.value, per_page: pageSize.value });
+
+    return {
+      users,
+      columns,
+      currentPage,
+      pageSize,
+      totalUsers,
+      loading,
+      handleTableChange,
+      deleteUsers,
+      pagination,
+    };
   },
 });
 </script>

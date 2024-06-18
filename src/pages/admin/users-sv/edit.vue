@@ -1,6 +1,6 @@
 <template>
-  <form @submit.prevent="createGiaoVien()">
-    <a-card title="Tạo mới tài khoản giáo viên" style="width: 100%">
+  <form @submit.prevent="updateUsers()">
+    <a-card title="Cập nhật tài khoản sinh viên" style="width: 100%">
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="row">
@@ -20,30 +20,30 @@
           </div>
         </div>
         <div class="col-12 col-sm-8">
-          <!-- Mã GV -->
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
-                <span>Mã GV:</span>
+                <span>Mã số sinh viên:</span>
               </label>
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                v-model:value="taikhoangv.ma_gv"
                 placeholder="Mã GV"
                 allow-clear
+                disabled
+                v-model:value="ma_sv"
                 :class="{
-                  input_danger: errors.ma_gv,
+                  input_danger: errors.ma_sv,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.ma_gv" class="text-danger">{{
-                errors.ma_gv[0]
+              <small v-if="errors.ma_sv" class="text-danger">{{
+                errors.ma_sv[0]
               }}</small>
             </div>
           </div>
-          <!-- Họ và tên -->
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -53,20 +53,44 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                v-model:value="taikhoangv.ten_gv"
                 placeholder="Họ và tên"
                 allow-clear
+                v-model:value="ten_sv"
                 :class="{
-                  input_danger: errors.ten_gv,
+                  input_danger: errors.ten_sv,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.ten_gv" class="text-danger">{{
-                errors.ten_gv[0]
+              <small v-if="errors.ten_sv" class="text-danger">{{
+                errors.ten_sv[0]
               }}</small>
             </div>
           </div>
-          <!-- Ngày sinh -->
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span class="text-danger me-1">*</span>
+                <span>Lớp:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <a-select
+                ref="select"
+                show-search
+                v-model:value="ma_lop"
+                style="width: 130px"
+                :options="allMaLop"
+                @change="handleChangeSelect"
+                >{{ ma_lop }}</a-select
+              >
+              <div class="w-100"></div>
+              <small v-if="errors.ma_lop" class="text-danger">{{
+                errors.ma_lop[0]
+              }}</small>
+            </div>
+          </div>
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -76,9 +100,9 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-date-picker
-                v-model:value="taikhoangv.ngay_sinh"
                 placeholder="Ngày sinh"
                 style="width: 100%"
+                v-model:value="ngay_sinh"
                 :class="{ input_danger: errors.ngay_sinh }"
               />
               <div class="w-100"></div>
@@ -87,7 +111,7 @@
               }}</small>
             </div>
           </div>
-          <!-- Giới tính -->
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -97,7 +121,7 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-radio-group
-                v-model:value="taikhoangv.phai"
+                v-model:value="phai"
                 :class="{ input_danger: errors.phai }"
               >
                 <a-radio value="1">Nam</a-radio>
@@ -109,7 +133,7 @@
               }}</small>
             </div>
           </div>
-          <!-- Địa chỉ -->
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -119,9 +143,9 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                v-model:value="taikhoangv.dia_chi"
                 placeholder="Địa chỉ"
                 allow-clear
+                v-model:value="dia_chi"
                 :class="{
                   input_danger: errors.dia_chi,
                 }"
@@ -132,7 +156,7 @@
               }}</small>
             </div>
           </div>
-          <!-- Số điện thoại -->
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -142,9 +166,9 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                v-model:value="taikhoangv.sdt"
                 placeholder="Số điện thoại"
                 allow-clear
+                v-model:value="sdt"
                 :class="{
                   input_danger: errors.sdt,
                 }"
@@ -155,7 +179,7 @@
               }}</small>
             </div>
           </div>
-          <!-- Email -->
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -165,9 +189,9 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input
-                v-model:value="taikhoangv.email"
                 placeholder="Email"
                 allow-clear
+                v-model:value="email"
                 :class="{
                   input_danger: errors.email,
                 }"
@@ -178,8 +202,17 @@
               }}</small>
             </div>
           </div>
-          <!-- Mật khẩu -->
+
           <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end"></div>
+            <div class="col-12 col-sm-5">
+              <a-checkbox v-model:checked="change_password">
+                Đổi mật khẩu
+              </a-checkbox>
+            </div>
+          </div>
+
+          <div class="row mb-3" v-if="change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -188,20 +221,20 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input-password
-                v-model:value="taikhoangv.mat_khau"
                 placeholder="Mật khẩu"
+                v-model:value="password"
                 :class="{
-                  input_danger: errors.mat_khau,
+                  input_danger: errors.password,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.mat_khau" class="text-danger">{{
-                errors.mat_khau[0]
+              <small v-if="errors.password" class="text-danger">{{
+                errors.password[0]
               }}</small>
             </div>
           </div>
-          <!-- Xác nhận mật khẩu -->
-          <div class="row mb-3">
+
+          <div class="row mb-3" v-if="change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -210,21 +243,44 @@
             </div>
             <div class="col-12 col-sm-5">
               <a-input-password
-                v-model:value="taikhoangv.password_confirmation"
                 placeholder="Xác nhận mật khẩu"
+                v-model:value="password_confirmation"
               />
             </div>
           </div>
+
+          <!-- <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span>Lần đăng nhập gần đây:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <span>{{ login_at }}</span>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span>Lần đổi mật khẩu gần đây:</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-5">
+              <span>{{ change_password_at }}</span>
+            </div>
+          </div> -->
         </div>
       </div>
-      <!-- Nút hành động -->
+
       <div class="row">
         <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
-          <router-link :to="{ name: 'admin-users-gv' }">
+          <router-link :to="{ name: 'admin-users-sv' }">
             <a-button class="w-100">
               <span>Hủy</span>
             </a-button>
           </router-link>
+
           <a-button
             type="primary"
             html-type="submit"
@@ -241,74 +297,119 @@
 
 <script>
 import { message } from "ant-design-vue";
-import { defineComponent, ref, reactive, toRefs } from "vue";
+import { defineComponent, ref, reactive, toRefs, computed } from "vue";
 import { useMenu } from "../../../stores/use-menu.js";
-import axios from "../../../axios.js"; // Import axios instance
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import axios from "../../../axios.js";
 import dayjs from "dayjs";
 
 export default defineComponent({
   setup() {
     const store = useMenu();
-    store.onSelectedKeys(["admin-users-gv"]);
+    store.onSelectedKeys(["admin-users-sv"]);
 
     const router = useRouter();
-
-    // Khởi tạo đối tượng taikhoangv với các thuộc tính cần thiết
-    const taikhoangv = reactive({
-      ma_gv: "",
-      ten_gv: "",
+    const route = useRoute();
+    const allMaLop = ref([]);
+    const users = reactive({
+      ma_sv: "",
+      ten_sv: "",
       ngay_sinh: "",
       phai: null,
       dia_chi: "",
       sdt: "",
       email: "",
-      mat_khau: "",
+      ma_lop: "",
+      password: "",
       password_confirmation: "",
+      change_password: false,
+      // login_at: "",
+      // change_password_at: "",
     });
 
     const errors = ref({});
-
-    const createGiaoVien = () => {
+    const dateFormat = "YYYY-MM-DD";
+    const getUsersEdit = () => {
       axios
-        .post("/taikhoangv", {
-          ma_gv: taikhoangv.ma_gv,
-          ten_gv: taikhoangv.ten_gv,
-          ngay_sinh: dayjs(taikhoangv.ngay_sinh).format("YYYY-MM-DD"),
-          phai: taikhoangv.phai,
-          dia_chi: taikhoangv.dia_chi,
-          sdt: taikhoangv.sdt,
-          email: taikhoangv.email,
-          password: taikhoangv.mat_khau,
-          password_confirmation: taikhoangv.password_confirmation
-        })
+        .get(`taikhoansv/${route.params.id}/edit`)
         .then((response) => {
-          if (response.status === 200) {
-            message.success("Tạo mới thành công");
-            router.push({ name: "admin-users-gv" });
-          }
+          users.ma_sv = response.data.ma_sv;
+          users.ten_sv = response.data.ten_sv;
+          users.ngay_sinh = dayjs(response.data.ngay_sinh, dateFormat);
+          users.phai = response.data.phai ? "1" : "0";
+          users.dia_chi = response.data.dia_chi;
+          users.sdt = response.data.sdt;
+          users.email = response.data.email;
+          users.ma_lop = response.data.ma_lop;
         })
         .catch((error) => {
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.errors
-          ) {
-            errors.value = error.response.data.errors;
-            console.log(errors);
-          }
+          console.log(error);
         });
     };
 
+    const getLop = () => {
+      axios
+        .get(`lop`)
+        .then((response) => {
+          allMaLop.value = response.data.map((item) => {
+            return {
+              label: item.ma_lop,
+              value: item.ma_lop,
+            };
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    const updateUsers = () => {
+      axios
+        .put(`/taikhoansv/${route.params.id}`, {
+          ten_sv: users.ten_sv,
+          ngay_sinh: dayjs(users.ngay_sinh).format(dateFormat),
+          ma_lop: users.ma_lop,
+          phai: users.phai == "1" ? 1 : 0,
+          dia_chi: users.dia_chi,
+          sdt: users.sdt,
+          email: users.email,
+          password: users.change_password ? users.password : null,
+          password_confirmation: users.change_password
+            ? users.password_confirmation
+            : null,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            message.success("Cập nhật thành công!");
+            router.push({ name: "admin-users-sv" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          errors.value = error.response.data.errors;
+        });
+    };
+
+    const filterOption = (input, option) => {
+      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    };
+
+    getUsersEdit();
+
+    const handleChangeSelect = (value) => {
+      users.ma_lop = value
+    };
+    getLop();
     return {
-      taikhoangv,
+      ...toRefs(users),
       errors,
-      createGiaoVien,
+      filterOption,
+      updateUsers,
+      allMaLop,
+      handleChangeSelect
     };
   },
 });
 </script>
-
 
 <style>
 .select_danger {

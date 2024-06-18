@@ -34,10 +34,16 @@ export default {
     const userStore = useUser();
     onMounted(() => {
       axios
-        .get("/taikhoangv")
+        .get("/getusertoken")
         .then((response) => {
-          const userData = response.data.giaovien;
-          userStore.setUser(userData);
+          console.log(response);
+          if (response.data.giaovien) {
+            const userData = response.data.giaovien;
+            userStore.setUser(userData, 'giaovien');
+          } else if (response.data.sinhvien) {
+            const userData = response.data.sinhvien;
+            userStore.setUser(userData, 'sinhvien');
+          }
         })
         .catch((error) => {
           console.error("Failed to fetch user details", error);
