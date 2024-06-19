@@ -6,6 +6,7 @@ const admin = [
     name: "admin",
     component: () => import("../layouts/admin.vue"),
     props: true,
+    meta: { requiresAuth: true },
     children: [
       //Quản lý users giao vien
       {

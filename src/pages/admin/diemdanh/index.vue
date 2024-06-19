@@ -131,24 +131,11 @@ export default defineComponent({
       const formattedDate = state.selectedDate
         ? new Date(state.selectedDate).toLocaleDateString()
         : "";
-      console.log("Province:", state.province);
-      console.log("Selected Date:", formattedDate);
-      console.log("Second City:", state.secondCity);
     };
     //Table
     const selectedRowKeys = ref([]);
-    // const test = () => {
-    //   state.data.dataSource.map(val => {
-    //     console.log(val.comat);
-    //     if (val.comat) {
-    //       selectedRowKeys.value.push(val.key)
-    //     }
-    //   })
-    // }
-    // test()
 
     const onSelectChange = (changableRowKeys) => {
-      console.log("selectedRowKeys changed: ", changableRowKeys);
       selectedRowKeys.value = changableRowKeys;
     };
 
@@ -169,12 +156,6 @@ export default defineComponent({
     }
 
     const toggleCoMat = (record) => {
-      // const isSelected = selectedRowKeys.value.includes(record.key);
-      // if (isSelected) {
-      //   selectedRowKeys.value = selectedRowKeys.value.filter(key => key !== record.key);
-      // } else {
-      //   selectedRowKeys.value.push(record.key);
-      // }
       record.comat = !record.comat;
       if (record.comat) {
         record.cophep = false;
@@ -225,9 +206,7 @@ export default defineComponent({
     });
 
     const sendLish = () => {
-    // console.log(state);
       const collectedData = state.data.dataSource
-    // .filter((record, index) => selectedRowKeys.value.includes(index+1))
     .map(record => ({
       key: record.key,
       mssv: record.mssv,
@@ -237,7 +216,6 @@ export default defineComponent({
       comat: record.comat
     }));
 
-      console.log('Submitted data:', collectedData);
       // Gửi dữ liệu lên server hoặc xử lý tiếp theo tại đây
       // Ví dụ gửi dữ liệu bằng axios
       /*
