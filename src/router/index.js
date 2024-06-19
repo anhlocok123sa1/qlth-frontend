@@ -31,26 +31,39 @@ async function validateToken(token) {
 
 // Navigation guard to check for logged-in users
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiresAuth) {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const isValidToken = await validateToken(token);
-      if (isValidToken) {
-        next();
-      } else {
-        localStorage.removeItem('token');
-        next({ name: 'login' });
-      }
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (token) {
+    const isValidToken = await validateToken(token);
+
+    if (!isValidToken) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      return next({ name: "login" });
     } else {
-      if (to.meta.requiresAuth) {
-        next({ name: "login" });
+      if (to.path.startsWith("/admin") && role !== "teacher") {
+        return next({ name: "login" });
+      }
+
+      if (role === "student" && !to.path.startsWith("/users")) {
+        return next({ name: "users-sv" });
+      } else if (role === "teacher" && !to.path.startsWith("/admin")) {
+        return next({ name: "admin" });
       } else {
-        next();
+        return next(); // Proceed if the role and path match
       }
     }
   } else {
-    next();
+    if (to.meta.requiresAuth || to.name === undefined) {
+      return next({ name: "login" });
+    } else {
+      return next(); // Proceed if the route does not require authentication
+    }
   }
 });
+
+
+
 
 export default router;

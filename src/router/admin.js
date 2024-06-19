@@ -1,4 +1,11 @@
-import { useRoute } from "vue-router";
+function checkAdminRole(to, from, next) {
+  const role = localStorage.getItem("role");
+  if (role === "teacher") {
+    next();
+  } else {
+    next({ name: "login" }); // Redirect to login if the role is not 'teacher'
+  }
+}
 
 const admin = [
   {
@@ -7,6 +14,7 @@ const admin = [
     component: () => import("../layouts/admin.vue"),
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: checkAdminRole,
     children: [
       //Quản lý users giao vien
       {
@@ -24,7 +32,7 @@ const admin = [
         name: "admin-users-gv-edit",
         component: () => import("../pages/admin/users-gv/edit.vue"),
       },
-      
+
       //Quản lý users sinh vien
       {
         path: "users-sv",

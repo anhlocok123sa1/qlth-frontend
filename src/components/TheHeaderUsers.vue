@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div
       class="row text-white"
-      style="background-color: #000000; padding: 1rem"
+      style="background-color: #0c713d; padding: 1rem"
     >
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
@@ -101,6 +101,7 @@ const logout = async () => {
     );
     localStorage.removeItem("token");
     localStorage.removeItem("ma_sv");
+    localStorage.removeItem("role");
     console.log("Đăng xuất thành công");
     router.push("/login");
   } catch (error) {

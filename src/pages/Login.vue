@@ -100,11 +100,9 @@ export default defineComponent({
           if (response.status === 200) {
             message.success("Đăng nhập thành công");
             localStorage.setItem("token", response.data.token);
-            const token = response.data.token;
-            const role = response.data.role;
-            window.user = { token, role };
+            localStorage.setItem("role", response.data.role);
             if (response.data.role == "teacher") {
-              router.push({ name: "admin-users-gv" });
+              router.push({ name: "admin" });
             } else if (response.data.role == "student") {
               router.push({ name: "users-sv" });
             }

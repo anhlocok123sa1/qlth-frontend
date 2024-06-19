@@ -80,6 +80,7 @@ export default defineComponent({
         .then(() => {
           message.success("Đăng xuất thành công");
           localStorage.removeItem("token");
+          localStorage.removeItem("role");
           window.user = null;
           router.push({ name: "login" });
         })
