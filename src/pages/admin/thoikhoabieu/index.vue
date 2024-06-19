@@ -35,7 +35,7 @@
             <td>{{ item.TietBD }}</td>
             <td>{{ item.ST }}</td>
             <td>{{ item.Phong }}</td>
-            <td>{{ item.Tuan }}</td>
+            <td>{{ item.NgayBD }} - {{ item.NgayKT }}</td>
             <td><a>action</a></td>
           </tr>
         </tbody>
@@ -61,36 +61,29 @@ export default defineComponent({
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
     const userStore = useUser();
-    const magv = computed(() => userStore.getmagv);
+    const magv = computed(() => userStore.getma);
     const hocKy = ref([]);
     const value1 = ref("");
     const data = ref([]);
     const dataSource = ref();
+
     const getHocKy = () => {
       if (magv.value) {
         axios
-          .get(`http://127.0.0.1:8000/api/hocky/${magv.value}`)
-          .then((response) => {
-            extractHocKy(response.data);
-          })
+        .get(`hocky/${magv.value}`)
+        .then((response) => {
+          extractHocKy(response.data);
+          console.log(response);
+        })
           .catch((error) => {
-            console.log(error);
-          });
+          console.log(error);
+        });
       }
     };
 
     const extractHocKy = (lichValue) => {
       const transformedHocKy = lichValue.map((item) => {
-        const parts = item.match(/Học kỳ (\d) năm học (\d{4})-\d{4}/);
-        if (parts) {
-          const hocKy = parts[1];
-          const year = parts[2].slice(2);
-          return {
-            label: item,
-            value: `${hocKy}${year}`,
-          };
-        }
-        return { label: item, value: item }; // Fallback in case of unexpected format
+        return { label: item.hoc_ky_text, value: item.hoc_ky }; // Fallback in case of unexpected format
       });
 
       hocKy.value = transformedHocKy;
@@ -130,10 +123,10 @@ export default defineComponent({
         dataSource.value = data.value;
       }
     });
-    onMounted(() => {
+    onMounted((magv) => {
       getHocKy();
-    });
-
+    })
+    
     return {
       value1,
       data,
@@ -145,37 +138,38 @@ export default defineComponent({
 </script>
 <style>
 .styled-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 14px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    width: 100%;
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 .styled-table thead tr {
-    background-color: #fafafa;
-    color: rgba(0, 0, 0, 0.88);
-    text-align: left;
-    border-bottom: 1px solid #f0f0f0;
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.88);
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
 }
-.styled-table th{
-    padding: 12px 15px;
-    font-weight: 600;
+.styled-table th {
+  padding: 12px 15px;
+  font-weight: 600;
 }
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
 }
 </style>
