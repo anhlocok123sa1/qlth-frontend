@@ -36,7 +36,6 @@ export default {
       axios
         .get("/getusertoken")
         .then((response) => {
-          console.log(response);
           if (response.data.giaovien) {
             const userData = response.data.giaovien;
             userStore.setUser(userData, 'giaovien');

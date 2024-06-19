@@ -80,6 +80,7 @@ export default defineComponent({
         .then(() => {
           message.success("Đăng xuất thành công");
           localStorage.removeItem("token");
+          window.user = null;
           router.push({ name: "login" });
         })
         .catch(() => {
@@ -87,7 +88,6 @@ export default defineComponent({
         });
     };
     const userStore = useUser();
-    console.log(userStore);
     const userName = computed(() => userStore.getten);
 
     return {

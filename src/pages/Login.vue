@@ -92,7 +92,9 @@ export default defineComponent({
           if (response.status === 200) {
             message.success('Đăng nhập thành công');
             localStorage.setItem('token', response.data.token);
-            console.log(response.data);
+            const token = response.data.token;
+            const role = response.data.role;
+            window.user = { token, role };
             if (response.data.role == 'teacher') {
               router.push({ name: 'admin-users-gv' });
             } else if(response.data.role == 'student') {
@@ -102,7 +104,6 @@ export default defineComponent({
         })
         .catch((error) => {
           errors.value = error.response.data.error || {};
-          console.log(errors);
           message.error(errors.value);
         });
     };
