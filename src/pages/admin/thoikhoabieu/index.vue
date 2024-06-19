@@ -34,8 +34,9 @@
             <td>{{ item.Thu }}</td>
             <td>{{ item.TietBD }}</td>
             <td>{{ item.ST }}</td>
-            <td>{{ item.Phong }}</td>
+            <!-- <td>{{ item.Phong }}</td> -->
             <td>{{ item.NgayBD }} - {{ item.NgayKT }}</td>
+            <td>{{ item.Tuan }}</td>
             <td><a>action</a></td>
           </tr>
         </tbody>
@@ -66,24 +67,33 @@ export default defineComponent({
     const value1 = ref("");
     const data = ref([]);
     const dataSource = ref();
-
     const getHocKy = () => {
       if (magv.value) {
         axios
-        .get(`hocky/${magv.value}`)
-        .then((response) => {
-          extractHocKy(response.data);
-          console.log(response);
-        })
+          .get(`hocky/${magv.value}`)
+          .then((response) => {
+            extractHocKy(response.data);
+            console.log(response);
+          })
           .catch((error) => {
-          console.log(error);
-        });
+            console.log(error);
+          });
       }
     };
 
     const extractHocKy = (lichValue) => {
       const transformedHocKy = lichValue.map((item) => {
-        return { label: item.hoc_ky_text, value: item.hoc_ky }; // Fallback in case of unexpected format
+        // const parts = item.match(/Học kỳ (\d) năm học (\d{4})-\d{4}/);
+        // if (parts) {
+        //   const hocKy = parts[1];
+        //   const year = parts[2].slice(2);
+        //   return {
+        //     label: item,
+        //     value: `${hocKy}${year}`,
+        //   };
+        // }
+        // return { label: item, value: item };
+        return { label: item.hoc_ky_text, value: item.hoc_ky };
       });
 
       hocKy.value = transformedHocKy;
@@ -125,8 +135,8 @@ export default defineComponent({
     });
     onMounted((magv) => {
       getHocKy();
-    })
-    
+    });
+
     return {
       value1,
       data,

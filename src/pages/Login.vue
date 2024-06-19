@@ -23,7 +23,9 @@
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.username" class="text-danger">{{ errors.username[0] }}</small>
+          <small v-if="errors.username" class="text-danger">{{
+            errors.username[0]
+          }}</small>
         </div>
       </div>
 
@@ -48,7 +50,9 @@
             }"
           />
           <div class="w-100"></div>
-          <small v-if="errors.password" class="text-danger">{{ errors.password[0] }}</small>
+          <small v-if="errors.password" class="text-danger">{{
+            errors.password[0]
+          }}</small>
         </div>
       </div>
 
@@ -60,7 +64,11 @@
             </a-button>
           </router-link> -->
 
-          <a-button type="primary" html-type="submit" class="ms-0 ms-sm-2 mt-3 mt-sm-0">
+          <a-button
+            type="primary"
+            html-type="submit"
+            class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+          >
             <span>Đăng nhập</span>
           </a-button>
         </div>
@@ -70,35 +78,35 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue';
-import { defineComponent, reactive, ref, toRefs } from 'vue';
-import axios from '../axios'; // Import axios instance
-import { useRouter } from 'vue-router';
+import { message } from "ant-design-vue";
+import { defineComponent, reactive, ref, toRefs } from "vue";
+import axios from "../axios"; // Import axios instance
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
     const router = useRouter();
     const user = reactive({
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     });
 
     const errors = ref({});
 
     const loginUser = () => {
       axios
-        .post('/login', user)
+        .post("/login", user)
         .then((response) => {
           if (response.status === 200) {
-            message.success('Đăng nhập thành công');
-            localStorage.setItem('token', response.data.token);
+            message.success("Đăng nhập thành công");
+            localStorage.setItem("token", response.data.token);
             const token = response.data.token;
             const role = response.data.role;
             window.user = { token, role };
-            if (response.data.role == 'teacher') {
-              router.push({ name: 'admin-users-gv' });
-            } else if(response.data.role == 'student') {
-              router.push({ name: 'admin-users-sv' });
+            if (response.data.role == "teacher") {
+              router.push({ name: "admin-users-gv" });
+            } else if (response.data.role == "student") {
+              router.push({ name: "users-sv" });
             }
           }
         })

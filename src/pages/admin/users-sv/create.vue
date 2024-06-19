@@ -67,7 +67,7 @@
             </div>
           </div>
           <!-- Mã lớp -->
-           <div class="row mb-3">
+          <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -262,7 +262,6 @@
   </form>
 </template>
 
-
 <script>
 import { message } from "ant-design-vue";
 import { defineComponent, ref, reactive, toRefs } from "vue";
@@ -307,7 +306,7 @@ export default defineComponent({
           email: taikhoansv.email,
           password: taikhoansv.mat_khau,
           password_confirmation: taikhoansv.password_confirmation,
-          ma_lop: taikhoansv.ma_lop
+          ma_lop: taikhoansv.ma_lop,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -346,7 +345,7 @@ export default defineComponent({
     getLop();
 
     const handleChangeSelect = (value) => {
-      taikhoansv.ma_lop = value
+      taikhoansv.ma_lop = value;
     };
 
     return {
@@ -354,12 +353,11 @@ export default defineComponent({
       errors,
       createGiaoVien,
       allMaLop,
-      handleChangeSelect
+      handleChangeSelect,
     };
   },
 });
 </script>
-
 
 <style>
 .select_danger {

@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import admin from "./admin.js";
 import Login from '../pages/Login.vue';
 import axios from "../axios.js";
+import users from "./users.js";
 
 const routes = [
   ...admin,
+  ...users,
   {
     path: "/login",
     name: "login",

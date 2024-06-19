@@ -294,7 +294,6 @@
   </form>
 </template>
 
-
 <script>
 import { message } from "ant-design-vue";
 import { defineComponent, ref, reactive, toRefs, computed } from "vue";
@@ -396,7 +395,7 @@ export default defineComponent({
     getUsersEdit();
 
     const handleChangeSelect = (value) => {
-      users.ma_lop = value
+      users.ma_lop = value;
     };
     getLop();
     return {
@@ -405,7 +404,7 @@ export default defineComponent({
       filterOption,
       updateUsers,
       allMaLop,
-      handleChangeSelect
+      handleChangeSelect,
     };
   },
 });

@@ -25,7 +25,10 @@
 
             <template v-if="column.key === 'actions'">
               <router-link
-                :to="{ name: 'admin-users-gv-edit', params: { id: record.ma_gv } }"
+                :to="{
+                  name: 'admin-users-gv-edit',
+                  params: { id: record.ma_gv },
+                }"
               >
                 <a-button type="primary" class="me-sm-2">
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -49,7 +52,7 @@
 
 <script>
 // import axios from "axios";
-import axios from '../../../axios.js';
+import axios from "../../../axios.js";
 import { Modal } from "ant-design-vue";
 import { message } from "ant-design-vue";
 import { useMenu } from "../../../stores/use-menu.js";

@@ -24,6 +24,7 @@ const admin = [
         name: "admin-users-gv-edit",
         component: () => import("../pages/admin/users-gv/edit.vue"),
       },
+      
       //Quản lý users sinh vien
       {
         path: "users-sv",
