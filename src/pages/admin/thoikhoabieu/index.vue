@@ -83,16 +83,6 @@ export default defineComponent({
 
     const extractHocKy = (lichValue) => {
       const transformedHocKy = lichValue.map((item) => {
-        // const parts = item.match(/Học kỳ (\d) năm học (\d{4})-\d{4}/);
-        // if (parts) {
-        //   const hocKy = parts[1];
-        //   const year = parts[2].slice(2);
-        //   return {
-        //     label: item,
-        //     value: `${hocKy}${year}`,
-        //   };
-        // }
-        // return { label: item, value: item };
         return { label: item.hoc_ky_text, value: item.hoc_ky };
       });
 

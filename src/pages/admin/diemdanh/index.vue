@@ -5,25 +5,31 @@
         <div class="row">
           <div class="col-12">
             <div class="row">
-              <div class="col-12 col-sm-9 d-flex flex-wrap flex-sm-nowrap">
+              <div class="col-12 col-sm-9 d-flex flex-wrap">
                 <div class="d-flex flex-column">
                   <span>Chọn đợt</span>
                   <a-select
-                    v-model:value="province"
-                    :options="provinceData.map((pro) => ({ value: pro }))"
-                    class="me-2 mb-sm-0 mb-2 responsive-width"
+                    v-model:value="selectedHocKy"
+                    :options="hocKy"
+                    class="me-2 mb-sm-0 mb-2"
+                    style="width: 230px;"
                   ></a-select>
                 </div>
                 <div class="d-flex flex-column">
                   <span>Ngày điểm danh</span>
-                  <a-date-picker v-model:value="selectedDate" class="me-2 mb-sm-0 mb-2 responsive-width" />
+                  <a-date-picker
+                    v-model:value="selectedDate"
+                    class="me-2 mb-sm-0 mb-2"
+                    style="width: 230px;"
+                  />
                 </div>
                 <div class="d-flex flex-column">
                   <span>Chọn lớp học phần</span>
                   <a-select
-                    v-model:value="secondCity"
-                    :options="cities.map((city) => ({ value: city }))"
-                    class="me-2 mb-sm-0 mb-2 responsive-width"
+                    v-model:value="selectedMonHoc"
+                    :options="filteredMonHoc"
+                    class="me-2 mb-sm-0 mb-2"
+                    style="width: 230px;"
                   ></a-select>
                 </div>
               </div>
@@ -50,8 +56,8 @@
             <a-button type="primary" class="me-2 mb-2">Xuất excel</a-button>
             <a-table
               :row-selection="rowSelection"
-              :dataSource="data.dataSource"
-              :columns="data.columns"
+              :dataSource="users"
+              :columns="columns"
               :scroll="{ x: 2000 }"
             >
               <template #bodyCell="{ column, index, record }">
@@ -71,175 +77,190 @@
         <a-tab-pane key="2" tab="Thứ 5: tiết 4 -> 6" force-render
           >Content of Tab Pane 2</a-tab-pane
         >
-        <a-tab-pane key="3" tab="Thứ 6: tiết 7 -> 9">Content of Tab Pane 3</a-tab-pane>
+        <a-tab-pane key="3" tab="Thứ 6: tiết 7 -> 9"
+          >Content of Tab Pane 3</a-tab-pane
+        >
       </a-tabs>
     </a-card>
   </a-card>
 </template>
 
 <script>
-const provinceData = [
-  "Học kỳ 1 năm học 2024-2025",
-  "Học kỳ 2 năm học 2024-2025",
-  "Học kỳ 3 năm học 2024-2025",
-];
-const cityData = {
-  "Học kỳ 1 năm học 2024-2025": [
-    "Toán A1 (Hàm 1 biến, chuỗi)",
-    "Thực hành Tin học đại cương",
-    "Tiếng Anh 1",
-  ],
-  "Học kỳ 2 năm học 2024-2025": ["Kỹ thuật số", "Tiếng Anh 2", "Triết học Mác - Lênin"],
-  "Học kỳ 3 năm học 2024-2025": [
-    "Toán A2 (Hàm nhiều biến, giải tích vec tơ)",
-    "Kinh tế chính trị Mác - Lênin",
-    "Nhập môn lập trình",
-  ],
-};
 import { useMenu, useUser } from "../../../stores/use-menu.js";
-import { defineComponent, reactive, toRefs, computed, watch, ref, unref } from "vue";
-import data from "./data.json";
-import { Radio, Table } from "ant-design-vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import { Table } from "ant-design-vue";
+import axios from "../../../axios";
+import { message } from "ant-design-vue";
+import dayjs from "dayjs";
 
 export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-diemdanh"]);
+
     const userStore = useUser();
-    const magv = computed(() => userStore.getmagv);
+    const magv = computed(() => userStore.getma);
+    //Tim lich
     const hocKy = ref([]);
-
-    const province = provinceData[0];
-    const state = reactive({
-      province,
-      provinceData,
-      cityData,
-      secondCity: cityData[province][0],
-      selectedDate: null,
-      data,
-    });
-    const cities = computed(() => {
-      return cityData[state.province];
-    });
-    watch(
-      () => state.province,
-      (val) => {
-        state.secondCity = state.cityData[val][0];
+    const monHoc = ref([]);
+    const selectedHocKy = ref("");
+    const selectedMonHoc = ref("");
+    const filteredMonHoc = ref([]);
+    const selectedDate = ref("");
+    //Hien thi danh sach sinh vien
+    const columns = [
+      {
+        title: "STT",
+        dataIndex: "id",
+        key: "id",
+        fixed: true,
+        width: "5%",
+      },
+      {
+        title: "MSSV",
+        dataIndex: "ma_sv",
+        key: "mssv"
+      },
+      {
+        title: "Họ tên",
+        dataIndex: "ten_sv",
+        key: "name"
+      },
+      {
+        title: "Lớp học",
+        dataIndex: "ma_lop",
+        key: "class"
+      },
+      {
+        title: "Có phép",
+        dataIndex: "cophep",
+        key: "cophep"
+      },
+      {
+        title: "Không phép",
+        dataIndex: "khongphep",
+        key: "khongphep"
+      },
+      {
+        title: "Nhập số tiết",
+        dataIndex: "nhapsotiet",
+        key: "nhapsotiet"
+      },
+      {
+        title: "Ghi chú",
+        dataIndex: "ghichu",
+        key: "ghichu"
+      },
+      {
+        title: "Vắng có phép",
+        dataIndex: "vangcophep",
+        key: "vangcophep"
+      },
+      {
+        title: "Vắng không phép",
+        dataIndex: "vangkhongphep",
+        key: "vangkhongphep"
+      },
+      {
+        title: "Tổng số tiết",
+        dataIndex: "tongsotiet",
+        key: "tongsotiet"
+      },
+      {
+        title: "Tỉ lệ vắng",
+        dataIndex: "tilevang",
+        key: "tilevang"
       }
-    );
+    ];
+    const users = ref([]);
+    //Tim lich
+    const getLich = async () => {
+      if (magv.value) {
+        try {
+          const response = await axios.get(`getLichDiemDanh/${magv.value}`);
+          extractLich(response.data);
+          // console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    const extractLich = (lichValue) => {
+      const transformedHocKy = Array.from(new Set(lichValue.map(item => item.hoc_ky)))
+        .map(hoc_ky => ({
+          label: lichValue.find(item => item.hoc_ky === hoc_ky).hoc_ky_text,
+          value: hoc_ky
+        }));
+      hocKy.value = transformedHocKy;
+
+      monHoc.value = lichValue.map(item => ({
+        hoc_ky: item.hoc_ky,
+        label: item.ten_mh + " - Tiết " + item.st_bd,
+        value: item.ma_gd,
+        ma_mh: item.ma_mh,
+        st_bd: item.st_bd
+      }));
+    };
+
+    //Hien thi danh sach sinh vien
     const filterCalendar = () => {
-      const formattedDate = state.selectedDate
-        ? new Date(state.selectedDate).toLocaleDateString()
-        : "";
-    };
-    //Table
-    const selectedRowKeys = ref([]);
-
-    const onSelectChange = (changableRowKeys) => {
-      selectedRowKeys.value = changableRowKeys;
-    };
-
-    const toggleCoPhep = (record) => {
-      record.cophep = !record.cophep;
-      if (record.cophep) {
-        record.comat = false;
-        record.khongphep = false;
-      }
-    }
-
-    const toggleKhongPhep = (record) => {
-      record.khongphep = !record.khongphep;
-      if (record.khongphep) {
-        record.comat = false;
-        record.cophep = false;
-      }
-    }
-
-    const toggleCoMat = (record) => {
-      record.comat = !record.comat;
-      if (record.comat) {
-        record.cophep = false;
-        record.khongphep = false;
-      }
-    }
-
-    const rowSelection = computed(() => {
-      return {
-        selectedRowKeys: unref(selectedRowKeys),
-        onChange: onSelectChange,
-        onSelect: toggleCoMat,
-        hideDefaultSelections: true,
-        selections: [
-          Table.SELECTION_ALL,
-          Table.SELECTION_INVERT,
-          Table.SELECTION_NONE,
-          {
-            key: "odd",
-            text: "Select Odd Row",
-            onSelect: (changableRowKeys) => {
-              let newSelectedRowKeys = [];
-              newSelectedRowKeys = changableRowKeys.filter((_key, index) => {
-                if (index % 2 !== 0) {
-                  return false;
-                }
-                return true;
-              });
-              selectedRowKeys.value = newSelectedRowKeys;
-            },
-          },
-          {
-            key: "even",
-            text: "Select Even Row",
-            onSelect: (changableRowKeys) => {
-              let newSelectedRowKeys = [];
-              newSelectedRowKeys = changableRowKeys.filter((_key, index) => {
-                if (index % 2 !== 0) {
-                  return true;
-                }
-                return false;
-              });
-              selectedRowKeys.value = newSelectedRowKeys;
-            },
-          },
-        ],
-      };
-    });
-
-    const sendLish = () => {
-      const collectedData = state.data.dataSource
-    .map(record => ({
-      key: record.key,
-      mssv: record.mssv,
-      name: record.name,
-      cophep: record.cophep,
-      khongphep: record.khongphep,
-      comat: record.comat
-    }));
-
-      // Gửi dữ liệu lên server hoặc xử lý tiếp theo tại đây
-      // Ví dụ gửi dữ liệu bằng axios
-      /*
-      axios.post('/api/attendance', collectedData)
+      // Gửi yêu cầu tìm lịch điểm danh với các thông tin đã chọn
+      // Thực hiện logic gửi request tới server với các thông tin đã chọn
+      console.log(selectedMonHoc.value);
+      console.log(dayjs(selectedDate.value).format('YYYY-MM-DD'));
+      if (magv.value && selectedHocKy.value && selectedMonHoc.value && selectedDate.value) {
+        axios.post('/getDanhSachSinhVien', {
+          ma_gd: selectedMonHoc.value,
+          ngay_diem_danh: dayjs(selectedDate.value).format("YYYY-MM-DD"),
+        })
         .then(response => {
-          console.log('Dữ liệu đã được gửi thành công:', response.data);
+          // console.log('Lịch điểm danh đã được gửi lên server:', response.data);
+          // Xử lý kết quả nếu cần
+          console.log(response.data);
+          users.value = response.data;
         })
         .catch(error => {
-          console.error('Lỗi khi gửi dữ liệu:', error);
+          console.error('Lỗi khi gửi yêu cầu điểm danh:', error);
+          message.error(error.response.data.message);
         });
-      */
-    }
+      } else {
+        message.warn('Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.');
+      }
+    };
+
+
+    watch(selectedHocKy, (newHocKy) => {
+      filteredMonHoc.value = monHoc.value.filter(item => item.hoc_ky === newHocKy);
+      if (filteredMonHoc.value.length > 0) {
+        selectedMonHoc.value = filteredMonHoc.value[0].value;
+      } else {
+        selectedMonHoc.value = "";
+      }
+    });
+
+    // watch(selectedMonHoc, (newMonHoc) => {
+    //   console.log(newMonHoc);
+    // })
+
+    watch(magv, (newMagv) => {
+      if (newMagv) {
+        getLich();
+      }
+    });
+    onMounted((magv) => {
+      getLich();
+    });
 
     return {
-      ...toRefs(state),
-      cities,
+      hocKy,
+      filteredMonHoc,
+      selectedHocKy,
+      selectedMonHoc,
+      selectedDate,
       filterCalendar,
-      activeKey: ref("1"),
-      selectedRowKeys,
-      rowSelection,
-      sendLish,
-      toggleCoPhep,
-      toggleKhongPhep,
-      toggleCoMat
+      columns,
+      users
     };
   },
 });
@@ -253,5 +274,5 @@ export default defineComponent({
   .responsive-width {
     width: 230px;
   }
-}
+} 
 </style>
