@@ -12,7 +12,7 @@
                     v-model:value="selectedHocKy"
                     :options="hocKy"
                     class="me-2 mb-sm-0 mb-2"
-                    style="width: 230px;"
+                    style="width: 230px"
                   ></a-select>
                 </div>
                 <div class="d-flex flex-column">
@@ -20,7 +20,7 @@
                   <a-date-picker
                     v-model:value="selectedDate"
                     class="me-2 mb-sm-0 mb-2"
-                    style="width: 230px;"
+                    style="width: 230px"
                   />
                 </div>
                 <div class="d-flex flex-column">
@@ -29,7 +29,7 @@
                     v-model:value="selectedMonHoc"
                     :options="filteredMonHoc"
                     class="me-2 mb-sm-0 mb-2"
-                    style="width: 230px;"
+                    style="width: 230px"
                   ></a-select>
                 </div>
               </div>
@@ -47,8 +47,12 @@
     </form>
 
     <a-card class="mt-2">
-      <a-tabs v-model:activeKey="activeKey">
-        <a-tab-pane key="1" tab="Thứ 3: tiết 1 -> 3">
+      <a-tabs v-model:activeKey="activeKey" @change="handleTabChange">
+        <a-tab-pane
+          v-for="tab in selectedTabs"
+          :key="tab.ma_gd"
+          :tab="`Nhóm: ${tab.nmh} - Tiết ${tab.st_bd} -> ${tab.st_kt}`"
+        >
           <form @submit.prevent="sendLish()">
             <a-button html-type="submit" type="primary" class="me-2 mb-2"
               >Lưu điểm danh</a-button
@@ -65,21 +69,21 @@
                   <span>{{ index + 1 }}</span>
                 </template>
                 <template v-if="column.key === 'cophep'">
-                  <a-checkbox v-model:checked="record.cophep" @click="toggleCoPhep(record)"></a-checkbox>
+                  <a-checkbox
+                    v-model:checked="record.cophep"
+                    @click="toggleCoPhep(record)"
+                  ></a-checkbox>
                 </template>
                 <template v-if="column.key === 'khongphep'">
-                  <a-checkbox v-model:checked="record.khongphep" @click="toggleKhongPhep(record)"></a-checkbox>
+                  <a-checkbox
+                    v-model:checked="record.khongphep"
+                    @click="toggleKhongPhep(record)"
+                  ></a-checkbox>
                 </template>
               </template>
             </a-table>
           </form>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="Thứ 5: tiết 4 -> 6" force-render
-          >Content of Tab Pane 2</a-tab-pane
-        >
-        <a-tab-pane key="3" tab="Thứ 6: tiết 7 -> 9"
-          >Content of Tab Pane 3</a-tab-pane
-        >
       </a-tabs>
     </a-card>
   </a-card>
@@ -97,7 +101,6 @@ export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-diemdanh"]);
-
     const userStore = useUser();
     const magv = computed(() => userStore.getma);
     //Tim lich
@@ -107,71 +110,16 @@ export default defineComponent({
     const selectedMonHoc = ref("");
     const filteredMonHoc = ref([]);
     const selectedDate = ref("");
+    const getListMH = ref([]);
+    const selectedTabs = ref([]);
+    const activeKey = ref("");
+    const keyATab = ref("");
     //Hien thi danh sach sinh vien
-    const columns = [
-      {
-        title: "STT",
-        dataIndex: "id",
-        key: "id",
-        fixed: true,
-        width: "5%",
-      },
-      {
-        title: "MSSV",
-        dataIndex: "ma_sv",
-        key: "mssv"
-      },
-      {
-        title: "Họ tên",
-        dataIndex: "ten_sv",
-        key: "name"
-      },
-      {
-        title: "Lớp học",
-        dataIndex: "ma_lop",
-        key: "class"
-      },
-      {
-        title: "Có phép",
-        dataIndex: "cophep",
-        key: "cophep"
-      },
-      {
-        title: "Không phép",
-        dataIndex: "khongphep",
-        key: "khongphep"
-      },
-      {
-        title: "Nhập số tiết",
-        dataIndex: "nhapsotiet",
-        key: "nhapsotiet"
-      },
-      {
-        title: "Ghi chú",
-        dataIndex: "ghichu",
-        key: "ghichu"
-      },
-      {
-        title: "Vắng có phép",
-        dataIndex: "vangcophep",
-        key: "vangcophep"
-      },
-      {
-        title: "Vắng không phép",
-        dataIndex: "vangkhongphep",
-        key: "vangkhongphep"
-      },
-      {
-        title: "Tổng số tiết",
-        dataIndex: "tongsotiet",
-        key: "tongsotiet"
-      },
-      {
-        title: "Tỉ lệ vắng",
-        dataIndex: "tilevang",
-        key: "tilevang"
-      }
-    ];
+    const handleTabChange = (key) => {
+      console.log("Người dùng đã chọn tab có key:", key);
+      keyATab.value = key;
+      console.log("hi", keyATab.value);
+    };
     const users = ref([]);
     //Tim lich
     const getLich = async () => {
@@ -187,51 +135,66 @@ export default defineComponent({
     };
 
     const extractLich = (lichValue) => {
-      const transformedHocKy = Array.from(new Set(lichValue.map(item => item.hoc_ky)))
-        .map(hoc_ky => ({
-          label: lichValue.find(item => item.hoc_ky === hoc_ky).hoc_ky_text,
-          value: hoc_ky
-        }));
-      hocKy.value = transformedHocKy;
-
-      monHoc.value = lichValue.map(item => ({
-        hoc_ky: item.hoc_ky,
-        label: item.ten_mh + " - Tiết " + item.st_bd,
-        value: item.ma_gd,
-        ma_mh: item.ma_mh,
-        st_bd: item.st_bd
+      getListMH.value = lichValue;
+      const transformedHocKy = Array.from(
+        new Set(lichValue.map((item) => item.hoc_ky))
+      ).map((hoc_ky) => ({
+        label: "Học Kỳ " + hoc_ky,
+        value: hoc_ky,
       }));
+      hocKy.value = transformedHocKy;
+      const seen = new Set();
+      const uniqueMonHoc = lichValue
+        .filter((item) => {
+          if (seen.has(item.ma_mh)) {
+            return false;
+          } else {
+            seen.add(item.ma_mh);
+            return true;
+          }
+        })
+        .map((item) => ({
+          hoc_ky: item.hoc_ky,
+          label: item.ten_mh,
+          value: item.ma_mh,
+          ma_mh: item.ma_mh,
+          st_bd: item.st_bd,
+        }));
+      monHoc.value = uniqueMonHoc;
     };
 
     //Hien thi danh sach sinh vien
     const filterCalendar = () => {
-      // Gửi yêu cầu tìm lịch điểm danh với các thông tin đã chọn
-      // Thực hiện logic gửi request tới server với các thông tin đã chọn
-      console.log(selectedMonHoc.value);
-      console.log(dayjs(selectedDate.value).format('YYYY-MM-DD'));
-      if (magv.value && selectedHocKy.value && selectedMonHoc.value && selectedDate.value) {
-        axios.post('/getDanhSachSinhVien', {
-          ma_gd: selectedMonHoc.value,
-          ngay_diem_danh: dayjs(selectedDate.value).format("YYYY-MM-DD"),
-        })
-        .then(response => {
-          // console.log('Lịch điểm danh đã được gửi lên server:', response.data);
-          // Xử lý kết quả nếu cần
-          console.log(response.data);
-          users.value = response.data;
-        })
-        .catch(error => {
-          console.error('Lỗi khi gửi yêu cầu điểm danh:', error);
-          message.error(error.response.data.message);
-        });
+      if (
+        magv.value &&
+        selectedHocKy.value &&
+        selectedMonHoc.value &&
+        selectedDate.value
+      ) {
+        axios
+          .post("/getDanhSachSinhVien", {
+            ma_gd: keyATab.value,
+            ngay_hoc: dayjs(selectedDate.value).format("YYYY-MM-DD"),
+          })
+          .then((response) => {
+            console.log(dayjs(selectedDate.value).format("YYYY-MM-DD"));
+            users.value = response.data;
+            console.log(response.data);
+            console.log(selectedMonHoc.value);
+          })
+          .catch((error) => {
+            console.error("Lỗi khi gửi yêu cầu điểm danh:", error);
+            message.error(error.response.data.message);
+          });
       } else {
-        message.warn('Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.');
+        message.warn("Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.");
       }
     };
 
-
     watch(selectedHocKy, (newHocKy) => {
-      filteredMonHoc.value = monHoc.value.filter(item => item.hoc_ky === newHocKy);
+      filteredMonHoc.value = monHoc.value.filter(
+        (item) => item.hoc_ky === newHocKy
+      );
       if (filteredMonHoc.value.length > 0) {
         selectedMonHoc.value = filteredMonHoc.value[0].value;
       } else {
@@ -239,18 +202,86 @@ export default defineComponent({
       }
     });
 
-    // watch(selectedMonHoc, (newMonHoc) => {
-    //   console.log(newMonHoc);
-    // })
+    watch(selectedMonHoc, (newMonHoc) => {
+      console.log(newMonHoc);
+      selectedTabs.value = getListMH.value.filter(
+        (item) => item.ma_mh === newMonHoc
+      );
+    });
 
     watch(magv, (newMagv) => {
       if (newMagv) {
         getLich();
       }
     });
+
     onMounted((magv) => {
       getLich();
     });
+    const columns = [
+      {
+        title: "STT",
+        dataIndex: "id",
+        key: "id",
+        fixed: true,
+        width: "5%",
+      },
+      {
+        title: "MSSV",
+        dataIndex: "ma_sv",
+        key: "mssv",
+      },
+      {
+        title: "Họ tên",
+        dataIndex: "ten_sv",
+        key: "name",
+      },
+      {
+        title: "Lớp học",
+        dataIndex: "ma_lop",
+        key: "class",
+      },
+      {
+        title: "Có phép",
+        dataIndex: "cophep",
+        key: "cophep",
+      },
+      {
+        title: "Không phép",
+        dataIndex: "khongphep",
+        key: "khongphep",
+      },
+      {
+        title: "Nhập số tiết",
+        dataIndex: "nhapsotiet",
+        key: "nhapsotiet",
+      },
+      {
+        title: "Ghi chú",
+        dataIndex: "ghichu",
+        key: "ghichu",
+      },
+      {
+        title: "Vắng có phép",
+        dataIndex: "vangcophep",
+        key: "vangcophep",
+      },
+      {
+        title: "Vắng không phép",
+        dataIndex: "vangkhongphep",
+        key: "vangkhongphep",
+      },
+      {
+        title: "Tổng số tiết",
+        dataIndex: "tongsotiet",
+        key: "tongsotiet",
+      },
+      {
+        title: "Tỉ lệ vắng",
+        dataIndex: "tilevang",
+        key: "tilevang",
+      },
+    ];
 
     return {
       hocKy,
@@ -260,7 +291,12 @@ export default defineComponent({
       selectedDate,
       filterCalendar,
       columns,
-      users
+      users,
+      getListMH,
+      selectedTabs,
+      activeKey,
+      handleTabChange,
+      keyATab,
     };
   },
 });
@@ -274,5 +310,5 @@ export default defineComponent({
   .responsive-width {
     width: 230px;
   }
-} 
+}
 </style>
