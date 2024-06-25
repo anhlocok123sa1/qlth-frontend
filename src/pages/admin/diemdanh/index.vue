@@ -67,21 +67,21 @@
               :columns="columns"
               :scroll="{ x: 2000 }"
             >
-              <template #bodyCell="{ column, index, record }">
-                <template v-if="column.key === 'stt'">
-                  <span>{{ index + 1 }}</span>
-                </template>
+              <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'cophep'">
                   <a-checkbox
                     v-model:checked="record.cophep"
-                    @click="toggleCoPhep(record)"
+                    @change="togglePermission(record, 'cophep')"
                   ></a-checkbox>
                 </template>
                 <template v-if="column.key === 'khongphep'">
                   <a-checkbox
                     v-model:checked="record.khongphep"
-                    @click="toggleKhongPhep(record)"
+                    @change="togglePermission(record, 'khongphep')"
                   ></a-checkbox>
+                </template>
+                <template v-if="column.key === 'ghichu'">
+                  <a-input v-model:value="record.ghichu" placeholder="Ghi chú" />
                 </template>
               </template>
             </a-table>
@@ -145,8 +145,8 @@
 <script>
 import { useMenu, useUser } from "../../../stores/use-menu.js";
 import { format } from "date-fns";
-import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { Table } from "ant-design-vue";
+import { computed, defineComponent, onMounted, ref, unref, watch } from "vue";
 import axios from "../../../axios";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
@@ -250,7 +250,79 @@ export default defineComponent({
         message.warn("Vui lòng chọn đầy đủ thông tin để khởi tạo mã QR.");
       }
     };
+    //Diem danh
+    const selectedRowKeys = ref([]);
+    const ma_gd_diemdanh = ref("");
+    const ngay_diem_danh = ref("");
 
+    const togglePermission = (record, permission) => {
+      if (permission == "cophep") {
+        if (record.khongphep) {
+          record.khongphep = false;
+        } else if (record.comat) {
+          record.comat = false;
+        selectedRowKeys.value = selectedRowKeys.value.filter(
+          (key) => key !== record.key
+        );
+        }
+      } else if (permission == "khongphep") {
+        if (record.cophep) {
+          record.cophep = false;
+        } else if (record.comat) {
+          record.comat = false;
+          selectedRowKeys.value = selectedRowKeys.value.filter(
+          (key) => key !== record.key
+        );
+        }
+      }
+    };
+
+    const onSelectChange = (changableRowKeys) => {
+      selectedRowKeys.value = changableRowKeys;
+    };
+
+    const onSelected = (record, selected) => {
+      record.comat = selected;
+      if (selected) {
+        if (record.cophep) {
+          record.cophep = false;
+        } else if (record.khongphep) {
+          record.khongphep = false;
+        }
+      }
+    };
+
+    const rowSelection = computed(() => {
+      return {
+        selectedRowKeys: unref(selectedRowKeys),
+        onChange: onSelectChange,
+        onSelect: onSelected,
+        hideDefaultSelections: false,
+        hideSelectAll: true,
+      };
+    });
+
+    const sendLish = async () => {
+      const students = users.value.map(user => ({
+        ma_sv: user.ma_sv,
+        ma_gd: ma_gd_diemdanh.value,
+        ngay_diem_danh: ngay_diem_danh.value,
+        co_mat: user.comat,
+        co_phep: user.cophep,
+        khong_phep: user.khongphep,
+        ghi_chu: user.ghichu,
+      }));
+      console.log(students);
+      // try {
+      //   const response = await axios.post("/diemDanhSinhVien", {
+      //     students
+      //   });
+      //   message.success("Điểm danh thành công!");
+      // } catch (error) {
+      //   console.error("Lỗi khi gửi danh sách điểm danh:", error);
+      //   message.error("Lỗi khi gửi danh sách điểm danh!");
+      // }
+    };
     //Hien thi danh sach sinh vien
     const handleTabChange = (key) => {
       keyATab.value = key;
@@ -297,25 +369,31 @@ export default defineComponent({
     };
 
     //Hien thi danh sach sinh vien
-    const filterCalendar = () => {
+    const filterCalendar = async () => {
       if (
         magv.value &&
         selectedHocKy.value &&
         selectedMonHoc.value &&
         selectedDate.value
       ) {
-        axios
-          .post("/getDanhSachSinhVien", {
+        try {
+          const response = await axios.post("/getDanhSachSinhVien", {
             ma_gd: keyATab.value,
             ngay_hoc: dayjs(selectedDate.value).format("YYYY-MM-DD"),
-          })
-          .then((response) => {
-            users.value = response.data;
-          })
-          .catch((error) => {
-            console.error("Lỗi khi gửi yêu cầu điểm danh:", error);
-            message.error(error.response.data.message);
           });
+          ma_gd_diemdanh.value = keyATab.value;
+          ngay_diem_danh.value = dayjs(selectedDate.value).format("YYYY-MM-DD");
+          users.value = response.data.map((user) => ({
+            ...user,
+            cophep: false,
+            khongphep: false,
+            comat: false,
+            ghichu: "",
+          }));
+        } catch (error) {
+          console.error("Lỗi khi gửi yêu cầu điểm danh:", error);
+          message.error(error.response.data.message);
+        }
       } else {
         message.warn("Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.");
       }
@@ -347,12 +425,11 @@ export default defineComponent({
     onMounted((magv) => {
       getLich();
     });
-
     // cột hiển thị danh sách sinh viên
     const columns = [
       {
         title: "STT",
-        dataIndex: "id",
+        dataIndex: "key",
         key: "id",
         fixed: true,
         width: "5%",
@@ -383,35 +460,10 @@ export default defineComponent({
         key: "khongphep",
       },
       {
-        title: "Nhập số tiết",
-        dataIndex: "nhapsotiet",
-        key: "nhapsotiet",
-      },
-      {
         title: "Ghi chú",
         dataIndex: "ghichu",
         key: "ghichu",
-      },
-      {
-        title: "Vắng có phép",
-        dataIndex: "vangcophep",
-        key: "vangcophep",
-      },
-      {
-        title: "Vắng không phép",
-        dataIndex: "vangkhongphep",
-        key: "vangkhongphep",
-      },
-      {
-        title: "Tổng số tiết",
-        dataIndex: "tongsotiet",
-        key: "tongsotiet",
-      },
-      {
-        title: "Tỉ lệ vắng",
-        dataIndex: "tilevang",
-        key: "tilevang",
-      },
+      }
     ];
 
     return {
@@ -437,6 +489,10 @@ export default defineComponent({
       value,
       valueExpires,
       showCodeAgain,
+      selectedRowKeys,
+      rowSelection,
+      togglePermission,
+      sendLish
     };
   },
 });

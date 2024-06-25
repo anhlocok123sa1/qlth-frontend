@@ -24,6 +24,7 @@ import axios from "../axios";
 import TheHeader from "../components/TheHeader.vue";
 import TheMenu from "../components/TheMenu.vue";
 import { useUser } from "../stores/use-menu";
+import users from "../router/users";
 export default {
   components: {
     TheHeader,
@@ -46,6 +47,9 @@ export default {
         })
         .catch((error) => {
           console.error("Failed to fetch user details", error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('role');
+          userStore.clearUser();
         });
     });
   },
