@@ -12,10 +12,12 @@
     "ant-design-vue": "^4.2.1",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "vue3-qrcode-reader": "^0.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

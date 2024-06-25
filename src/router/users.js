@@ -25,6 +25,11 @@ const users = [
         name: "users-timetable",
         component: () => import("../pages/users/timetable/index.vue"),
       },
+      {
+        path: "scanqr",
+        name: "users-scanqr",
+        component: () => import("../pages/users/scan-attendance-code/index.vue"),
+      },
     ],
   },
 ];

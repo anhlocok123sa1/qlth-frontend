@@ -31,6 +31,12 @@
         <span><TableOutlined /> Thời khóa biểu </span>
       </router-link>
     </a-menu-item>
+
+    <a-menu-item key="users-scanqr">
+      <router-link :to="{ name: 'users-scanqr' }">
+        <span><TableOutlined /> Quét mã điểm danh </span>
+      </router-link>
+    </a-menu-item>
   </a-menu>
 </template>
 
