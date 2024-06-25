@@ -58,6 +58,9 @@
               >Lưu điểm danh</a-button
             >
             <a-button type="primary" class="me-2 mb-2">Xuất excel</a-button>
+            <a-button type="primary" class="me-2 mb-2" @click="showModalSetQR"
+              >QR điểm danh</a-button
+            >
             <a-table
               :row-selection="rowSelection"
               :dataSource="users"
@@ -87,10 +90,61 @@
       </a-tabs>
     </a-card>
   </a-card>
+  <a-modal v-model:open="modalVisible" title="QR Điểm Danh">
+    <div class="qr-container">
+      <a-qrcode
+        class="large-qrcode"
+        error-level="H"
+        :value="qrValue"
+        icon="https://upload.wikimedia.org/wikipedia/commons/a/ae/Logo_STU.png"
+      />
+    </div>
+  </a-modal>
+  <!-- Modal Khởi tảo QR -->
+
+  <a-modal v-model:open="setQR" title="Khởi Tạo QR Điểm danh" @ok="handleOk">
+    <div>
+      <table>
+        <tr>
+          <td><label for="">Điểm danh lần: </label></td>
+          <td>
+            <a-select
+              v-model:value="value"
+              label-in-value
+              style="width: 120px"
+              :options="options"
+              @change="handleChange"
+            ></a-select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="">Hết hạn sau </label></td>
+          <td>
+            <a-input-number
+              id="inputNumber"
+              v-model:value="valueExpires"
+              :min="1"
+              :max="10"
+            />
+          </td>
+          <td></td>
+        </tr>
+      </table>
+      <div>
+        <a-button type="primary" style="margin-right: 10px" @click="createQr"
+          >Tạo mới</a-button
+        >
+        <a-button type="primary" @click="showCodeAgain"
+          >Hiển thị lại mã</a-button
+        >
+      </div>
+    </div>
+  </a-modal>
 </template>
 
 <script>
 import { useMenu, useUser } from "../../../stores/use-menu.js";
+import { format } from "date-fns";
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { Table } from "ant-design-vue";
 import axios from "../../../axios";
@@ -103,6 +157,10 @@ export default defineComponent({
     store.onSelectedKeys(["admin-diemdanh"]);
     const userStore = useUser();
     const magv = computed(() => userStore.getma);
+    // Khởi Tạo QR
+    const modalVisible = ref(false);
+    const setQR = ref(false);
+
     //Tim lich
     const hocKy = ref([]);
     const monHoc = ref([]);
@@ -114,20 +172,95 @@ export default defineComponent({
     const selectedTabs = ref([]);
     const activeKey = ref("");
     const keyATab = ref("");
+    const users = ref([]);
+    const idTKB = ref([]);
+    const qrValue = ref("");
+    const valueExpires = ref(2);
+
+    //hiển thị lại mã
+    const showCodeAgain = () => {
+      if (localStorage.getItem("code")) {
+        const currentTime = new Date().getTime();
+        const localStorageTime = localStorage.getItem("timeExpires");
+        if (localStorageTime && currentTime < localStorageTime) {
+          modalVisible.value = true;
+          setQR.value = false;
+          qrValue.value = localStorage.getItem("code");
+        } else {
+          message.warn("Mã đã hết hạn. Vui lòng tạo lại");
+        }
+      } else {
+        message.warn("Không tồn tại mã. Vui lòng tạo mới");
+      }
+    };
+    // set giá trị QR code
+    const value = ref({
+      value: "1",
+      label: "1",
+    });
+    const options = ref([
+      {
+        value: "1",
+        label: "1",
+      },
+      {
+        value: "2",
+        label: "2",
+      },
+    ]);
+    const showModalSetQR = () => {
+      setQR.value = true;
+    };
+
+    // sinh qr code điểm danh
+    const createQr = () => {
+      if (users.value.length > 0) {
+        axios
+          .post("getIdTKB", {
+            ma_gd: keyATab.value,
+            ngay_hoc: dayjs(selectedDate.value).format("YYYY-MM-DD"),
+          })
+          .then((response) => {
+            idTKB.value = response.data;
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + valueExpires.value);
+            const expires_at = format(now, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+            qrValue.value = `${idTKB.value.ma_tkb}-${value.value.value}-${expires_at}`;
+            const code = qrValue.value;
+
+            // lưu mã qr vào local nếu muons hiển thị lại
+            localStorage.setItem("code", code);
+            localStorage.setItem(
+              "timeExpires",
+              new Date().getTime() + valueExpires.value * 60 * 1000
+            );
+            //Gửi qr đến server
+            axios
+              .put("saveQr", {
+                code: code,
+              })
+              .catch((error) => {
+                console.error("Lỗi khi gửi mã Qr:", error);
+                message.error(error.response.data.message);
+              });
+          });
+        modalVisible.value = true;
+        setQR.value = false;
+      } else {
+        message.warn("Vui lòng chọn đầy đủ thông tin để khởi tạo mã QR.");
+      }
+    };
+
     //Hien thi danh sach sinh vien
     const handleTabChange = (key) => {
-      console.log("Người dùng đã chọn tab có key:", key);
       keyATab.value = key;
-      console.log("hi", keyATab.value);
     };
-    const users = ref([]);
     //Tim lich
     const getLich = async () => {
       if (magv.value) {
         try {
           const response = await axios.get(`getLichDiemDanh/${magv.value}`);
           extractLich(response.data);
-          // console.log(response.data);
         } catch (error) {
           console.log(error);
         }
@@ -177,10 +310,7 @@ export default defineComponent({
             ngay_hoc: dayjs(selectedDate.value).format("YYYY-MM-DD"),
           })
           .then((response) => {
-            console.log(dayjs(selectedDate.value).format("YYYY-MM-DD"));
             users.value = response.data;
-            console.log(response.data);
-            console.log(selectedMonHoc.value);
           })
           .catch((error) => {
             console.error("Lỗi khi gửi yêu cầu điểm danh:", error);
@@ -190,7 +320,7 @@ export default defineComponent({
         message.warn("Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.");
       }
     };
-
+    // xử lý khi selectedHocKy thay đổi
     watch(selectedHocKy, (newHocKy) => {
       filteredMonHoc.value = monHoc.value.filter(
         (item) => item.hoc_ky === newHocKy
@@ -201,9 +331,8 @@ export default defineComponent({
         selectedMonHoc.value = "";
       }
     });
-
+    // xử lý khi selectedMonHoc thay đổi
     watch(selectedMonHoc, (newMonHoc) => {
-      console.log(newMonHoc);
       selectedTabs.value = getListMH.value.filter(
         (item) => item.ma_mh === newMonHoc
       );
@@ -218,6 +347,8 @@ export default defineComponent({
     onMounted((magv) => {
       getLich();
     });
+
+    // cột hiển thị danh sách sinh viên
     const columns = [
       {
         title: "STT",
@@ -297,6 +428,15 @@ export default defineComponent({
       activeKey,
       handleTabChange,
       keyATab,
+      modalVisible,
+      createQr,
+      qrValue,
+      showModalSetQR,
+      setQR,
+      options,
+      value,
+      valueExpires,
+      showCodeAgain,
     };
   },
 });
@@ -304,6 +444,12 @@ export default defineComponent({
 <style>
 .responsive-width {
   width: 100%;
+}
+.qr-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 @media (min-width: 1024px) {

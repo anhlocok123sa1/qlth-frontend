@@ -10,7 +10,6 @@
     </div>
   </a-card>
 </template>
-
 <script>
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
 import { ref, onMounted } from "vue";
