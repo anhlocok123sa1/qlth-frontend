@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="loginUser">
+  <form v-if="isUserLogin" @submit.prevent="loginUser">
     <a-card title="Đăng nhập" style="width: 100%">
       <div class="row mb-3">
         <div class="col-12 col-sm-3 text-start text-sm-end">
@@ -17,7 +17,7 @@
           <a-input
             placeholder="Username"
             allow-clear
-            v-model:value="username"
+            v-model:value="user.username"
             :class="{
               input_danger: errors.username,
             }"
@@ -44,7 +44,7 @@
         <div class="col-12 col-sm-5">
           <a-input-password
             placeholder="Password"
-            v-model:value="password"
+            v-model:value="user.password"
             :class="{
               input_danger: errors.password,
             }"
@@ -75,12 +75,102 @@
       </div>
     </a-card>
   </form>
+  <form v-else @submit.prevent="loginAdmin">
+    <a-card title="Đăng nhập Quản trị viên" style="width: 100%">
+      <div class="row mb-3">
+        <div class="col-12 col-sm-3 text-start text-sm-end">
+          <label>
+            <span class="text-danger me-1">*</span>
+            <span
+              :class="{
+                'text-danger': errors.username,
+              }"
+            ></span>
+            <span>Username:</span>
+          </label>
+        </div>
+        <div class="col-12 col-sm-5">
+          <a-input
+            placeholder="Username"
+            allow-clear
+            v-model:value="admin.username"
+            :class="{
+              input_danger: errors.username,
+            }"
+          />
+          <div class="w-100"></div>
+          <small v-if="errors.username" class="text-danger">{{
+            errors.username[0]
+          }}</small>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12 col-sm-3 text-start text-sm-end">
+          <label>
+            <span class="text-danger me-1">*</span>
+            <span
+              :class="{
+                'text-danger': errors.password,
+              }"
+            ></span>
+            <span>Password:</span>
+          </label>
+        </div>
+        <div class="col-12 col-sm-5">
+          <a-input-password
+            placeholder="Password"
+            v-model:value="admin.password"
+            :class="{
+              input_danger: errors.password,
+            }"
+          />
+          <div class="w-100"></div>
+          <small v-if="errors.password" class="text-danger">{{
+            errors.password[0]
+          }}</small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
+          <!-- <router-link :to="{ name: 'admin-users' }">
+            <a-button class="w-100">
+              <span>Hủy</span>
+            </a-button>
+          </router-link> -->
+
+          <a-button
+            type="primary"
+            html-type="submit"
+            class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+          >
+            <span>Đăng nhập</span>
+          </a-button>
+        </div>
+      </div>
+    </a-card>
+  </form>
+  <a-space wrap class="d-flex justify-content-center mt-2">
+    <a-button
+      @click="toggleLogin(true)"
+      :type="isUserLogin ? 'primary' : 'default'"
+      class="me-2"
+      >User Login</a-button
+    >
+    <a-button
+      @click="toggleLogin(false)"
+      :type="!isUserLogin ? 'primary' : 'default'"
+      >Admin Login</a-button
+    >
+  </a-space>
 </template>
 
 <script>
 import { message } from "ant-design-vue";
 import { defineComponent, reactive, ref, toRefs } from "vue";
 import axios from "../axios"; // Import axios instance
+// import axios from "axios";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -90,8 +180,17 @@ export default defineComponent({
       username: "",
       password: "",
     });
+    const admin = reactive({
+      username: "",
+      password: "",
+    });
+    const isUserLogin = ref(true);
 
     const errors = ref({});
+
+    const toggleLogin = (isUser) => {
+      isUserLogin.value = isUser;
+    };
 
     const loginUser = () => {
       axios
@@ -114,10 +213,35 @@ export default defineComponent({
         });
     };
 
+    const loginAdmin = () => {
+      axios.defaults.withCredentials = true;
+      axios
+        .post("/loginAdmin", admin, {
+          withCredentials: 'include'
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+            message.success("Đăng nhập thành công");
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("role", response.data.role);
+            router.push({ name: "super-admin" });
+          }
+        })
+        .catch((error) => {
+          errors.value = error.response.data.error || {};
+          message.error(errors.value);
+        });
+    };
+
     return {
-      ...toRefs(user),
+      user,
+      admin,
       errors,
       loginUser,
+      toggleLogin,
+      isUserLogin,
+      loginAdmin,
     };
   },
 });
