@@ -13,7 +13,7 @@
 <script>
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
 import { onMounted } from "vue";
-import axios from "axios";
+import axios from "../../../axios.js";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -73,7 +73,7 @@ export default defineComponent({
         }
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/thong-tin-ca-nhan",
+          "thong-tin-ca-nhan",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -391,6 +391,9 @@ export default defineComponent({
             ghichu: "",
           }));
         } catch (error) {
+          ma_gd_diemdanh.value = 0;
+          users.value = [];
+          selectedRowKeys.value = [];
           console.error("Lỗi khi gửi yêu cầu điểm danh:", error);
           message.error(error.response.data.message);
         }
