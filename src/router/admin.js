@@ -16,39 +16,6 @@ const admin = [
     meta: { requiresAuth: true },
     beforeEnter: checkAdminRole,
     children: [
-      //Quản lý users giao vien
-      {
-        path: "users-gv",
-        name: "admin-users-gv",
-        component: () => import("../pages/admin/users-gv/index.vue"),
-      },
-      {
-        path: "users-gv/create",
-        name: "admin-users-gv-create",
-        component: () => import("../pages/admin/users-gv/create.vue"),
-      },
-      {
-        path: "users-gv/:id/edit",
-        name: "admin-users-gv-edit",
-        component: () => import("../pages/admin/users-gv/edit.vue"),
-      },
-
-      //Quản lý users sinh vien
-      {
-        path: "users-sv",
-        name: "admin-users-sv",
-        component: () => import("../pages/admin/users-sv/index.vue"),
-      },
-      {
-        path: "users-sv/create",
-        name: "admin-users-sv-create",
-        component: () => import("../pages/admin/users-sv/create.vue"),
-      },
-      {
-        path: "users-sv/:id/edit",
-        name: "admin-users-sv-edit",
-        component: () => import("../pages/admin/users-sv/edit.vue"),
-      },
       //Quản lý roles
       {
         path: "roles",

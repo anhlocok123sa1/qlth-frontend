@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fuild">
     <div
       class="row text-white"
       style="background-color: #0c713d; padding: 1rem"
@@ -7,53 +7,57 @@
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
       >
-        <span @click="showDrawer">X</span>
+        <span @click="showDrawer()">
+          <i class="fa-solid fa-align-justify"></i>
+        </span>
       </div>
-
       <div
         class="col-10 col-sm-9 d-flex align-items-center justify-content-center justify-content-sm-start"
       >
         <img
-          src="../assets/logosv.png"
-          alt="logo"
+          src="../assets/logo.png"
+          alt="Logo"
           height="32"
           width="34"
           class="ms-3 me-3"
         />
-        <span class="d-none d-sm-flex">Sinh Viên</span>
+        <span class="d-none d-sm-flex">Quản trị</span>
       </div>
       <div
-        class="col-sm-3 d-none d-sm-flex align-items-center justify-content-center justify-content-sm-end"
+        class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end"
       >
         <span>{{ currentUser }}</span>
-        <a-button type="primary" @click="logout" class="ms-3"
+        <a-button type="primary" class="ms-2" @click="logout"
           >Đăng xuất</a-button
         >
       </div>
+
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
       >
-        <span @click="showDrawer_Users">X</span>
+        <span @click="showDrawerUser()">
+          <i class="fa-regular fa-user"></i>
+        </span>
       </div>
     </div>
   </div>
 
-  <a-drawer v-model:open="open" title="Danh Mục" placement="left">
-    <TheMenuUsers />
+  <a-drawer v-model:open="open" title="Danh mục" placement="left">
+    <TheMenuSuperAdmin />
   </a-drawer>
-
-  <a-drawer v-model:open="open_users" title="Danh Mục" placement="right">
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
+  <a-drawer v-model:open="open_user" title="Danh mục" placement="right">
+    <p>Some contents for user...</p>
+    <p>Some contents for user...</p>
+    <p>Some contents for user...</p>
   </a-drawer>
 </template>
 
 <script setup>
-import TheMenuUsers from "./TheMenuUsers.vue";
+import TheMenuSuperAdmin from "./TheMenuSuperAdmin.vue";
 import { ref } from "vue";
 import axios from "../axios.js";
 import { useRouter } from "vue-router";
+import { message } from "ant-design-vue";
 
 const open = ref(false);
 const open_users = ref(false);
@@ -73,13 +77,13 @@ const fetchUserInfo = async () => {
     if (!token) {
       throw new Error("No token found");
     }
-    const response = await axios.get("thong-tin-ca-nhan", {
+    const response = await axios.get("thong-tin-admin", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    localStorage.setItem("ma_sv", response.data.ma_sv);
-    currentUser.value = response.data.ten_sv;
+    localStorage.setItem("ma_admin", response.data.username);
+    currentUser.value = response.data.full_name;
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
   }
@@ -100,9 +104,9 @@ const logout = async () => {
       }
     );
     localStorage.removeItem("token");
-    localStorage.removeItem("ma_sv");
     localStorage.removeItem("role");
     console.log("Đăng xuất thành công");
+    message.success("Đăng xuất thành công");
     router.push("/login");
   } catch (error) {
     console.error("Đăng xuất thất bại:", error);
