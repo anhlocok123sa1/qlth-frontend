@@ -1,0 +1,30 @@
+
+/* Menu header */
+.header{
+    background-color: black;
+    padding: 0.8rem;
+}
+.name-student{
+    color: white;
+    font-weight: 600;
+}
+.logout-web{
+    color: black;
+    font-weight: 700;
+    border-radius: 20px;
+    background-color: white
+}
+.logout-mobile{
+    color: white;
+    font-weight: 700;
+    border-radius: 20px;
+    background-color: black
+}
+.logout-web.logout-mobile:hover {
+    background-color: #0056b3 !important; /* Màu nền xanh dương đậm khi hover */
+    color: #ffffff !important;            /* Màu chữ trắng */
+}
+
+.name-user{
+    font-weight: 600;
+}

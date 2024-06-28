@@ -1,0 +1,7 @@
+.ant-card-head-title {
+    font-weight: 700;
+
+  }
+  .edit-mode{
+    border-color: black; /* Blue border for edit mode */
+  }

@@ -81,7 +81,10 @@
                   ></a-checkbox>
                 </template>
                 <template v-if="column.key === 'ghichu'">
-                  <a-input v-model:value="record.ghichu" placeholder="Ghi chú" />
+                  <a-input
+                    v-model:value="record.ghichu"
+                    placeholder="Ghi chú"
+                  />
                 </template>
               </template>
             </a-table>
@@ -90,7 +93,7 @@
       </a-tabs>
     </a-card>
   </a-card>
-  <a-modal v-model:open="modalVisible" title="QR Điểm Danh">
+  <a-modal v-model:open="modalVisible" :title="value.value.value">
     <div class="qr-container">
       <a-qrcode
         class="large-qrcode"
@@ -261,9 +264,9 @@ export default defineComponent({
           record.khongphep = false;
         } else if (record.comat) {
           record.comat = false;
-        selectedRowKeys.value = selectedRowKeys.value.filter(
-          (key) => key !== record.key
-        );
+          selectedRowKeys.value = selectedRowKeys.value.filter(
+            (key) => key !== record.key
+          );
         }
       } else if (permission == "khongphep") {
         if (record.cophep) {
@@ -271,8 +274,8 @@ export default defineComponent({
         } else if (record.comat) {
           record.comat = false;
           selectedRowKeys.value = selectedRowKeys.value.filter(
-          (key) => key !== record.key
-        );
+            (key) => key !== record.key
+          );
         }
       }
     };
@@ -303,7 +306,7 @@ export default defineComponent({
     });
 
     const sendLish = async () => {
-      const students = users.value.map(user => ({
+      const students = users.value.map((user) => ({
         ma_sv: user.ma_sv,
         ma_gd: ma_gd_diemdanh.value,
         ngay_diem_danh: ngay_diem_danh.value,
@@ -463,7 +466,7 @@ export default defineComponent({
         title: "Ghi chú",
         dataIndex: "ghichu",
         key: "ghichu",
-      }
+      },
     ];
 
     return {
@@ -492,7 +495,7 @@ export default defineComponent({
       selectedRowKeys,
       rowSelection,
       togglePermission,
-      sendLish
+      sendLish,
     };
   },
 });

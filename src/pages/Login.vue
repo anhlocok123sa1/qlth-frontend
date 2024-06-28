@@ -92,7 +92,6 @@ export default defineComponent({
     });
 
     const errors = ref({});
-
     const loginUser = () => {
       axios
         .post("/login", user)
