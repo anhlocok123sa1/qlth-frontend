@@ -305,8 +305,6 @@ export default defineComponent({
       password: "",
       password_confirmation: "",
       change_password: false,
-      // login_at: "",
-      // change_password_at: "",
     });
 
     const errors = ref({});
