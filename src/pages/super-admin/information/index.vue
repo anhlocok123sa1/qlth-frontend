@@ -21,18 +21,18 @@
         </div>
         <!-- Thông tin cá nhân -->
         <div class="col-12 col-sm-8">
-          <!-- mssv -->
+          <!-- Mã giáo viên -->
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
-                <span>Mã sinh viên</span>
+                <span>Mã giáo viên</span>
               </label>
             </div>
             <div class="col-12 col-sm-4">
-              <a-input :value="users.ma_sv" :readonly="true"></a-input>
+              <a-input :value="users.username" :readonly="true"></a-input>
             </div>
           </div>
-          <!-- ho ten -->
+          <!-- Họ và tên -->
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -40,31 +40,10 @@
               </label>
             </div>
             <div class="col-12 col-sm-4">
-              <a-input :value="users.ten_sv" :readonly="true"></a-input>
-            </div>
-          </div>
-          <!-- malop -->
-          <div class="row mb-3">
-            <div class="col-12 col-sm-3 text-start text-sm-end">
-              <label>
-                <span>Mã Lớp</span>
-              </label>
-            </div>
-            <div class="col-12 col-sm-4">
-              <a-input :value="users.ma_lop" :readonly="true"></a-input>
-            </div>
-          </div>
-          <!-- Giới tính -->
-          <div class="row mb-3">
-            <div class="col-12 col-sm-3 text-start text-sm-end">
-              <label>
-                <span>Giới tính</span>
-              </label>
-            </div>
-            <div class="col-12 col-sm-4">
-              <a-input
-                :value="users.phai === 1 ? 'Nam' : 'Nữ'"
-                :readonly="true"
+              <a-input 
+              v-model:value="taikhoang.full_name"
+              :readonly="readonly"
+              :class="{ 'edit-mode': !readonly }"
               ></a-input>
             </div>
           </div>
@@ -83,7 +62,7 @@
             </div>
             <div class="col-12 col-sm-4">
               <a-input
-                v-model:value="taikhoansv.email"
+                v-model:value="taikhoang.email"
                 :readonly="readonly"
                 :class="{ 'edit-mode': !readonly }"
               ></a-input>
@@ -94,42 +73,17 @@
               </div>
             </div>
           </div>
-          <!-- SĐT -->
-          <div class="row mb-3">
-            <div class="col-12 col-sm-3 text-start text-sm-end">
-              <label>
-                <span
-                  :class="{
-                    'text-danger': errors.sdt,
-                  }"
-                  >Số điện thoại</span
-                >
-              </label>
-            </div>
-            <div class="col-12 col-sm-4">
-              <a-input
-                v-model:value="taikhoansv.sdt"
-                :readonly="readonly"
-                :class="{ 'edit-mode': !readonly }"
-              ></a-input>
-              <div class="w-100">
-                <small v-if="errors.sdt" class="text-danger">{{
-                  errors.sdt[0]
-                }}</small>
-              </div>
-            </div>
-          </div>
           <!-- Đổi mật khẩu -->
           <div class="row mb-3" v-if="!readonly">
             <div class="col-12 col-sm-3 text-start text-sm-end"></div>
             <div class="col-12 col-sm-5">
-              <a-checkbox v-model:checked="taikhoansv.change_password">
+              <a-checkbox v-model:checked="taikhoang.change_password">
                 Đổi mật khẩu
               </a-checkbox>
             </div>
           </div>
 
-          <div class="row mb-3" v-if="taikhoansv.change_password">
+          <div class="row mb-3" v-if="taikhoang.change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -139,7 +93,7 @@
             <div class="col-12 col-sm-5">
               <a-input-password
                 placeholder="Mật khẩu"
-                v-model:value="taikhoansv.password"
+                v-model:value="taikhoang.password"
                 :class="{
                   input_danger: errors.password,
                 }"
@@ -151,7 +105,7 @@
             </div>
           </div>
 
-          <div class="row mb-3" v-if="taikhoansv.change_password">
+          <div class="row mb-3" v-if="taikhoang.change_password">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -161,7 +115,7 @@
             <div class="col-12 col-sm-5">
               <a-input-password
                 placeholder="Xác nhận mật khẩu"
-                v-model:value="taikhoansv.password_confirmation"
+                v-model:value="taikhoang.password_confirmation"
               />
             </div>
           </div>
@@ -186,8 +140,8 @@ import { useMenuUsers } from "../../../stores/use-menu-users.js";
 
 import { onMounted, toRef } from "vue";
 import axios from "../../../axios";
-import { defineComponent, ref, reactive } from "vue";
 import "../../../css/users/information.css";
+import { defineComponent, ref, reactive } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 
@@ -199,16 +153,17 @@ export default defineComponent({
     const readonly = ref(true);
     const router = useRouter();
 
-    const taikhoansv = reactive({
+    const taikhoang = reactive({
       email: "",
-      sdt: "",
+      full_name: "",
+      username: "",
       password: "",
       password_confirmation: "",
       change_password: false,
     });
     const errors = ref({});
     onMounted(() => {
-      menuUsersStore.onSelectedKeys(["users-information"]);
+      menuUsersStore.onSelectedKeys(["admin-information"]);
     });
     onMounted(async () => {
       try {
@@ -217,14 +172,15 @@ export default defineComponent({
           throw new Error("No token found");
         }
 
-        const response = await axios.get("/thong-tin-ca-nhan", {
+        const response = await axios.get("/thong-tin-admin", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         users.value = response.data;
-        taikhoansv.email = response.data.email;
-        taikhoansv.sdt = response.data.sdt;
+        taikhoang.email = response.data.email;
+        taikhoang.full_name = response.data.full_name;
+        taikhoang.username = response.data.username;
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
@@ -237,22 +193,18 @@ export default defineComponent({
     };
     const save = () => {
       axios
-        .post("/edit", {
-          sdt: taikhoansv.sdt,
-          email: taikhoansv.email,
-          ma_sv: users.value.ma_sv,
-          password: taikhoansv.change_password ? taikhoansv.password : null,
-          password_confirmation: taikhoansv.change_password
-            ? taikhoansv.password_confirmation
+        .post("/editProfileAdmin", {
+          email: taikhoang.email,
+          username: users.value.username,
+          full_name: taikhoang.full_name,
+          password: taikhoang.change_password ? taikhoang.password : null,
+          password_confirmation: taikhoang.change_password
+            ? taikhoang.password_confirmation
             : null,
         })
         .then((response) => {
           if (response.status === 200) {
-            if (response.data.message) {
-              message.success(response.data.message);
-            } else {
-              message.success("Cập nhật thành công");
-            }
+            message.success(response.data.message);
             setTimeout(() => {
               location.reload();
             }, 500);
@@ -274,7 +226,7 @@ export default defineComponent({
       readonly,
       edit,
       save,
-      taikhoansv,
+      taikhoang,
       errors,
     };
   },

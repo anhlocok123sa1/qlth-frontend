@@ -41,6 +41,12 @@ const admin = [
         component: () => import("../pages/admin/thoikhoabieu/index.vue"),
         props: (route) => ({ query: route.query.q }),
       },
+      //Thông tin cá nhân
+      {
+        path: "information",
+        name: "admin-information",
+        component: () => import("../pages/admin/information/index.vue"),
+      },
     ],
   },
 ];
