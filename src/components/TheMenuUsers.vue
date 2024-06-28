@@ -3,6 +3,7 @@
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
     mode="inline"
+    style="min-height: 500px"
   >
     <!-- Qr code -->
     <a-menu-item key="users-qrcode">

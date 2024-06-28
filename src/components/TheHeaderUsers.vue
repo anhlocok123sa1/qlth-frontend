@@ -1,13 +1,10 @@
 <template>
   <div class="container-fluid">
-    <div
-      class="row text-white"
-      style="background-color: #0c713d; padding: 1rem"
-    >
+    <div class="row text-white header">
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
       >
-        <span @click="showDrawer">X</span>
+        <span @click="showDrawer"> <UnorderedListOutlined /></span>
       </div>
 
       <div
@@ -16,36 +13,36 @@
         <img
           src="../assets/logosv.png"
           alt="logo"
-          height="32"
-          width="34"
+          height="50"
+          width="50"
           class="ms-3 me-3"
         />
-        <span class="d-none d-sm-flex">Sinh Viên</span>
+        <span class="d-none d-sm-flex name-student">Sinh Viên</span>
       </div>
       <div
         class="col-sm-3 d-none d-sm-flex align-items-center justify-content-center justify-content-sm-end"
       >
-        <span>{{ currentUser }}</span>
-        <a-button type="primary" @click="logout" class="ms-3"
-          >Đăng xuất</a-button
-        >
+        <span class="name-user">{{ currentUser }}</span>
+        <a-button @click="logout" class="ms-3 logout-web">Đăng xuất</a-button>
       </div>
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
       >
-        <span @click="showDrawer_Users">X</span>
+        <span @click="showDrawer_Users"><LogoutOutlined /></span>
       </div>
     </div>
   </div>
 
+  <!-- show thanh trang thai mobile -->
   <a-drawer v-model:open="open" title="Danh Mục" placement="left">
     <TheMenuUsers />
   </a-drawer>
 
+  <!-- show thanh trang thai mobile -->
   <a-drawer v-model:open="open_users" title="Danh Mục" placement="right">
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
+    <a-button type="primary" @click="logout" class="ms-3 logout-mobile"
+      >Đăng xuất</a-button
+    >
   </a-drawer>
 </template>
 
@@ -54,6 +51,8 @@ import TheMenuUsers from "./TheMenuUsers.vue";
 import { ref } from "vue";
 import axios from "../axios.js";
 import { useRouter } from "vue-router";
+import { LogoutOutlined, UnorderedListOutlined } from "@ant-design/icons-vue";
+import "../css/users/header.css";
 
 const open = ref(false);
 const open_users = ref(false);

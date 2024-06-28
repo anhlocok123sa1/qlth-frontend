@@ -36,6 +36,7 @@ const pinia = createPinia();
 const app = createApp(App);
 
 app.config.globalProperties.$axios = axios;
+
 app.use(InputNumber);
 app.use(Modal);
 app.use(QRCode);

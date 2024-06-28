@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <p>Đây là trang QR code</p>
-    <a-qrcode ref="qrcodeCanvasRef" :value="qrValue" />
-    <br />
-    <br />
-    <a-button type="primary" @click="dowloadChange">Download</a-button>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2>QR code</h2>
+        <a-qrcode ref="qrcodeCanvasRef" :value="qrValue" class="qr-code" />
+        <br />
+        <br />
+        <a-button type="primary" @click="dowloadChange">Download</a-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +22,6 @@ const qrValue = ref("");
 const users = ref([]);
 const user = ref(null);
 const qrcodeCanvasRef = ref();
-
 const dowloadChange = async () => {
   try {
     if (!user.value) {
@@ -52,8 +55,6 @@ onMounted(async () => {
     user.value = users.value[0];
 
     qrValue.value = `${user.value.ma_sv}-${user.value.ten_sv}-${user.value.ma_lop}`;
-    console.log(qrValue.value);
-    // console.log(users.value[0].ten_sv);
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
   }

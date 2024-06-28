@@ -1,11 +1,10 @@
 <template>
-  <TheHeader/>
-  .
+  <TheHeader />
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-sm-3 d-none d-sm-flex">
         <a-list bordered style="width: 100%">
-          <TheMenu/>
+          <TheMenu />
           <template #header>
             <div>Bảng điều khiển</div>
           </template>
@@ -39,16 +38,16 @@ export default {
         .then((response) => {
           if (response.data.giaovien) {
             const userData = response.data.giaovien;
-            userStore.setUser(userData, 'giaovien');
+            userStore.setUser(userData, "giaovien");
           } else if (response.data.sinhvien) {
             const userData = response.data.sinhvien;
-            userStore.setUser(userData, 'sinhvien');
+            userStore.setUser(userData, "sinhvien");
           }
         })
         .catch((error) => {
           console.error("Failed to fetch user details", error);
-          localStorage.removeItem('token');
-          localStorage.removeItem('role');
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
           userStore.clearUser();
         });
     });
