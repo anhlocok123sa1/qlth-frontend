@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import admin from "./admin.js";
+import superAdmin from "./super_admin.js"
 import Login from '../pages/Login.vue';
 import axios from "../axios.js";
 import users from "./users.js";
@@ -7,6 +8,7 @@ import users from "./users.js";
 const routes = [
   ...admin,
   ...users,
+  ...superAdmin,
   {
     path: "/login",
     name: "login",
@@ -50,6 +52,8 @@ router.beforeEach(async (to, from, next) => {
         return next({ name: "users-sv" });
       } else if (role === "teacher" && !to.path.startsWith("/admin")) {
         return next({ name: "admin" });
+      } else if (role === "super_admin" && !to.path.startsWith("/super-admin")) {
+        return next({ name: "super-admin" });
       } else {
         return next(); // Proceed if the role and path match
       }

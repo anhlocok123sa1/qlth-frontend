@@ -138,12 +138,16 @@
 </template>
 <script>
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
+
 import { onMounted, toRef } from "vue";
 import axios from "../../../axios";
 import { defineComponent, ref, reactive } from "vue";
 import "../../../css/users/information.css";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+
+
+
 
 export default defineComponent({
   setup() {
@@ -167,6 +171,7 @@ export default defineComponent({
         if (!token) {
           throw new Error("No token found");
         }
+
         const response = await axios.get("/thong-tin-ca-nhan", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -175,6 +180,7 @@ export default defineComponent({
         users.value = response.data;
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
+
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }

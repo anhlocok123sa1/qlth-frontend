@@ -1,13 +1,17 @@
 <template>
-  <a-menu v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys" mode="inline">
-    <a-menu-item key="admin-diemdanh">
-      <router-link :to="{ name: 'admin-diemdanh'}" >
-        <span><i class="fa-regular fa-calendar me-1"></i>Điểm danh</span>
+  <a-menu
+    v-model:openKeys="openKeys"
+    v-model:selectedKeys="selectedKeys"
+    mode="inline"
+  >
+    <a-menu-item key="admin-users-gv">
+      <router-link :to="{ name: 'admin-users-gv' }">
+        <span><i class="fa-solid fa-user me-1"></i>Tài khoản giáo viên</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item key="admin-thoikhoabieu">
-      <router-link :to="{ name: 'admin-thoikhoabieu'}">
-        <span><i class="fa-regular fa-calendar-days me-1"></i>Thời khóa biểu</span>
+    <a-menu-item key="admin-users-sv">
+      <router-link :to="{ name: 'admin-users-sv' }">
+        <span><i class="fa-solid fa-user me-1"></i>Tài khoản sinh viên</span>
       </router-link>
     </a-menu-item>
     <a-menu-item key="admin-roles">
@@ -33,8 +37,8 @@ export default defineComponent({
     const store = useMenu();
 
     return {
-      ...storeToRefs(store)
+      ...storeToRefs(store),
     };
-  }
+  },
 });
 </script>

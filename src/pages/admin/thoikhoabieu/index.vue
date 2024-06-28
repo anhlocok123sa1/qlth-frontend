@@ -82,24 +82,33 @@ export default defineComponent({
     };
 
     const extractHocKy = (lichValue) => {
-      const transformedHocKy = lichValue.map((item) => {
-        return { label: item.hoc_ky_text, value: item.hoc_ky };
+      const uniqueHocKySet = new Set();
+      const transformedHocKy = [];
+
+      lichValue.forEach((item) => {
+        if (!uniqueHocKySet.has(item.hoc_ky)) {
+          uniqueHocKySet.add(item.hoc_ky);
+          transformedHocKy.push({
+            label: item.hoc_ky_text,
+            value: item.hoc_ky,
+          });
+        }
       });
 
       hocKy.value = transformedHocKy;
+      console.log(hocKy.value);
 
       if (hocKy.value.length > 0) {
         value1.value = hocKy.value[0].value;
-        fetchLichGDByHocKy(value1.value); // Fetch data for the initial value
+        fetchLichGDByHocKy(value1.value);
       }
     };
 
     const fetchLichGDByHocKy = (hocKy) => {
       if (magv.value) {
         axios
-          .get(`http://127.0.0.1:8000/api/lichgd/${magv.value}?hoc_ky=${hocKy}`)
+          .get(`lichgd/${magv.value}?hoc_ky=${hocKy}`)
           .then((response) => {
-            // data.value = response.data;
             watchEffect(() => {
               data.value = response.data;
             });

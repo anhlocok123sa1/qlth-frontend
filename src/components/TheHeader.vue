@@ -90,6 +90,7 @@ export default defineComponent({
     };
     const userStore = useUser();
     const userName = computed(() => userStore.getten);
+    console.log(userStore);
 
     return {
       open,
