@@ -47,8 +47,6 @@
   </a-drawer>
   <a-drawer v-model:open="open_user" title="Danh mục" placement="right">
     <p>Some contents for user...</p>
-    <p>Some contents for user...</p>
-    <p>Some contents for user...</p>
   </a-drawer>
 </template>
 

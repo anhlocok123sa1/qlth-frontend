@@ -146,9 +146,6 @@ import "../../../css/users/information.css";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 
-
-
-
 export default defineComponent({
   setup() {
     // Lấy store từ useMenuUsers
@@ -180,7 +177,6 @@ export default defineComponent({
         users.value = response.data;
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
-
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
