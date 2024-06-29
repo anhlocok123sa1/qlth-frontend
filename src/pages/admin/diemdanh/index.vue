@@ -86,6 +86,22 @@
               :scroll="{ x: 2000 }"
             >
               <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'diemdanh1'">
+                  <div v-if="record.diemdanh1">
+                    <a-checkbox checked disabled ></a-checkbox>
+                  </div>
+                  <div v-else>
+                    <a-checkbox disabled ></a-checkbox>
+                  </div>
+                </template>
+                <template v-if="column.key === 'diemdanh2'">
+                  <div v-if="record.diemdanh2">
+                    <a-checkbox checked disabled ></a-checkbox>
+                  </div>
+                  <div v-else>
+                    <a-checkbox disabled ></a-checkbox>
+                  </div>
+                </template>
                 <template v-if="column.key === 'cophep'">
                   <a-checkbox
                     v-model:checked="record.cophep"
@@ -412,15 +428,18 @@ export default defineComponent({
         ghi_chu: user.ghichu,
       }));
 
-      // try {
-      //   const response = await axios.post("/diemDanhSinhVien", {
-      //     students
-      //   });
-      //   message.success("Điểm danh thành công!");
-      // } catch (error) {
-      //   console.error("Lỗi khi gửi danh sách điểm danh:", error);
-      //   message.error("Lỗi khi gửi danh sách điểm danh!");
-      // }
+      console.log(students);
+      try {
+        const response = await axios.post("/diemDanhSinhVien", {
+          students
+        });
+        message.success("Điểm danh thành công!");
+        setTimeout
+      } catch (error) {
+        console.error("Lỗi khi gửi danh sách điểm danh:", error);
+        message.error("Lỗi khi gửi danh sách điểm danh!");
+      }
+
     };
 
     //Hien thi danh sach sinh vien
@@ -537,6 +556,18 @@ export default defineComponent({
         key: "id",
         fixed: true,
         width: "5%",
+      },
+      {
+        title: "Điểm danh lần 1",
+        dataIndex: "diemdanh1",
+        key: "diemdanh1",
+        width: "5%"
+      },
+      {
+        title: "Điểm danh lần 2",
+        dataIndex: "diemdanh2",
+        key: "diemdanh2",
+        width: "5%"
       },
       {
         title: "MSSV",

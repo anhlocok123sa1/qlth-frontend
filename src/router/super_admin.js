@@ -49,6 +49,13 @@ const superAdmin = [
         name: "admin-users-sv-edit",
         component: () => import("../pages/super-admin/users-sv/edit.vue"),
       },
+
+      //Thông tin cá nhân
+      {
+        path: "information",
+        name: "super-admin-information",
+        component: () => import("../pages/super-admin/information/index.vue"),
+      },
     ],
   },
 ];

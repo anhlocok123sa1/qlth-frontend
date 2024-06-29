@@ -4,23 +4,37 @@
     v-model:selectedKeys="selectedKeys"
     mode="inline"
   >
+
+    <!-- Điểm danh sinh viên -->
+
     <a-menu-item key="admin-diemdanh">
       <router-link :to="{ name: 'admin-diemdanh' }">
         <span><i class="fa-regular fa-calendar me-1"></i>Điểm danh</span>
       </router-link>
     </a-menu-item>
+
+    <!-- Xem thời khóa biểu -->
     <a-menu-item key="admin-thoikhoabieu">
       <router-link :to="{ name: 'admin-thoikhoabieu' }">
-        <span
-          ><i class="fa-regular fa-calendar-days me-1"></i>Thời khóa biểu</span
-        >
+
+        <span><i class="fa-regular fa-calendar-days me-1"></i>Thời khóa biểu</span>
+
       </router-link>
     </a-menu-item>
+
+    <!-- information -->
+    <a-menu-item key="admin-information">
+      <router-link :to="{ name: 'admin-information' }">
+        <span><UserOutlined /> Thông tin cá nhân</span>
+      </router-link>
+    </a-menu-item>
+
     <a-menu-item key="admin-roles">
       <router-link :to="{ name: 'admin-roles' }">
         <span><i class="fa-solid fa-tag me-1"></i>Vai trò</span>
       </router-link>
     </a-menu-item>
+
     <a-menu-item key="admin-settings">
       <router-link :to="{ name: 'admin-settings' }">
         <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
