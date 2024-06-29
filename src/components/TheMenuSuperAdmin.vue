@@ -21,7 +21,7 @@
     <!-- information -->
     <a-menu-item key="super-admin-information">
       <router-link :to="{ name: 'super-admin-information' }">
-        <span><UserOutlined /> Thông tin cá nhân</span>
+        <span><i class="fa-solid fa-user me-1"></i>Thông tin cá nhân</span>
       </router-link>
     </a-menu-item>
 

@@ -27,6 +27,8 @@ async function validateToken(token) {
     const response = await axios.post('validate-token', { token });
     return response.data.valid;
   } catch (error) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
     return false;
   }
 }

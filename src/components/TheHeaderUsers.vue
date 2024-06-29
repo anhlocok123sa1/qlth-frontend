@@ -81,6 +81,9 @@ const fetchUserInfo = async () => {
     currentUser.value = response.data.ten_sv;
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("ma_sv");
   }
 };
 const logout = async () => {
