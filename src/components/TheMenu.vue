@@ -6,10 +6,16 @@
   >
 
     <!-- Điểm danh sinh viên -->
-
     <a-menu-item key="admin-diemdanh">
       <router-link :to="{ name: 'admin-diemdanh' }">
         <span><i class="fa-regular fa-calendar me-1"></i>Điểm danh</span>
+      </router-link>
+    </a-menu-item>
+
+    <!-- Xem kết quả điểm danh -->
+     <a-menu-item key="admin-kqdiemdanh">
+      <router-link :to="{ name: 'admin-kqdiemdanh' }">
+        <span><i class="fa-solid fa-file me-1"></i>Xem kết quả điểm danh</span>
       </router-link>
     </a-menu-item>
 
@@ -25,7 +31,7 @@
     <!-- information -->
     <a-menu-item key="admin-information">
       <router-link :to="{ name: 'admin-information' }">
-        <span><UserOutlined /> Thông tin cá nhân</span>
+        <span><i class="fa-solid fa-user me-1"></i>Thông tin cá nhân</span>
       </router-link>
     </a-menu-item>
 

@@ -34,6 +34,12 @@ const admin = [
         name: "admin-diemdanh",
         component: () => import("../pages/admin/diemdanh/index.vue"),
       },
+      //Xem điểm danh
+      {
+        path: "kqdiemdanh",
+        name: "admin-kqdiemdanh",
+        component: () => import("../pages/admin/kqdiemdanh/index.vue"),
+      },
       //Quản lý thời khóa biểu
       {
         path: "thoikhoabieu",
