@@ -1,10 +1,11 @@
 <template>
-  <a-card title="THỜI KHÓA BIỂU" style="width: max-content">
+  <a-card title="THỜI KHÓA BIỂU" style="width: 100%">
     <div class="col-12">
       <a-table
         :columns="columns"
         :data-source="timetalbe"
         v-if="timetalbe.length > 0"
+        :scroll="{ x: 1000 }"
       ></a-table>
       <a-spin v-else />
     </div>
@@ -47,13 +48,18 @@ export default {
     };
 
     const columns = [
-      { title: "Mã môn học", dataIndex: "ma_mh", key: "ma_mh" },
-      { title: "Tên môn học", dataIndex: "ten_mh", key: "ten_mh" },
+      { title: "Mã môn học", dataIndex: "ma_mh", key: "ma_mh", fixed: "left" },
+      {
+        title: "Tên môn học",
+        dataIndex: "ten_mh",
+        key: "ten_mh",
+      },
       { title: "Phòng học", dataIndex: "phong_hoc", key: "phong_hoc" },
       { title: "Số tiết bắt đầu", dataIndex: "st_bd", key: "st_bd" },
       { title: "Số tiết kết thúc", dataIndex: "st_kt", key: "st_kt" },
       { title: "Tên giáo viên", dataIndex: "ten_gv", key: "ten_gv" },
-      { title: "Thời gian học", dataIndex: "thoi_gian", key: "thoi_gian" },
+      { title: "NGày bắt đầu", dataIndex: "ngay_bd", key: "ngay_bd" },
+      { title: "NGày bắt đầu", dataIndex: "ngay_kt", key: "ngay_kt" },
     ];
     // console.log(timetalbe);
     return {

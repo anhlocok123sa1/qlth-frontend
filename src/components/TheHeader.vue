@@ -46,9 +46,7 @@
     <TheMenu />
   </a-drawer>
   <a-drawer v-model:open="open_user" title="Danh mục" placement="right">
-    <p>Some contents for user...</p>
-    <p>Some contents for user...</p>
-    <p>Some contents for user...</p>
+    <a-button type="primary" class="ms-2" @click="logout">Đăng xuất</a-button>
   </a-drawer>
 </template>
 

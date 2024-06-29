@@ -46,7 +46,7 @@
       </a-card>
     </form>
 
-    <a-card class="mt-2">
+    <a-card>
       <a-tabs v-model:activeKey="activeKey" @change="handleTabChange">
         <a-tab-pane
           v-for="tab in selectedTabs"
@@ -54,12 +54,30 @@
           :tab="`Nhóm: ${tab.nmh} - Tiết ${tab.st_bd} -> ${tab.st_kt}`"
         >
           <form @submit.prevent="sendLish()">
+            <!-- Lưu điểm danh -->
             <a-button html-type="submit" type="primary" class="me-2 mb-2"
               >Lưu điểm danh</a-button
             >
+
+            <!-- Xuát excel -->
             <a-button type="primary" class="me-2 mb-2">Xuất excel</a-button>
-            <a-button type="primary" class="me-2 mb-2" @click="showModalSetQR"
+
+            <!-- Hiện mã QR -->
+            <a-button
+              type="primary"
+              class="me-2 mb-2"
+              @click="showModalSetQR"
+              @ok="handleOk"
               >QR điểm danh</a-button
+            >
+
+            <!-- Quét mã điểm danh -->
+            <a-button
+              type="primary"
+              class="me-2 mb-2"
+              @click="showModalScanQR"
+              @ok="handleOk"
+              >Quét mã</a-button
             >
             <a-table
               :row-selection="rowSelection"
@@ -109,7 +127,11 @@
       </a-tabs>
     </a-card>
   </a-card>
-  <a-modal v-model:open="modalVisible" :title="value.value.value">
+  <a-modal
+    v-model:open="modalVisible"
+    :title="value.value.value"
+    @ok="handleOk"
+  >
     <div class="qr-container">
       <a-qrcode
         class="large-qrcode"
@@ -119,8 +141,7 @@
       />
     </div>
   </a-modal>
-  <!-- Modal Khởi tảo QR -->
-
+  <!-- Modal Khởi tạo QR -->
   <a-modal v-model:open="setQR" title="Khởi Tạo QR Điểm danh" @ok="handleOk">
     <div>
       <table>
@@ -159,26 +180,48 @@
       </div>
     </div>
   </a-modal>
+  <!-- Modal Quét mã điểm danh -->
+  <a-modal
+    v-model:open="scanQR"
+    :title="`Quét mã điểm danh lần ${valueAttendance}`"
+    @ok="handleOk"
+  >
+    <a-radio-group v-model:value="valueAttendance" :hidden="statusCamera">
+      <a-radio :style="radioStyle" :value="1">1</a-radio>
+      <a-radio :style="radioStyle" :value="2">2</a-radio>
+    </a-radio-group>
+    <a-button type="primary" @click="onOffCamera" class="mb-3">
+      {{ statusCamera ? "Tắt Camera" : "Bật Camera" }}
+    </a-button>
+    <VueQrcodeReader v-if="statusCamera" @decode="onDecode" />
+    <h1>{{ result }}</h1>
+  </a-modal>
 </template>
 
 <script>
 import { useMenu, useUser } from "../../../stores/use-menu.js";
 import { format } from "date-fns";
-import { Table } from "ant-design-vue";
 import { computed, defineComponent, onMounted, ref, unref, watch } from "vue";
-import axios from "../../../axios";
+
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
+import { QrcodeStream as VueQrcodeReader } from "vue3-qrcode-reader";
+import axios from "../../../axios.js";
 
 export default defineComponent({
+  components: {
+    VueQrcodeReader,
+  },
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-diemdanh"]);
     const userStore = useUser();
     const magv = computed(() => userStore.getma);
+
     // Khởi Tạo QR
     const modalVisible = ref(false);
     const setQR = ref(false);
+    const scanQR = ref(false);
 
     //Tim lich
     const hocKy = ref([]);
@@ -195,6 +238,63 @@ export default defineComponent({
     const idTKB = ref([]);
     const qrValue = ref("");
     const valueExpires = ref(2);
+    const tkb = ref("");
+
+    //Diem danh
+    const selectedRowKeys = ref([]);
+    const ma_gd_diemdanh = ref("");
+    const ngay_diem_danh = ref("");
+
+    // Quét mã điểm danh
+    const result = ref("");
+    const statusCamera = ref(false);
+    const valueAttendance = ref(1);
+
+    const onDecode = async (decodedText) => {
+      result.value = decodedText;
+      try {
+        const date = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+        const response = await axios.post("quet-ma-sinh-vien", {
+          code: result.value,
+          attendace: valueAttendance.value,
+          attendaceTime: date,
+          ma_gd: keyATab.value,
+          day: dayjs(selectedDate.value).format("YYYY-MM-DD"),
+        });
+
+        if (response.data.message) {
+          message.success(response.data.message);
+        } else {
+          alert("Không tìm thấy sinh viên");
+        }
+      } catch (error) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          message.error(error.response.data.message);
+        } else {
+          message.error("Có lỗi xảy ra, vui lòng thử lại.");
+        }
+      }
+    };
+    const showModalScanQR = () => {
+      scanQR.value = true;
+    };
+    const handleOk = (e) => {
+      scanQR.value = false;
+      setQR.value = false;
+      modalVisible.value = false;
+    };
+    const onOffCamera = () => {
+      if (users.value.length == 0) {
+        message.warn("Vui lòng chọn đầy đủ thông tin và Tìm lịch học");
+      } else {
+        result.value = "";
+        statusCamera.value = !statusCamera.value;
+      }
+    };
 
     //hiển thị lại mã
     const showCodeAgain = () => {
@@ -269,10 +369,6 @@ export default defineComponent({
         message.warn("Vui lòng chọn đầy đủ thông tin để khởi tạo mã QR.");
       }
     };
-    //Diem danh
-    const selectedRowKeys = ref([]);
-    const ma_gd_diemdanh = ref("");
-    const ngay_diem_danh = ref("");
 
     const togglePermission = (record, permission) => {
       if (permission == "cophep") {
@@ -331,6 +427,7 @@ export default defineComponent({
         khong_phep: user.khongphep,
         ghi_chu: user.ghichu,
       }));
+
       console.log(students);
       try {
         const response = await axios.post("/diemDanhSinhVien", {
@@ -342,11 +439,14 @@ export default defineComponent({
         console.error("Lỗi khi gửi danh sách điểm danh:", error);
         message.error("Lỗi khi gửi danh sách điểm danh!");
       }
+
     };
+
     //Hien thi danh sach sinh vien
     const handleTabChange = (key) => {
       keyATab.value = key;
     };
+
     //Tim lich
     const getLich = async () => {
       if (magv.value) {
@@ -444,10 +544,10 @@ export default defineComponent({
         getLich();
       }
     });
-
     onMounted((magv) => {
       getLich();
     });
+
     // cột hiển thị danh sách sinh viên
     const columns = [
       {
@@ -500,6 +600,12 @@ export default defineComponent({
         key: "ghichu",
       },
     ];
+    watch(scanQR, (newVal) => {
+      if (!newVal) {
+        result.value = "";
+        statusCamera.value = false; // Tắt camera khi modal đóng
+      }
+    });
 
     return {
       hocKy,
@@ -519,7 +625,9 @@ export default defineComponent({
       createQr,
       qrValue,
       showModalSetQR,
+      showModalScanQR,
       setQR,
+      scanQR,
       options,
       value,
       valueExpires,
@@ -528,6 +636,12 @@ export default defineComponent({
       rowSelection,
       togglePermission,
       sendLish,
+      handleOk,
+      onDecode,
+      result,
+      statusCamera,
+      valueAttendance,
+      onOffCamera,
     };
   },
 });
