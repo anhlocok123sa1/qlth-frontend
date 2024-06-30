@@ -218,11 +218,12 @@ import "../../../css/users/information.css";
 import { defineComponent, ref, reactive } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import { useMenu } from "../../../stores/use-menu.js";
 
 export default defineComponent({
   setup() {
     // Lấy store từ useMenuUsers
-    const menuUsersStore = useMenuUsers();
+    const store = useMenu();
     const users = ref({});
     const readonly = ref(true);
     const router = useRouter();
@@ -236,7 +237,7 @@ export default defineComponent({
     });
     const errors = ref({});
     onMounted(() => {
-      menuUsersStore.onSelectedKeys(["admin-information"]);
+      store.onSelectedKeys(["admin-information"]);
     });
     onMounted(async () => {
       try {
@@ -261,7 +262,7 @@ export default defineComponent({
     // Edit
     const edit = () => {
       readonly.value = !readonly.value;
-      console.log(readonly.value);
+      // console.log(readonly.value);
     };
     const save = () => {
       axios
@@ -275,7 +276,7 @@ export default defineComponent({
             : null,
         })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           if (response.status === 200) {
             if (response.data.message) {
               message.success(response.data.message);
@@ -299,12 +300,12 @@ export default defineComponent({
     };
 
     return {
-      users,
-      readonly,
       edit,
       save,
-      taikhoangv,
+      users,
       errors,
+      readonly,
+      taikhoangv,
     };
   },
 });

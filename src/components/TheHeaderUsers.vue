@@ -104,7 +104,7 @@ const logout = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("ma_sv");
     localStorage.removeItem("role");
-    console.log("Đăng xuất thành công");
+    // console.log("Đăng xuất thành công");
     router.push("/login");
   } catch (error) {
     console.error("Đăng xuất thất bại:", error);

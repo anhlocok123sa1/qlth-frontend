@@ -4,7 +4,7 @@
     <a-button type="primary" @click="onOffCamera" class="mb-3">
       {{ statusCamera ? "Tắt Camera" : "Bật Camera" }}
     </a-button>
-    <VueQrcodeReader v-if="statusCamera" @decode="onDecode" />
+    <VueQrcodeReader v-if="statusCamera" @decode="onDecode" class="width-camera"/>
   </div>
 </template>
 <script lang="ts">
@@ -74,4 +74,10 @@ export default defineComponent({
 .decode-result {
   margin-top: 10px;
 }
+@media screen and (min-width: 600px) {
+  .width-camera {
+    width: 500px;
+  } 
+}
+
 </style>
