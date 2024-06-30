@@ -25,7 +25,7 @@
     @ok="handleOk"
     width="800px"
   >
-    <a-table :dataSource="attendance" :columns="columnsAttendance">
+    <a-table :dataSource="attendance" :columns="columnsAttendance" :scroll="{ x: 500 }">
       <a-table-column title="STT" dataIndex="stt"></a-table-column>
       <template
         #customFilterDropdown="{
@@ -94,7 +94,10 @@
 import axios from "../../../axios";
 import { onMounted, reactive, ref } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
+import { useMenu } from "../../../stores/use-menu";
 
+const store = useMenu();
+store.onSelectedKeys(['admin-kqdiemdanh'])
 const state = reactive({
   searchText: "",
   searchedColumn: "",
@@ -131,9 +134,9 @@ const columnsAttendance = [
     },
   },
   { title: "Họ và tên", dataIndex: "ten_sv", key: "ten_sv" },
-  { title: "Số buổi học", dataIndex: "sbh", key: "sbh" },
-  { title: "Số buổi điểm danh", dataIndex: "sbdd", key: "sbdd" },
-  { title: "Số buổi vắng", dataIndex: "sbv", key: "sbv" },
+  { title: "Số buổi học", dataIndex: "sbh", key: "sbh", width:'10%' },
+  { title: "Số buổi điểm danh", dataIndex: "sbdd", key: "sbdd", width:'10%' },
+  { title: "Số buổi vắng", dataIndex: "sbv", key: "sbv", width:'10%' },
 ];
 const handleSearch = (selectedKeys, confirm, dataIndex) => {
   confirm();
@@ -178,7 +181,7 @@ const showModal = async (record) => {
       },
     });
     attendance.value = response.data;
-    console.log(response);
+    // console.log(response);
   } catch (error) {
     console.log(error);
   }

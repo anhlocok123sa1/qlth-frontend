@@ -83,6 +83,9 @@ const fetchUserInfo = async () => {
     localStorage.setItem("ma_admin", response.data.username);
     currentUser.value = response.data.full_name;
   } catch (error) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("ma_admin");
     console.error("Failed to fetch user profile:", error);
   }
 };
@@ -103,7 +106,7 @@ const logout = async () => {
     );
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    console.log("Đăng xuất thành công");
+    // console.log("Đăng xuất thành công");
     message.success("Đăng xuất thành công");
     router.push("/login");
   } catch (error) {

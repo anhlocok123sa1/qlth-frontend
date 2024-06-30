@@ -21,7 +21,7 @@
           width="34"
           class="ms-3 me-3"
         />
-        <span class="d-none d-sm-flex">Quản trị</span>
+        <span class="d-none d-sm-flex">Giáo viên</span>
       </div>
       <div
         class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end"

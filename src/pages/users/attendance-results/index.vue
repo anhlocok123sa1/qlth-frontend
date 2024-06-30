@@ -41,7 +41,7 @@ export default {
 
     const showModal = (record) => {
       const ma_gd = record.ma_gd;
-      console.log(ma_gd);
+      // console.log(ma_gd);
 
       axios
         .get(`ket-qua-diem-danh/${ma_gd}/${ma_sv}`, {
@@ -65,8 +65,8 @@ export default {
           } else {
             attendance.value = [];
           }
-          console.log(ma_gd);
-          console.log(localStorage.getItem("ma_sv"));
+          // console.log(ma_gd);
+          // console.log(localStorage.getItem("ma_sv"));
         })
         .catch((error) => {
           console.error("Lỗi không gọi được api", error);

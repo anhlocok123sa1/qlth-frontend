@@ -263,6 +263,7 @@ export default defineComponent({
         });
 
         if (response.data.message) {
+          console.log(response);
           message.success(response.data.message);
         } else {
           alert("Không tìm thấy sinh viên");
@@ -370,6 +371,7 @@ export default defineComponent({
       }
     };
 
+    //Toggle có phép, không phép, có mặt
     const togglePermission = (record, permission) => {
       if (permission == "cophep") {
         if (record.khongphep) {
@@ -407,6 +409,7 @@ export default defineComponent({
       }
     };
 
+    //Check sinh viên có mặt
     const rowSelection = computed(() => {
       return {
         selectedRowKeys: unref(selectedRowKeys),
@@ -417,6 +420,7 @@ export default defineComponent({
       };
     });
 
+    //Gửi danh sách sinh viên điểm danh
     const sendLish = async () => {
       const students = users.value.map((user) => ({
         ma_sv: user.ma_sv,
@@ -428,7 +432,6 @@ export default defineComponent({
         ghi_chu: user.ghichu,
       }));
 
-      console.log(students);
       try {
         const response = await axios.post("/diemDanhSinhVien", {
           students
@@ -609,39 +612,39 @@ export default defineComponent({
 
     return {
       hocKy,
-      filteredMonHoc,
-      selectedHocKy,
-      selectedMonHoc,
-      selectedDate,
-      filterCalendar,
-      columns,
-      users,
-      getListMH,
-      selectedTabs,
-      activeKey,
-      handleTabChange,
-      keyATab,
-      modalVisible,
-      createQr,
-      qrValue,
-      showModalSetQR,
-      showModalScanQR,
-      setQR,
-      scanQR,
-      options,
       value,
+      setQR,
+      users,
+      scanQR,
+      result,
+      options,
+      columns,
+      keyATab,
+      qrValue,
+      getListMH,
+      activeKey,
+      selectedDate,
+      selectedTabs,
+      modalVisible,
       valueExpires,
-      showCodeAgain,
-      selectedRowKeys,
       rowSelection,
-      togglePermission,
+      statusCamera,
+      selectedHocKy,
+      filteredMonHoc,
+      selectedMonHoc,
+      selectedRowKeys,
+      valueAttendance,
       sendLish,
       handleOk,
       onDecode,
-      result,
-      statusCamera,
-      valueAttendance,
+      createQr,
       onOffCamera,
+      showCodeAgain,
+      showModalSetQR,
+      filterCalendar,
+      handleTabChange,
+      showModalScanQR,
+      togglePermission,
     };
   },
 });

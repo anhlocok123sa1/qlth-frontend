@@ -73,7 +73,7 @@ export default defineComponent({
           .get(`hocky/${magv.value}`)
           .then((response) => {
             extractHocKy(response.data);
-            console.log(response);
+            // console.log(response);
           })
           .catch((error) => {
             console.log(error);
@@ -96,7 +96,7 @@ export default defineComponent({
       });
 
       hocKy.value = transformedHocKy;
-      console.log(hocKy.value);
+      // console.log(hocKy.value);
 
       if (hocKy.value.length > 0) {
         value1.value = hocKy.value[0].value;

@@ -189,7 +189,7 @@ export default defineComponent({
     // Edit
     const edit = () => {
       readonly.value = !readonly.value;
-      console.log(readonly.value);
+      // console.log(readonly.value);
     };
     const save = () => {
       axios

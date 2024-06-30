@@ -222,7 +222,7 @@ export default defineComponent({
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response);
+            // console.log(response);
             message.success("Đăng nhập thành công");
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("role", response.data.role);
