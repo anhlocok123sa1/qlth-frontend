@@ -1,6 +1,9 @@
 function checkAdminRole(to, from, next) {
   const role = localStorage.getItem("role");
   if (role === "teacher") {
+    if (to.name == 'admin') {
+      next({ name: "admin-diemdanh" });
+    }
     next();
   } else {
     next({ name: "login" }); // Redirect to login if the role is not 'teacher'

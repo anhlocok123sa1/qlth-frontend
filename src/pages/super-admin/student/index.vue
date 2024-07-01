@@ -1,113 +1,117 @@
 <template>
-  <div class="row">
-    <div class="col-sm-6 d-flex justify-content-sm-start">
-      <span>Danh sách sinh viên</span>
-    </div>
-    <div class="col-sm-6 d-flex justify-content-sm-end">
-      <a-button type="primary">Thêm mới</a-button>
-    </div>
-  </div>
-
-  <div class="row">
-    <!-- Lớp -->
-    <div class="col-sm-5">
-      <a-select
-        v-model:value="valueDepartment"
-        show-search
-        placeholder="Chọn khoa"
-        style="width: 100%"
-        :options="departmentList"
-        :filter-option="filterOption"
-        @change="handleChangeDepartment"
-      ></a-select>
-    </div>
-    <div class="col-sm-4">
-      <a-select
-        v-model:value="selectedClasses"
-        mode="multiple"
-        style="width: 100%"
-        placeholder="Chọn Lớp"
-        :options="classList"
-        @change="handleChangeClass"
-      ></a-select>
+  <a-card title="Danh sách sinh viên">
+    <div class="row">
+      <div class="d-flex justify-content-sm-end mb-2">
+        <a-button type="primary">Thêm mới</a-button>
+      </div>
     </div>
 
-    <div class="col-sm-3">
-      <a-button type="primary" @click="search()">
-        <i class="fa-solid fa-magnifying-glass" style="margin-right: 4px"></i
-        >Tìm Kiếm</a-button
-      >
-    </div>
-  </div>
-  <br />
+    <div class="row">
+      <!-- Lớp -->
+      <div class="col-sm-5 mb-2">
+        <a-select
+          v-model:value="valueDepartment"
+          show-search
+          placeholder="Chọn khoa"
+          style="width: 100%"
+          :options="departmentList"
+          :filter-option="filterOption"
+          @change="handleChangeDepartment"
+        ></a-select>
+      </div>
+      <div class="col-sm-4 mb-2">
+        <a-select
+          v-model:value="selectedClasses"
+          mode="multiple"
+          style="width: 100%"
+          placeholder="Chọn Lớp"
+          :options="classList"
+          @change="handleChangeClass"
+        ></a-select>
+      </div>
 
-  <div class="row">
-    <div class="col-sm-12 d-flex">
-      <div class="col-sm-8 d-sm-flex m-1">
-        <div class="col-sm-5">
-          <a-input-search
-            v-model:value="nameFilter"
-            placeholder="Nhập họ và tên"
-            allow-clear
-            enter-button
-            @search="searchName"
+      <div class="col-sm-3">
+        <a-button type="primary" @click="search()">
+          <i class="fa-solid fa-magnifying-glass" style="margin-right: 4px"></i
+          >Tìm Kiếm</a-button
+        >
+      </div>
+    </div>
+    <br />
+
+    <div class="row">
+      <div class="col-sm-12 d-flex">
+        <div class="col-sm-8 d-sm-flex m-1">
+          <div class="col-sm-5 me-2 mb-2">
+            <a-input-search
+              v-model:value="nameFilter"
+              placeholder="Nhập họ và tên"
+              allow-clear
+              enter-button
+              @search="searchName"
+            />
+          </div>
+          <div class="col-sm-5">
+            <a-input-search
+              class=""
+              v-model:value="idFilter"
+              placeholder="Nhập MSSV "
+              allow-clear
+              enter-button
+              @search="searchID"
+            />
+          </div>
+        </div>
+        <!-- import-export -->
+        <div class="col-sm-4 m-1">
+          <a-button
+            type="primary"
+            style="margin-left: 8px"
+            @click="importData()"
+            class="mb-2"
+          >
+            <i class="fa-solid fa-upload"></i><label> import</label></a-button
+          >
+          <a-button
+            type="primary"
+            danger
+            style="margin-left: 8px"
+            @click="exportData()"
+          >
+            <i class="fa-solid fa-download"></i><lable> Export</lable></a-button
+          >
+        </div>
+      </div>
+      <div class="col-sm-12 d-flex justify-content-end">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+          <input
+            ref="fileInput"
+            type="file"
+            accept=".xlsx, .xls"
+            style="display: none"
+            @change="handleFileChange"
           />
         </div>
-        <div class="col-sm-5">
-          <a-input-search
-            class=""
-            v-model:value="idFilter"
-            placeholder="Nhập MSSV "
-            allow-clear
-            enter-button
-            @search="searchID"
-          />
-        </div>
-      </div>
-      <!-- import-export -->
-      <div class="col-sm-4 m-1">
-        <a-button type="primary" style="margin-left: 8px" @click="importData()">
-          <i class="fa-solid fa-upload"></i><label> import</label></a-button
-        >
-        <a-button
-          type="primary"
-          danger
-          style="margin-left: 8px"
-          @click="exportData()"
-        >
-          <i class="fa-solid fa-download"></i><lable> Export</lable></a-button
-        >
       </div>
     </div>
-    <div class="col-sm-12 d-flex justify-content-end">
-      <div class="col-sm-8"></div>
-      <div class="col-sm-4">
-        <input
-          ref="fileInput"
-          type="file"
-          accept=".xlsx, .xls"
-          style="display: none"
-          @change="handleFileChange"
-        />
-      </div>
-    </div>
-  </div>
-  <br />
-  <div class="row">
-    <div class="col-sm-12">
-      <a-table
-        :columns="columns"
-        :data-source="data"
-        :scroll="{ x: 1500, y: 1500 }"
-      >
-        <template #bodyCell="{ column }">
-          <template v-if="column.key === 'operation'">
-            <a>action</a>
+    <br />
+    <div class="row">
+      <div class="col-sm-12">
+        <a-table
+          :columns="columns"
+          :data-source="data"
+          :scroll="{ x: 1500, y: 1500 }"
+        >
+          <template #bodyCell="{ column }">
+            <template v-if="column.key === 'operation'">
+              <a>action</a>
+            </template>
           </template>
-        </template>
-      </a-table>
+        </a-table>
+      </div>
     </div>
-  </div>
+  </a-card>
 </template>
 
 <script>
