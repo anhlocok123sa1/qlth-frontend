@@ -46,7 +46,7 @@
     <TheMenuSuperAdmin />
   </a-drawer>
   <a-drawer v-model:open="open_user" title="Danh mục" placement="right">
-    <p>Some contents for user...</p>
+    <a-button type="primary" class="ms-2" @click="logout">Đăng xuất</a-button>
   </a-drawer>
 </template>
 
@@ -58,15 +58,15 @@ import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
 
 const open = ref(false);
-const open_users = ref(false);
+const open_user = ref(false);
 const currentUser = ref("");
 const router = useRouter();
 const showDrawer = () => {
   open.value = true;
 };
 
-const showDrawer_Users = () => {
-  open_users.value = true;
+const showDrawerUser = () => {
+  open_user.value = true;
 };
 
 const fetchUserInfo = async () => {

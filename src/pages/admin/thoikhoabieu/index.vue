@@ -7,12 +7,30 @@
           v-model:value="value1"
           :options="hocKy"
           @change="handleChangeSelect"
-          >{{ hocKy.value }}</a-select
+          @focus="focus"
+          class="mb-2 me-2"
+        >{{ hocKy.value }}</a-select>
+        <a-select
+          ref="select"
+          v-model:value="value2"
+          :options="styleTKB"
+          style="width: 200px"
+          @change="handleChangeSelectStyle"
+          class="mb-2 me-2"
+        ></a-select>
+        <a-select
+          ref="select"
+          v-model:value="value3"
+          :options="tuan"
+          style="width: 270px"
+          @change="handleChangeSelectTuan"
+          v-if="!selectView"
         >
+        </a-select>
       </a-card>
     </form>
     <a-card class="mt-2">
-      <table class="styled-table">
+      <table v-if="selectView" class="styled-table">
         <thead>
           <tr>
             <th>Mã môn học</th>
@@ -50,12 +68,14 @@ import { useMenu, useUser } from "../../../stores/use-menu.js";
 import {
   computed,
   defineComponent,
+  h,
   onMounted,
   ref,
   watch,
   watchEffect,
 } from "vue";
 import axios from "../../../axios.js";
+import dayjs from "dayjs";
 
 export default defineComponent({
   setup() {
@@ -67,13 +87,31 @@ export default defineComponent({
     const value1 = ref("");
     const data = ref([]);
     const dataSource = ref();
+    
+    const value2 = ref("TKB học kỳ cá nhân");
+    const value3 = ref("");
+    const tuanStart = ref(0);
+    const tuan = ref([]);
+    const namRaw = ref("");
+    const hocKyRaw = ref("");
+    const selectView = ref(true);
+    const styleTKB = ref([
+      {
+        value: 0,
+        label: "TKB học kỳ cá nhân",
+      },
+      {
+        value: 1,
+        label: "TKB theo tuần",
+      },
+    ]);
+
     const getHocKy = () => {
       if (magv.value) {
         axios
           .get(`hocky/${magv.value}`)
           .then((response) => {
             extractHocKy(response.data);
-            // console.log(response);
           })
           .catch((error) => {
             console.log(error);
@@ -96,11 +134,11 @@ export default defineComponent({
       });
 
       hocKy.value = transformedHocKy;
-      // console.log(hocKy.value);
 
       if (hocKy.value.length > 0) {
         value1.value = hocKy.value[0].value;
         fetchLichGDByHocKy(value1.value);
+        updateTuan(value1.value);
       }
     };
 
@@ -121,30 +159,91 @@ export default defineComponent({
 
     const handleChangeSelect = (value) => {
       fetchLichGDByHocKy(value);
+      updateTuan(value);
     };
+
+    const updateTuan = (hocKy) => {
+      hocKyRaw.value = parseInt(hocKy / 100);
+      namRaw.value = hocKy % 100;
+      let startWeek, endWeek;
+      if (hocKyRaw.value == 1) {
+        startWeek = 1;
+        endWeek = 24;
+      } else if (hocKyRaw.value == 2) {
+        startWeek = 25;
+        endWeek = 43;
+      } else if (hocKyRaw.value == 3) {
+        startWeek = 44;
+        endWeek = 52;
+      }
+      tuanStart.value = startWeek;
+      tuan.value = [];
+      // Calculate the first Monday of September for the given year
+      let firstDayOfSeptember = dayjs(`20${namRaw.value}-09-01`);
+      let firstMonday = firstDayOfSeptember.day() === 1
+        ? firstDayOfSeptember
+        : firstDayOfSeptember.add(8 - firstDayOfSeptember.day(), 'day');
+
+      let startDate = firstMonday;
+
+      for (let i = startWeek; i <= endWeek; i++) {
+        let weekStart = startDate.add((i - 1) * 7, "day").format("DD/MM/YYYY");
+        let weekEnd = startDate.add(i * 7 - 1, "day").format("DD/MM/YYYY");
+        tuan.value.push({
+          value: `${weekStart.replace(/\//g, "")}`,
+          label: `Tuần ${i} (${weekStart} - ${weekEnd})`,
+        });
+      }
+    };
+
+    const handleChangeSelectStyle = (value) => {
+      selectView.value = !selectView.value;
+    };
+
+    const handleChangeSelectTuan = async (value) => {
+      console.log(value);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`getTKBWeek/${value}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+    };
+
     watch(magv, (newMagv) => {
       if (newMagv) {
         getHocKy();
       }
     });
+
     watch(data, (newData) => {
       if (newData) {
         dataSource.value = data.value;
       }
     });
-    onMounted((magv) => {
+
+    onMounted(() => {
       getHocKy();
     });
 
     return {
-      value1,
       data,
-      handleChangeSelect,
+      tuan,
       hocKy,
+      value1,
+      value2,
+      value3,
+      styleTKB,
+      selectView,
+      handleChangeSelect,
+      handleChangeSelectTuan,
+      handleChangeSelectStyle,
     };
   },
 });
 </script>
+
 <style>
 .styled-table {
   border-collapse: collapse;

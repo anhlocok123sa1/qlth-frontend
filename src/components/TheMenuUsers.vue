@@ -33,9 +33,17 @@
       </router-link>
     </a-menu-item>
 
+    <!-- Quét mã điểm danh -->
     <a-menu-item key="users-scanqr">
       <router-link :to="{ name: 'users-scanqr' }">
         <span><TableOutlined /> Quét mã điểm danh </span>
+      </router-link>
+    </a-menu-item>
+
+    <!-- Xem điểm -->
+     <a-menu-item key="users-view-score">
+      <router-link :to="{ name: 'users-view-score' }">
+        <span><TableOutlined /> Xem điểm </span>
       </router-link>
     </a-menu-item>
   </a-menu>
@@ -49,7 +57,7 @@ import {
   TableOutlined,
 } from "@ant-design/icons-vue";
 import { storeToRefs } from "pinia";
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent } from "vue";
 import { useMenuUsers } from "../stores/use-menu-users";
 
 export default defineComponent({
