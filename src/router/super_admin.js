@@ -3,19 +3,26 @@ function checkAdminRole(to, from, next) {
   if (role === "super_admin") {
     next();
   } else {
-    next({ name: "login" }); 
+    next({ name: "login" });
   }
 }
 
 const superAdmin = [
   {
-    path: "/super-admin",
-    name: "super-admin",
+    path: "/system",
+    name: "system",
     component: () => import("../layouts/superadmin.vue"),
     props: true,
     meta: { requiresAuth: true },
     beforeEnter: checkAdminRole,
     children: [
+
+      // home
+      {
+        path: "home",
+        name: "home",
+        component: () => import("../pages/super-admin/index.vue"),
+      },
       //Quản lý users giao vien
       {
         path: "users-gv",
@@ -56,6 +63,17 @@ const superAdmin = [
         name: "super-admin-information",
         component: () => import("../pages/super-admin/information/index.vue"),
       },
+
+      /// ---------------  Users          ---------------------------
+      // ----Quản lý sinh viên 
+      {
+        path: "student",
+        name: "student",
+        component: () => import("../pages/super-admin/student/index.vue"),
+      },
+
+
+      // Quản lý giáo viên TE
     ],
   },
 ];

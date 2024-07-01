@@ -1,18 +1,18 @@
 <template>
-  <TheHeaderSuperAdmin/>
+  <TheHeaderSuperAdmin />
   .
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-sm-3 d-none d-sm-flex">
         <a-list bordered style="width: 100%">
-          <TheMenuSuperAdmin/>
+          <TheMenuSuperAdmin />
           <template #header>
             <div>Bảng điều khiển</div>
           </template>
         </a-list>
       </div>
-      <div class="col-12 col-sm-9">
-        <router-view></router-view>
+      <div class="col-12 col-sm-9" style="background-color: whitesmoke">
+        <router-view> </router-view>
       </div>
     </div>
   </div>

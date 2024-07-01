@@ -88,18 +88,18 @@
               <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'diemdanh1'">
                   <div v-if="record.diemdanh1">
-                    <a-checkbox checked disabled ></a-checkbox>
+                    <a-checkbox checked disabled></a-checkbox>
                   </div>
                   <div v-else>
-                    <a-checkbox disabled ></a-checkbox>
+                    <a-checkbox disabled></a-checkbox>
                   </div>
                 </template>
                 <template v-if="column.key === 'diemdanh2'">
                   <div v-if="record.diemdanh2">
-                    <a-checkbox checked disabled ></a-checkbox>
+                    <a-checkbox checked disabled></a-checkbox>
                   </div>
                   <div v-else>
-                    <a-checkbox disabled ></a-checkbox>
+                    <a-checkbox disabled></a-checkbox>
                   </div>
                 </template>
                 <template v-if="column.key === 'cophep'">
@@ -431,15 +431,14 @@ export default defineComponent({
       console.log(students);
       try {
         const response = await axios.post("/diemDanhSinhVien", {
-          students
+          students,
         });
         message.success("Điểm danh thành công!");
-        setTimeout
+        setTimeout;
       } catch (error) {
         console.error("Lỗi khi gửi danh sách điểm danh:", error);
         message.error("Lỗi khi gửi danh sách điểm danh!");
       }
-
     };
 
     //Hien thi danh sach sinh vien
@@ -561,13 +560,13 @@ export default defineComponent({
         title: "Điểm danh lần 1",
         dataIndex: "diemdanh1",
         key: "diemdanh1",
-        width: "5%"
+        width: "5%",
       },
       {
         title: "Điểm danh lần 2",
         dataIndex: "diemdanh2",
         key: "diemdanh2",
-        width: "5%"
+        width: "5%",
       },
       {
         title: "MSSV",

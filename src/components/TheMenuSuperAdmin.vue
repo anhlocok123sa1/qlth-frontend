@@ -4,6 +4,12 @@
     v-model:selectedKeys="selectedKeys"
     mode="inline"
   >
+    <!-- Trang chủ -->
+    <a-menu-item key="home">
+      <router-link :to="{ name: 'home' }">
+        <span><i class="fa-solid fa-user me-1"></i>Trang chủ</span>
+      </router-link>
+    </a-menu-item>
     <!-- Quản lý tài khoản giáo viên -->
     <a-menu-item key="admin-users-gv">
       <router-link :to="{ name: 'admin-users-gv' }">
@@ -35,9 +41,13 @@
         <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
       </router-link>
     </a-menu-item>
+    <a-menu-item key="student">
+      <router-link :to="{ name: 'student' }">
+        <span><i class="fa-solid fa-graduation-cap"></i> Sinh Viên</span>
+      </router-link>
+    </a-menu-item>
   </a-menu>
 </template>
-
 <script>
 import { defineComponent } from "vue";
 import { useMenu } from "../stores/use-menu";
