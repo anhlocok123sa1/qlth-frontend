@@ -54,8 +54,8 @@ router.beforeEach(async (to, from, next) => {
         return next({ name: "users-sv" });
       } else if (role === "teacher" && !to.path.startsWith("/admin")) {
         return next({ name: "admin" });
-      } else if (role === "super_admin" && !to.path.startsWith("/super-admin")) {
-        return next({ name: "super-admin" });
+      } else if (role === "super_admin" && !to.path.startsWith("/system")) {
+        return next({ name: "system" });
       } else {
         return next(); // Proceed if the role and path match
       }

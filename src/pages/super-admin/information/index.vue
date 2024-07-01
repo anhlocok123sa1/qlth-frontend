@@ -40,10 +40,10 @@
               </label>
             </div>
             <div class="col-12 col-sm-4">
-              <a-input 
-              v-model:value="taikhoang.full_name"
-              :readonly="readonly"
-              :class="{ 'edit-mode': !readonly }"
+              <a-input
+                v-model:value="taikhoang.full_name"
+                :readonly="readonly"
+                :class="{ 'edit-mode': !readonly }"
               ></a-input>
             </div>
           </div>

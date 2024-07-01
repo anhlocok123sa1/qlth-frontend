@@ -192,7 +192,6 @@ export default defineComponent({
       isUserLogin.value = isUser;
     };
 
-
     const loginUser = () => {
       axios
         .post("/login", user)
@@ -218,7 +217,7 @@ export default defineComponent({
       axios.defaults.withCredentials = true;
       axios
         .post("/loginAdmin", admin, {
-          withCredentials: 'include'
+          withCredentials: "include",
         })
         .then((response) => {
           if (response.status === 200) {
@@ -226,7 +225,7 @@ export default defineComponent({
             message.success("Đăng nhập thành công");
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("role", response.data.role);
-            router.push({ name: "super-admin" });
+            router.push({ name: "system" });
           }
         })
         .catch((error) => {
