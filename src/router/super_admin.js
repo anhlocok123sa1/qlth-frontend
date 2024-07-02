@@ -1,6 +1,6 @@
 function checkAdminRole(to, from, next) {
   const role = localStorage.getItem("role");
-  if (role === "super_admin") {
+  if (role === "super_admin" || role === "student_admin" || role === "teacher_admin") {
     if (to.name == "system") {
       next({ name: "home" });
     }

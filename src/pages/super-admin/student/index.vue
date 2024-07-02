@@ -116,14 +116,15 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import { useMenuUsers } from "../../../stores/use-menu-users.js";
 import axios from "../../../axios.js";
 import { message } from "ant-design-vue";
 import { max } from "date-fns";
+import { useMenu } from "../../../stores/use-menu.js";
 
 export default defineComponent({
   setup() {
-    const menuUsersStore = useMenuUsers();
+    const store = useMenu();
+    store.onSelectedKeys(["student"]);
     const departmentList = ref([]);
     const classList = ref([]);
     const selectedClasses = ref([]);
@@ -131,6 +132,7 @@ export default defineComponent({
     const data = ref([]);
     const nameFilter = ref("");
     const idFilter = ref("");
+
     // khoa
     const filterOption = (input, option) => {
       return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -267,7 +269,6 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      menuUsersStore.onSelectedKeys(["student"]);
       // lay danh sách khoa, lop
       axios
         .get("/get-department-class")

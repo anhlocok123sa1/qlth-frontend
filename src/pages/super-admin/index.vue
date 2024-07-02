@@ -6,3 +6,14 @@
   <div>4 Điểm danh</div>
   <div>....</div>
 </template>
+<script>
+import { defineComponent } from 'vue'
+import { useMenu } from '../../stores/use-menu'
+
+export default defineComponent({
+  setup() {
+    const store = useMenu();
+    store.onSelectedKeys(["home"]);
+  },
+})
+</script>

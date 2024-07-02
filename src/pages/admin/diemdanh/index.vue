@@ -83,7 +83,8 @@
               :row-selection="rowSelection"
               :dataSource="users"
               :columns="columns"
-              :scroll="{ x: 2000 }"
+              size="small"
+              :scroll="{ x:1200 }"
             >
               <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'diemdanh1'">
@@ -436,9 +437,11 @@ export default defineComponent({
         const response = await axios.post("/diemDanhSinhVien", {
           students,
         });
+        filterCalendar();
+        selectedRowKeys.value = [];
         message.success("Điểm danh thành công!");
-        setTimeout;
       } catch (error) {
+        console.log(error);
         console.error("Lỗi khi gửi danh sách điểm danh:", error);
         message.error("Lỗi khi gửi danh sách điểm danh!");
       }
@@ -557,7 +560,7 @@ export default defineComponent({
         dataIndex: "key",
         key: "id",
         fixed: true,
-        width: "5%",
+        width: 50,
       },
       {
         title: "Điểm danh lần 1",
@@ -575,31 +578,37 @@ export default defineComponent({
         title: "MSSV",
         dataIndex: "ma_sv",
         key: "mssv",
+        width: 100,
       },
       {
         title: "Họ tên",
         dataIndex: "ten_sv",
         key: "name",
+        width: 200,
       },
       {
         title: "Lớp học",
         dataIndex: "ma_lop",
         key: "class",
+        width: 100,
       },
       {
         title: "Có phép",
         dataIndex: "cophep",
         key: "cophep",
+        width: 100,
       },
       {
         title: "Không phép",
         dataIndex: "khongphep",
         key: "khongphep",
+        width: 100,
       },
       {
         title: "Ghi chú",
         dataIndex: "ghichu",
         key: "ghichu",
+        width: 300,
       },
     ];
     watch(scanQR, (newVal) => {
