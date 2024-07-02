@@ -9,7 +9,8 @@
           @change="handleChangeSelect"
           @focus="focus"
           class="mb-2 me-2"
-        >{{ hocKy.value }}</a-select>
+          >{{ hocKy.value }}</a-select
+        >
         <a-select
           ref="select"
           v-model:value="value2"
@@ -52,13 +53,13 @@
             <td>{{ item.Thu }}</td>
             <td>{{ item.TietBD }}</td>
             <td>{{ item.ST }}</td>
-            <!-- <td>{{ item.Phong }}</td> -->
+            <td>{{ item.Phong }}</td>
             <td>{{ item.NgayBD }} - {{ item.NgayKT }}</td>
-            <td>{{ item.Tuan }}</td>
             <td><a>action</a></td>
           </tr>
         </tbody>
       </table>
+      <ThoiKhoaBieu v-else :data="tkbWeek" />
     </a-card>
   </a-card>
 </template>
@@ -68,16 +69,19 @@ import { useMenu, useUser } from "../../../stores/use-menu.js";
 import {
   computed,
   defineComponent,
-  h,
   onMounted,
   ref,
   watch,
   watchEffect,
 } from "vue";
+import ThoiKhoaBieu from "./ThoiKhoaBieu.vue";
 import axios from "../../../axios.js";
 import dayjs from "dayjs";
 
 export default defineComponent({
+  components: {
+    ThoiKhoaBieu,
+  },
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
@@ -87,7 +91,7 @@ export default defineComponent({
     const value1 = ref("");
     const data = ref([]);
     const dataSource = ref();
-    
+
     const value2 = ref("TKB học kỳ cá nhân");
     const value3 = ref("");
     const tuanStart = ref(0);
@@ -95,6 +99,7 @@ export default defineComponent({
     const namRaw = ref("");
     const hocKyRaw = ref("");
     const selectView = ref(true);
+    const tkbWeek = ref([]);
     const styleTKB = ref([
       {
         value: 0,
@@ -180,9 +185,10 @@ export default defineComponent({
       tuan.value = [];
       // Calculate the first Monday of September for the given year
       let firstDayOfSeptember = dayjs(`20${namRaw.value}-09-01`);
-      let firstMonday = firstDayOfSeptember.day() === 1
-        ? firstDayOfSeptember
-        : firstDayOfSeptember.add(8 - firstDayOfSeptember.day(), 'day');
+      let firstMonday =
+        firstDayOfSeptember.day() === 1
+          ? firstDayOfSeptember
+          : firstDayOfSeptember.add(8 - firstDayOfSeptember.day(), "day");
 
       let startDate = firstMonday;
 
@@ -201,14 +207,13 @@ export default defineComponent({
     };
 
     const handleChangeSelectTuan = async (value) => {
-      console.log(value);
       const token = localStorage.getItem("token");
       const response = await axios.get(`getTKBWeek/${value}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+      tkbWeek.value = response.data;
     };
 
     watch(magv, (newMagv) => {
@@ -222,6 +227,11 @@ export default defineComponent({
         dataSource.value = data.value;
       }
     });
+    watch(tkbWeek, (data) => {
+      if (data) {
+        console.log(data);
+      }
+    })
 
     onMounted(() => {
       getHocKy();
@@ -234,6 +244,7 @@ export default defineComponent({
       value1,
       value2,
       value3,
+      tkbWeek,
       styleTKB,
       selectView,
       handleChangeSelect,
