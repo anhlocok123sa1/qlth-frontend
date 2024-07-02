@@ -1,21 +1,25 @@
 <template>
   <a-card title="Xem điểm">
-    <a-table :columns="columns" size="small" :dataSource="data"> </a-table>
+    <a-table :columns="columns" size="small" :dataSource="data" v-if="data"> </a-table>
+    <a-spin v-else></a-spin>
   </a-card>
 </template>
 
 <script>
+import { useMenuUsers } from '../../../stores/use-menu-users';
 export default {
   setup() {
+    const store = useMenuUsers();
+    store.onSelectedKeys(["users-view-score"]);
     const columns = [
-      { title: "STT", dataIndex: "stt", key: "stt" },
-      { title: "Mã môn", dataIndex: "ma_mh", key: "ma_mh" },
+      { title: "STT", dataIndex: "stt", key: "stt", width:20 },
+      { title: "Mã môn", dataIndex: "ma_mh", key: "ma_mh", width:90 },
       { title: "Tên môn", dataIndex: "ten_mh", key: "ten_mh" },
-      { title: "Quá trình", dataIndex: "diem_qt", key: "diem_qt" },
-      { title: "Giữa kỳ", dataIndex: "diem_gk", key: "diem_gk" },
-      { title: "Điểm thi", dataIndex: "diem_thi", key: "diem_thi" },
-      { title: "Điểm TK", dataIndex: "diem_tk", key: "diem_tk" },
-      { title: "Kết quả", dataIndex: "ketqua", key: "ketqua" },
+      { title: "Quá trình", dataIndex: "diem_qt", key: "diem_qt", width:30 },
+      { title: "Giữa kỳ", dataIndex: "diem_gk", key: "diem_gk", width:30 },
+      { title: "Điểm thi", dataIndex: "diem_thi", key: "diem_thi", width:30 },
+      { title: "Điểm TK", dataIndex: "diem_tk", key: "diem_tk", width:30 },
+      { title: "Kết quả", dataIndex: "ketqua", key: "ketqua", width:50 },
     ];
     const data = [
       {

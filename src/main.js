@@ -22,7 +22,9 @@ import {
   Table,
   QRCode,
   Modal,
-  InputNumber
+  InputNumber,
+  Popover,
+  Spin
 } from "ant-design-vue";
 import { createPinia } from "pinia";
 import axios from './axios'; // Import axios instance
@@ -58,6 +60,8 @@ app.use(RadioGroup);
 app.use(Select);
 app.use(Tabs);
 app.use(Table);
+app.use(Popover);
+app.use(Spin);
 app.use(pinia);
 app.mount("#app");
 
