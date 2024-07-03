@@ -13,12 +13,15 @@ import { QrcodeStream as VueQrcodeReader } from "vue3-qrcode-reader";
 import axios from "../../../axios.js";
 import { format } from "date-fns";
 import { message } from "ant-design-vue";
+import { useMenuUsers } from "../../../stores/use-menu-users.js";
 export default defineComponent({
   components: {
     VueQrcodeReader,
   },
-
   setup() {
+    // Lấy store từ useMenuUsers
+    const store = useMenuUsers();
+    store.onSelectedKeys(["users-scanqr"]);
     const result = ref<string>("");
     const statusCamera = ref<boolean>(false);
 

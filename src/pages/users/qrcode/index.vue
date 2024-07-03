@@ -3,7 +3,13 @@
     <div class="row">
       <div class="col">
         <h2>QR code</h2>
-        <a-qrcode ref="qrcodeCanvasRef" :value="qrValue" class="qr-code" />
+        <a-qrcode
+          ref="qrcodeCanvasRef"
+          :value="qrValue"
+          class="qr-code"
+          v-if="qrValue"
+        />
+        <a-spin v-else></a-spin>
         <br />
         <br />
         <a-button type="primary" @click="dowloadChange">Download</a-button>
@@ -16,8 +22,11 @@
 import { onMounted } from "vue";
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
 import { ref } from "vue";
-// import users from "../../../router/users.js";
 import axios from "../../../axios.js";
+
+// Lấy store từ useMenuUsers
+const store = useMenuUsers();
+store.onSelectedKeys(["users-qrcode"]);
 const qrValue = ref("");
 const users = ref([]);
 const user = ref(null);
@@ -58,7 +67,5 @@ onMounted(async () => {
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
   }
-  const menuUsersStore = useMenuUsers();
-  menuUsersStore.onSelectedKeys(["users-qrcode"]);
 });
 </script>

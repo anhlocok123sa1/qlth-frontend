@@ -186,15 +186,16 @@ import { useMenuUsers } from "../../../stores/use-menu-users.js";
 
 import { onMounted, toRef } from "vue";
 import axios from "../../../axios";
-import { defineComponent, ref, reactive } from "vue";
+import { ref, reactive } from "vue";
 import "../../../css/users/information.css";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 
-export default defineComponent({
+export default {
   setup() {
     // Lấy store từ useMenuUsers
-    const menuUsersStore = useMenuUsers();
+    const store = useMenuUsers();
+    store.onSelectedKeys(["users-information"]);
     const users = ref({});
     const readonly = ref(true);
     const router = useRouter();
@@ -207,9 +208,6 @@ export default defineComponent({
       change_password: false,
     });
     const errors = ref({});
-    onMounted(() => {
-      menuUsersStore.onSelectedKeys(["users-information"]);
-    });
     onMounted(async () => {
       try {
         const token = localStorage.getItem("token");
@@ -278,5 +276,5 @@ export default defineComponent({
       errors,
     };
   },
-});
+};
 </script>

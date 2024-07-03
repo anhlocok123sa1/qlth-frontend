@@ -136,22 +136,21 @@
   </form>
 </template>
 <script>
-import { useMenuUsers } from "../../../stores/use-menu-users.js";
-
-import { onMounted, toRef } from "vue";
+import { onMounted } from "vue";
 import axios from "../../../axios";
 import "../../../css/users/information.css";
 import { defineComponent, ref, reactive } from "vue";
 import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
+import { useMenu } from "../../../stores/use-menu.js";
 
 export default defineComponent({
   setup() {
-    // Lấy store từ useMenuUsers
-    const menuUsersStore = useMenuUsers();
+    // Lấy store từ usestore
+    const store = useMenu();
+    console.log(store);
+    store.onSelectedKeys(["super-admin-information"]);
     const users = ref({});
     const readonly = ref(true);
-    const router = useRouter();
 
     const taikhoang = reactive({
       email: "",
@@ -162,9 +161,6 @@ export default defineComponent({
       change_password: false,
     });
     const errors = ref({});
-    onMounted(() => {
-      menuUsersStore.onSelectedKeys(["admin-information"]);
-    });
     onMounted(async () => {
       try {
         const token = localStorage.getItem("token");

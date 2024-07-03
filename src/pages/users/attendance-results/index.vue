@@ -2,7 +2,7 @@
   <a-card title="KÊT QUẢ ĐIỂM DANH" style="width: 100%">
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="subject" :columns="columns">
+        <a-table :dataSource="subject" :columns="columns" v-if="subject.length > 0">
           <template #bodyCell="{ column, record }">
             <!-- <template v-if="column.key === 'index'"> </template> -->
 
@@ -16,6 +16,7 @@
             </template>
           </template>
         </a-table>
+        <a-spin v-else></a-spin>
       </div>
     </div>
   </a-card>
@@ -32,6 +33,9 @@ import { onMounted, ref } from "vue";
 import axios from "../../../axios.js";
 export default {
   setup() {
+    // Lấy store từ useMenuUsers
+    const store = useMenuUsers();
+    store.onSelectedKeys(["users-attendance-results"]);
     const modalVisible = ref(false);
     const subject = ref([]);
     const attendance = ref([]);
@@ -75,9 +79,7 @@ export default {
       modalVisible.value = true;
     };
 
-    const menuUsersStore = useMenuUsers();
     onMounted(() => {
-      menuUsersStore.onSelectedKeys(["users-attendance-results"]);
       fetchSubject();
     });
 

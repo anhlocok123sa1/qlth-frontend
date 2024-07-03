@@ -18,13 +18,14 @@ import axios from "../../../axios.js";
 
 export default {
   setup() {
+    // Lấy store từ useMenuUsers
+    const store = useMenuUsers();
+    store.onSelectedKeys(["users-timetable"]);
     const timetalbe = ref([]);
     const token = localStorage.getItem("token");
     const apiUrl = "thoi-khoa-bieu";
-    const menuUsersStore = useMenuUsers();
 
     onMounted(() => {
-      menuUsersStore.onSelectedKeys(["users-timetable"]);
       fetchTimetable();
     });
 
