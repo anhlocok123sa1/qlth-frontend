@@ -248,11 +248,25 @@ export default defineComponent({
 
     //Tìm kiếm theo tên
     const searchName = () => {
+      if (data.value.length === 0) {
+        message.warn("Không tồn tại danh sách sinh viên");
+        return;
+      }
+      if (!nameFilter.value) {
+        message.warn("Vui lòng nhập thông tin");
+      }
       idFilter.value = "";
       search();
     };
     // Tim kiem theo ma_sv
     const searchID = () => {
+      if (data.value.length === 0) {
+        message.warn("Không tồn tại danh sách sinh viên");
+        return;
+      }
+      if (!idFilter.value) {
+        message.warn("Vui lòng nhập thông tin");
+      }
       nameFilter.value = "";
       search();
     };
