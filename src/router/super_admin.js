@@ -68,7 +68,30 @@ const superAdmin = [
       },
 
       /// ---------------  Users          ---------------------------
-      // ----Quản lý sinh viên 
+      // ------ Khoản lý khoa
+      {
+        path: "department",
+        name: "department",
+        component: () => import("../pages/super-admin/department/index.vue"),
+      },
+      {
+        path: "department/:ma_khoa/edit",
+        name: "department-edit",
+        component: () => import("../pages/super-admin/department/edit.vue"),
+      },
+      {
+        path: "department/create",
+        name: "department-create",
+        component: () => import("../pages/super-admin/department/create.vue"),
+      },
+      // ----------- Khoản lý Lớp
+      {
+        path: "classroom",
+        name: "classroom",
+        component: () => import("../pages/super-admin/classroom/index.vue"),
+      },
+
+      //--------  Quản lý sinh viên 
       {
         path: "student",
         name: "student",

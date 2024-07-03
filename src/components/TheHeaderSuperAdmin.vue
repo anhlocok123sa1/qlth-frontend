@@ -2,7 +2,7 @@
   <div class="container-fuild">
     <div
       class="row text-white"
-      style="background-color: #0c713d; padding: 1rem"
+      style="background-color: #134b5f; padding: 0.8rem"
     >
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
@@ -15,21 +15,21 @@
         class="col-10 col-sm-9 d-flex align-items-center justify-content-center justify-content-sm-start"
       >
         <img
-          src="../assets/logo.png"
+          src="../assets/pdt3.png"
           alt="Logo"
           height="32"
           width="34"
           class="ms-3 me-3"
         />
-        <span class="d-none d-sm-flex">Quản trị</span>
+        <span class="d-none d-sm-flex">PHÒNG ĐÀO TẠO</span>
       </div>
       <div
         class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end"
       >
         <span>{{ currentUser }}</span>
         <a-button type="primary" class="ms-2" @click="logout"
-          >Đăng xuất</a-button
-        >
+          ><i class="fa-solid fa-right-from-bracket"></i
+        ></a-button>
       </div>
 
       <div

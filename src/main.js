@@ -23,8 +23,13 @@ import {
   QRCode,
   Modal,
   InputNumber,
+
+  Result,
+  Alert,
+
   Popover,
   Spin
+
 } from "ant-design-vue";
 import { createPinia } from "pinia";
 import axios from './axios'; // Import axios instance
@@ -39,6 +44,8 @@ const app = createApp(App);
 
 app.config.globalProperties.$axios = axios;
 
+app.use(Alert);
+app.use(Result);
 app.use(InputNumber);
 app.use(Modal);
 app.use(QRCode);

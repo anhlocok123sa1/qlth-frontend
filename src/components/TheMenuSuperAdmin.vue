@@ -7,7 +7,25 @@
     <!-- Trang chủ -->
     <a-menu-item key="home">
       <router-link :to="{ name: 'home' }">
-        <span><i class="fa-solid fa-user me-1"></i>Trang chủ</span>
+        <span><i class="fa-solid fa-house"></i> Trang chủ</span>
+      </router-link>
+    </a-menu-item>
+    <!-- Quản lý khoa -->
+    <a-menu-item key="department">
+      <router-link :to="{ name: 'department' }">
+        <span><i class="fa-solid fa-building"></i> Khoa</span>
+      </router-link>
+    </a-menu-item>
+    <!-- Quản lý lớp -->
+    <a-menu-item key="classroom">
+      <router-link :to="{ name: 'classroom' }">
+        <span><i class="fa-solid fa-graduation-cap"></i> Lớp</span>
+      </router-link>
+    </a-menu-item>
+    <!-- Quản lý sinh viên -->
+    <a-menu-item key="student">
+      <router-link :to="{ name: 'student' }">
+        <span><i class="fa-solid fa-graduation-cap"></i> Sinh Viên</span>
       </router-link>
     </a-menu-item>
     <!-- Quản lý tài khoản giáo viên -->
@@ -31,10 +49,21 @@
       </router-link>
     </a-menu-item>
 
+
+    <a-menu-item key="admin-roles">
+      <router-link :to="{ name: 'admin-roles' }">
+        <span><i class="fa-solid fa-tag me-1"></i>Vai trò</span>
+      </router-link>
+    </a-menu-item>
+    <a-menu-item key="admin-settings">
+      <router-link :to="{ name: 'admin-settings' }">
+        <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
+
     <!-- Quản lý sinh viên -->
     <a-menu-item key="student">
       <router-link :to="{ name: 'student' }">
         <span><i class="fa-solid fa-graduation-cap"></i> Sinh Viên</span>
+
       </router-link>
     </a-menu-item>
   </a-menu>

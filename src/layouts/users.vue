@@ -3,7 +3,7 @@
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-sm-3 d-none d-sm-flex">
-        <a-list bordered style="width: 100%; background-color: cornflowerblue">
+        <a-list bordered style="width: 100%; background-color: antiquewhite">
           <template #header>
             <div>
               <strong>Thanh Menu</strong>
