@@ -14,7 +14,6 @@
       </div>
 
       <div class="col-12 col-sm-9">
-
         <router-view> </router-view>
       </div>
     </div>

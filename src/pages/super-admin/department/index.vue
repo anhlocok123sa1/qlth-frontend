@@ -5,8 +5,8 @@
         <div class="col-12 col-sm-6"><h2>DANH SÁCH KHOA</h2></div>
         <div class="col-12 col-sm-6 d-sm-flex justify-content-sm-end">
           <a-button type="primary" @click="add">
-            <i class="fa-solid fa-circle-plus"></i>
-            <span>Thêm mới</span>
+            <i class="fa-solid fa-circle-plus" style="margin-right: 2px"> </i>
+            <span> Thêm mới</span>
           </a-button>
         </div>
       </div>
@@ -50,8 +50,16 @@
                     style="margin-right: 10px"
                   ></i>
                 </router-link>
-
-                <a><i class="fa-solid fa-trash"></i> </a>
+                <a>
+                  <a-popconfirm
+                    :title="`Bạn có muốn xóa mã khoa ${record.ma_khoa}`"
+                    ok-text="Yes"
+                    cancel-text="No"
+                    @confirm="() => confirm(record.ma_khoa)"
+                  >
+                    <a href="#">Delete</a>
+                  </a-popconfirm>
+                </a>
               </span>
             </template>
           </a-table-column>
@@ -88,7 +96,6 @@ export default defineComponent({
             message.warn("Không tìm thấy ");
             return;
           }
-          console.log(response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -103,7 +110,23 @@ export default defineComponent({
     const add = () => {
       router.push({ name: "department-create" });
     };
-
+    const confirm = (ma_khoa) => {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(true), 1000, {});
+      }).then(() => {
+        axios
+          .delete(`/delete-department/${ma_khoa}`)
+          .then((response) => {
+            message.success(response.data.message);
+            setTimeout(() => {
+              location.reload();
+            }, 300);
+          })
+          .catch((error) => {
+            message.error(error.response.data.error);
+          });
+      });
+    };
     //=====================*===============
     store.onSelectedKeys(["department"]);
     getListDepartment();
@@ -113,6 +136,7 @@ export default defineComponent({
       onSearch,
       searchValue,
       add,
+      confirm,
     };
   },
 });

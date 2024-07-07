@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12"><h2>Cập nhật thông tin khoa</h2></div>
+      <div class="col-sm-12"><h2>Sửa đổi thông tin khoa</h2></div>
     </div>
 
     <div v-if="successMessage" class="row">
@@ -100,7 +100,6 @@ export default defineComponent({
       axios
         .get(`/list-department/${route.params.ma_khoa}`)
         .then((response) => {
-          console.log(response.data);
           department.ma_khoa = response.data.ma_khoa;
           department.ten_khoa = response.data.ten_khoa;
           changeKeyDepartment.value = response.data.ma_khoa;
