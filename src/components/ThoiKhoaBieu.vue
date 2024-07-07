@@ -20,18 +20,20 @@
               <template v-if="n == lesson.st_bd">
                 <a-popover title="Chi tiết">
                   <template #content>
-                    <p>Mã môn học: {{lesson.ma_mh}}</p>
-                    <p>Tên môn học: {{lesson.ten_mh}}</p>
-                    <p>Phòng: {{lesson.phong_hoc}}</p>
-                    <p>Giảng viên: {{lesson.ten_gv}}</p>
+                    <p>Mã môn học: {{ lesson.ma_mh }}</p>
+                    <p>Tên môn học: {{ lesson.ten_mh }}</p>
+                    <p>Phòng: {{ lesson.phong_hoc }}</p>
+                    <p>Giảng viên: {{ lesson.ten_gv }}</p>
                   </template>
                   <td
                     :rowspan="lesson.st_kt - lesson.st_bd + 1"
                     class="active-td"
                   >
-                    {{ lesson.ten_mh }}<br />
-                    Phòng: {{ lesson.phong_hoc }}<br />
-                    {{ lesson.ghi_chu }}
+                    <span>
+                      {{ lesson.ten_mh }}<br />
+                      Phòng: {{ lesson.phong_hoc }}<br />
+                      {{ lesson.ghi_chu }}
+                    </span>
                   </td>
                 </a-popover>
               </template>
@@ -39,7 +41,7 @@
             </template>
           </template>
           <template v-else>
-            <td></td>
+            <td><span></span></td>
           </template>
         </template>
         <td class="period head-tr">Tiết {{ n }}</td>
@@ -56,6 +58,9 @@
         <th></th>
       </tr>
     </table>
+    <div class="mobile">
+      {{ data.map((item) => item.dayOfWeek) }}
+    </div>
   </div>
 </template>
 
@@ -108,23 +113,39 @@ export default defineComponent({
   border-collapse: collapse;
 }
 
-.classTable th,
 .classTable td {
-  padding: 8px;
-  text-align: center;
+  height: 33px;
 }
 
-.period {
+.classTable th,
+.classTable td {
+  padding: 4px 8px;
+  text-align: center;
+  width: 10%;
+}
+.classTable td span {
+  font-weight: 700;
+}
+
+.classTable .period {
   font-weight: bold;
-  background-color: #f0f0f0;
 }
 .active-td {
   background: beige;
   color: teal;
-  font-weight: 700;
 }
 .head-tr {
   background-color: #6699cc;
   color: #fff;
+}
+@media screen and (max-width: 915px) {
+  .classTable {
+    display: none;
+  }
+}
+@media screen and (min-width: 915px) {
+  .mobile {
+    display: none;
+  }
 }
 </style>

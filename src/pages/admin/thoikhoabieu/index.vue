@@ -74,7 +74,7 @@ import {
   watch,
   watchEffect,
 } from "vue";
-import ThoiKhoaBieu from "./ThoiKhoaBieu.vue";
+import ThoiKhoaBieu from "../../../components/ThoiKhoaBieu.vue";
 import axios from "../../../axios.js";
 import dayjs from "dayjs";
 
