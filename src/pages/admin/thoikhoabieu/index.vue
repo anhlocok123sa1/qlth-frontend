@@ -30,7 +30,7 @@
         </a-select>
       </a-card>
     </form>
-    <a-card class="mt-2">
+    <a-card class="mt-2" style="overflow: hidden; overflow-x: auto;">
       <table v-if="selectView" class="styled-table">
         <thead>
           <tr>
@@ -59,7 +59,7 @@
           </tr>
         </tbody>
       </table>
-      <ThoiKhoaBieu v-else :data="tkbWeek" />
+      <ThoiKhoaBieu v-else :data="tkbWeek"/>
     </a-card>
   </a-card>
 </template>
@@ -229,9 +229,9 @@ export default defineComponent({
     });
     watch(tkbWeek, (data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
       }
-    })
+    });
 
     onMounted(() => {
       getHocKy();
