@@ -97,6 +97,11 @@ const superAdmin = [
         name: "student",
         component: () => import("../pages/super-admin/student/index.vue"),
       },
+      {
+        path: "student/create",
+        name: "student-create",
+        component: () => import("../pages/super-admin/student/create.vue"),
+      },
 
 
       // Quản lý giáo viên TE

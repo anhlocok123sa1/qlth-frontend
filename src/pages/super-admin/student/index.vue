@@ -1,12 +1,6 @@
 <template>
   <a-card title="Danh sách sinh viên">
     <div class="row">
-      <div class="d-flex justify-content-sm-end mb-2">
-        <a-button type="primary">Thêm mới</a-button>
-      </div>
-    </div>
-
-    <div class="row">
       <!-- Lớp -->
       <div class="col-sm-5 mb-2">
         <a-select
@@ -31,9 +25,13 @@
       </div>
 
       <div class="col-sm-3">
-        <a-button type="primary" @click="search()">
+        <a-button type="primary" @click="search()" style="margin-right: 4px">
           <i class="fa-solid fa-magnifying-glass" style="margin-right: 4px"></i
           >Tìm Kiếm</a-button
+        >
+        <a-button type="primary" @click="addStudent" class="mt-1">
+          <i class="fa-solid fa-circle-plus" style="margin-right: 4px"></i>Thêm
+          sinh viên</a-button
         >
       </div>
     </div>
@@ -67,7 +65,7 @@
           <a-button
             type="primary"
             style="margin-left: 8px"
-            @click="importData()"
+            @click="showModal"
             class="mb-2"
           >
             <i class="fa-solid fa-upload"></i><label> import</label></a-button
@@ -98,11 +96,7 @@
     <br />
     <div class="row">
       <div class="col-sm-12">
-        <a-table
-          :columns="columns"
-          :data-source="data"
-          :scroll="{ x: 1500, y: 1500 }"
-        >
+        <a-table :columns="columns" :data-source="data" :scroll="{ x: 1000 }">
           <template #bodyCell="{ column }">
             <template v-if="column.key === 'operation'">
               <a>action</a>
@@ -112,15 +106,46 @@
       </div>
     </div>
   </a-card>
+
+  <!-- modal import sinh vien -->
+  <a-modal
+    v-model:open="open"
+    width="1000px"
+    title="Import Data"
+    @ok="handleOk"
+  >
+    <div class="div">
+      <b>1. Đảm bảo File excel có định dạng như bên dưới</b>
+
+      <img src="../../../assets/import.png" alt="" width="100%" />
+      <br />
+      <br />
+      <b>2. Chỉ hỗ trợ file .xlsx, .xls</b>
+      <br />
+      <b>3. Vui lòng kiểm tra dữ liệu trước khi upload</b>
+      <a-button
+        type="primary"
+        style="margin-left: 8px"
+        @click="importData"
+        class="mb-2"
+      >
+        <i class="fa-solid fa-upload"></i><label> import</label></a-button
+      >
+    </div>
+  </a-modal>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
 import axios from "../../../axios.js";
 import { message } from "ant-design-vue";
-import { max } from "date-fns";
+import { format, max } from "date-fns";
 import { useMenu } from "../../../stores/use-menu.js";
-
+import { useRouter } from "vue-router";
+const open = ref(false);
+const showModal = () => {
+  open.value = true;
+};
 export default defineComponent({
   setup() {
     const store = useMenu();
@@ -129,9 +154,17 @@ export default defineComponent({
     const classList = ref([]);
     const selectedClasses = ref([]);
     const valueDepartment = ref(undefined);
-    const data = ref([]);
+    const data = ref("");
     const nameFilter = ref("");
     const idFilter = ref("");
+    const router = useRouter();
+
+    // Thêm sinh viên
+
+    const addStudent = () => {
+      router.push({ name: "student-create" });
+    };
+    //end
 
     // khoa
     const filterOption = (input, option) => {
@@ -148,7 +181,7 @@ export default defineComponent({
             label: classItem.ten_lop,
             value: classItem.ma_lop,
           }));
-          console.log(classList.value);
+          console.log(listID.value);
         })
         .catch((error) => {
           console.log(error);
@@ -182,12 +215,11 @@ export default defineComponent({
     const importData = () => {
       const fileInput = document.createElement("input");
       fileInput.type = "file";
-      fileInput.accept = ".xlsx, .xls";
+      fileInput.accept = ".xlsx, .xls, .csv";
       fileInput.onchange = () => {
         const file = fileInput.files[0];
         const formData = new FormData();
         formData.append("file", file);
-
         axios
           .post("/import-data", formData, {
             headers: {
@@ -195,12 +227,12 @@ export default defineComponent({
             },
           })
           .then((response) => {
-            message.success("Import thành công");
+            message.success(response.data.message);
             // Thực hiện các thao tác tiếp theo sau khi import thành công
           })
           .catch((error) => {
             console.error("Lỗi khi import dữ liệu:", error);
-            message.error("Lỗi khi import dữ liệu");
+            message.error(error.response.data.message);
           });
       };
 
@@ -209,6 +241,10 @@ export default defineComponent({
 
     //Xuất file Excel
     const exportData = () => {
+      if (data.value.length == 0) {
+        message.warn("Không có dữ liệu");
+        return;
+      }
       axios
         .post(
           "/export-data-students",
@@ -317,6 +353,9 @@ export default defineComponent({
       idFilter,
       exportData,
       importData,
+      addStudent,
+      showModal,
+      open,
     };
   },
 });

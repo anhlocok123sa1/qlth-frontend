@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createGiaoVien()">
+  <form @submit.prevent="createStudent()">
     <a-card title="Tạo mới tài khoản sinh viên" style="width: 100%">
       <div class="row">
         <div class="col-12 col-sm-4">
@@ -244,7 +244,7 @@
       <!-- Nút hành động -->
       <div class="row">
         <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
-          <router-link :to="{ name: 'admin-users-sv' }">
+          <router-link :to="{ name: 'student' }">
             <a-button class="w-100">
               <span>Hủy</span>
             </a-button>
@@ -291,10 +291,8 @@ export default defineComponent({
       password_confirmation: "",
     });
     const allMaLop = ref([]);
-
     const errors = ref({});
-
-    const createGiaoVien = () => {
+    const createStudent = () => {
       axios
         .post("/taikhoansv", {
           ma_sv: taikhoansv.ma_sv,
@@ -311,7 +309,7 @@ export default defineComponent({
         .then((response) => {
           if (response.status === 200) {
             message.success("Tạo mới thành công");
-            router.push({ name: "admin-users-sv" });
+            router.push({ name: "student" });
           }
         })
         .catch((error) => {
@@ -351,7 +349,7 @@ export default defineComponent({
     return {
       taikhoansv,
       errors,
-      createGiaoVien,
+      createStudent,
       allMaLop,
       handleChangeSelect,
     };

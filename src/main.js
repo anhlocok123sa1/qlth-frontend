@@ -23,12 +23,13 @@ import {
   QRCode,
   Modal,
   InputNumber,
-
   Result,
   Alert,
-
   Popover,
-  Spin
+  Spin,
+  Popconfirm,
+  Upload,
+
 
 } from "ant-design-vue";
 import { createPinia } from "pinia";
@@ -44,6 +45,8 @@ const app = createApp(App);
 
 app.config.globalProperties.$axios = axios;
 
+app.use(Upload);
+app.use(Popconfirm);
 app.use(Alert);
 app.use(Result);
 app.use(InputNumber);

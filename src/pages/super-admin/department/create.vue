@@ -29,9 +29,7 @@
         <a-button type="primary" style="margin-right: 3px" @click="save"
           >Lưu thông tin</a-button
         >
-        <a-button type="primary" danger @click="backDepartment"
-          >Hủy bỏ</a-button
-        >
+        <a-button type="primary" danger @click="back">Hủy bỏ</a-button>
       </div>
     </div>
   </div>
@@ -43,8 +41,10 @@ import { defineComponent, reactive, ref, toRefs } from "vue";
 import { useMenu } from "../../../stores/use-menu.js";
 import axios from "../../../axios.js";
 import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
+    const router = useRouter();
     const store = useMenu();
     const errorMessage = ref("");
     const department = reactive({
@@ -63,10 +63,12 @@ export default defineComponent({
           ten_khoa: department.ten_khoa,
         })
         .then((response) => {
-          console.log(response.data);
           if (response.data.message) {
             message.success(response.data.message);
             errorMessage.value = "";
+            setTimeout(() => {
+              router.push({ name: "department" });
+            }, 800);
           }
         })
         .catch((error) => {
@@ -74,9 +76,13 @@ export default defineComponent({
         });
     };
 
+    const back = () => {
+      router.push({ name: "department" });
+    };
     store.onSelectedKeys(["department"]);
     return {
       save,
+      back,
       ...toRefs(department),
       errorMessage,
     };

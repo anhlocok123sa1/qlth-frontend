@@ -84,7 +84,7 @@
               :dataSource="users"
               :columns="columns"
               size="small"
-              :scroll="{ x:1200 }"
+              :scroll="{ x: 1200 }"
             >
               <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'diemdanh1'">

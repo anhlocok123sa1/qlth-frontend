@@ -48,24 +48,6 @@
         <span><i class="fa-solid fa-user me-1"></i>Thông tin cá nhân</span>
       </router-link>
     </a-menu-item>
-
-
-    <a-menu-item key="admin-roles">
-      <router-link :to="{ name: 'admin-roles' }">
-        <span><i class="fa-solid fa-tag me-1"></i>Vai trò</span>
-      </router-link>
-    </a-menu-item>
-    <a-menu-item key="admin-settings">
-      <router-link :to="{ name: 'admin-settings' }">
-        <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
-
-    <!-- Quản lý sinh viên -->
-    <a-menu-item key="student">
-      <router-link :to="{ name: 'student' }">
-        <span><i class="fa-solid fa-graduation-cap"></i> Sinh Viên</span>
-
-      </router-link>
-    </a-menu-item>
   </a-menu>
 </template>
 <script>
