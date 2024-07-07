@@ -3,7 +3,7 @@
     <!-- row -->
     <div class="row boxs">
       <!-- box1 -->
-      <div class="col-sm-3 box1 box">
+      <router-link :to="{ name: 'department' }" class="col-sm-3 box1 box py-2 py-sm-0">
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -11,16 +11,13 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-building-user item-img"></i>
+            <i class="fa-solid fa-building-user item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="department" class="item-link"> Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box2 -->
-      <div class="col-sm-3 box2 box">
+      <router-link :to="{ name: 'classroom' }" class="col-sm-3 box2 box py-2 py-sm-0">
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -31,13 +28,10 @@
             <i class="fa-solid fa-building-columns item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="classroom" class="item-link">Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box3 -->
-      <div class="col-sm-3 box3 box">
+      <router-link :to="{ name: 'student' }" class="col-sm-3 box3 box py-2 py-sm-0">
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -45,16 +39,13 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-graduation-cap item-img"></i>
+            <i class="fa-solid fa-graduation-cap item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="student" class="item-link">Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box4 -->
-      <div class="col-sm-3 box4 box">
+      <router-link :to="{ name: 'student' }" class="col-sm-3 box4 box py-2 py-sm-0">
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -62,14 +53,14 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-building-user item-img"></i>
+            <i class="fa-solid fa-building-user item-img-box2"></i>
           </div>
         </div>
-        <div class="row link"><a href="" class="item-link">Xem Thêm</a></div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
+
 <script>
 import { defineComponent } from "vue";
 import { useMenu } from "../../stores/use-menu";
