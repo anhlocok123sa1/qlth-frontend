@@ -59,13 +59,6 @@
         <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
       </router-link>
     </a-menu-item>
-    
-    <!-- Quản lý sinh viên -->
-    <a-menu-item key="student">
-      <router-link :to="{ name: 'student' }">
-        <span><i class="fa-solid fa-graduation-cap"></i> Sinh Viên</span>
-      </router-link>
-    </a-menu-item>
 
   </a-menu>
 </template>

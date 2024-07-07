@@ -275,7 +275,7 @@ export default defineComponent({
         dataIndex: "ma_sv",
         key: "ma_sv",
         width: 50,
-        fixed: "left",
+        // fixed: "left",
       },
       { title: "Tên SV", dataIndex: "ten_sv", key: "ten_sv", width: 80 },
       {
