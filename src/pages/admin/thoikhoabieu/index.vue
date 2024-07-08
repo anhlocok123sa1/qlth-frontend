@@ -36,8 +36,8 @@
           <tr>
             <th>Mã môn học</th>
             <th>Tên môn học</th>
+            <th>NMH</th>
             <th>Số tiết</th>
-            <th>Thứ</th>
             <th>Tiết bắt đầu</th>
             <th>Tiết kết thúc</th>
             <th>Phòng</th>
@@ -49,8 +49,8 @@
           <tr v-for="item in data" :key="item.key">
             <td>{{ item.MaMH }}</td>
             <td>{{ item.TenMH }}</td>
+            <td>{{ item.NMH }}</td>
             <td>{{ item.SoTiet }}</td>
-            <td>{{ item.Thu }}</td>
             <td>{{ item.TietBD }}</td>
             <td>{{ item.ST }}</td>
             <td>{{ item.Phong }}</td>
