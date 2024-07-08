@@ -40,7 +40,7 @@ export default {
     const subject = ref([]);
     const attendance = ref([]);
     const token = localStorage.getItem("token");
-    const apiSubject = "thoi-khoa-bieu";
+    const apiSubject = "mon-hoc-diem-danh";
     const ma_sv = localStorage.getItem("ma_sv");
 
     const showModal = (record) => {
