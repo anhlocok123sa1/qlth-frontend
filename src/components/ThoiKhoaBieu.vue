@@ -24,6 +24,8 @@
                     <p>Tên môn học: {{ lesson.ten_mh }}</p>
                     <p>Phòng: {{ lesson.phong_hoc }}</p>
                     <p>Giảng viên: {{ lesson.ten_gv }}</p>
+                    <p>Nhóm: {{ lesson.nmh }}</p>
+                    <!-- {{ lesson }} -->
                   </template>
                   <td
                     :rowspan="lesson.st_kt - lesson.st_bd + 1"
@@ -73,9 +75,9 @@
             >
               <ul>
                 <li v-for="lesson in courseLessons" :key="lesson.ma_mh">
-                  Tiết: {{ lesson.st_bd }} - {{ lesson.st_kt }} -
-                  Phòng: {{ lesson.phong_hoc }} - Giảng
-                  viên: {{ lesson.ten_gv }}
+                  Tiết: {{ lesson.st_bd }} - {{ lesson.st_kt }} - Nhóm: {{ lesson.nmh }}
+                  Phòng: {{ lesson.phong_hoc }} 
+                  - Giảng viên: {{ lesson.ten_gv }}
                 </li>
               </ul>
             </a-collapse-panel>

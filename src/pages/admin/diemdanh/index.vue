@@ -264,6 +264,7 @@ export default defineComponent({
         });
 
         if (response.data.message) {
+          filterCalendar();
           console.log(response);
           message.success(response.data.message);
         } else {
