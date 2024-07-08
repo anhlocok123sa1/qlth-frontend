@@ -30,7 +30,7 @@
         </a-select>
       </a-card>
     </form>
-    <a-card class="mt-2" style="overflow: hidden; overflow-x: auto;">
+    <a-card class="mt-2" style="overflow: hidden; overflow-x: auto">
       <table v-if="selectView" class="styled-table">
         <thead>
           <tr>
@@ -59,7 +59,7 @@
           </tr>
         </tbody>
       </table>
-      <ThoiKhoaBieu v-else :data="tkbWeek"/>
+      <ThoiKhoaBieu v-else :data="tkbWeek" />
     </a-card>
   </a-card>
 </template>
@@ -85,6 +85,7 @@ export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
+    const token = localStorage.getItem("token");
     const userStore = useUser();
     const magv = computed(() => userStore.getma);
     const hocKy = ref([]);
@@ -112,16 +113,18 @@ export default defineComponent({
     ]);
 
     const getHocKy = () => {
-      if (magv.value) {
-        axios
-          .get(`hocky/${magv.value}`)
-          .then((response) => {
-            extractHocKy(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      axios
+        .get(`hocky`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          extractHocKy(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     const extractHocKy = (lichValue) => {
