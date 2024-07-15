@@ -3,7 +3,9 @@
     <!-- row -->
     <div class="row boxs">
       <!-- box1 -->
+
       <div class="col-sm-3 col-xl-6 box1 box">
+
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -11,16 +13,15 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-building-user item-img"></i>
+            <i class="fa-solid fa-building-user item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="department" class="item-link"> Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box2 -->
+
       <div class="col-sm-3 col-xl-6 box2 box">
+
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -31,13 +32,12 @@
             <i class="fa-solid fa-building-columns item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="classroom" class="item-link">Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box3 -->
+
       <div class="col-sm-3 col-xl-6 box3 box">
+
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -45,16 +45,15 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-graduation-cap item-img"></i>
+            <i class="fa-solid fa-graduation-cap item-img-box2"></i>
           </div>
         </div>
-        <div class="row link">
-          <a href="student" class="item-link">Xem Thêm</a>
-        </div>
-      </div>
+      </router-link>
 
       <!-- box4 -->
+
       <div class="col-sm-3 col-xl-6 box4 box">
+
         <div class="row item">
           <!-- box-menu -->
           <div class="col-sm-6 item-menu">
@@ -62,11 +61,10 @@
           </div>
           <!-- box-icon -->
           <div class="col-sm-6">
-            <i class="fa-solid fa-building-user item-img"></i>
+            <i class="fa-solid fa-building-user item-img-box2"></i>
           </div>
         </div>
-        <div class="row link"><a href="" class="item-link">Xem Thêm</a></div>
-      </div>
+      </router-link>
     </div>
 
     <!--  -->

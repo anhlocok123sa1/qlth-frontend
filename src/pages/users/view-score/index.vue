@@ -1,7 +1,9 @@
 <template>
   <a-card title="Xem điểm">
-    <a-table :columns="columns" size="small" :dataSource="data" v-if="data"> </a-table>
-    <a-spin v-else></a-spin>
+    <div class="view-score">
+      <a-table :columns="columns" size="small" :dataSource="data" v-if="data"> </a-table>
+      <a-spin v-else></a-spin>
+    </div>
   </a-card>
 </template>
 
@@ -847,4 +849,8 @@ export default {
 </script>
 
 <style>
+.view-score {
+  overflow: hidden;
+  overflow-x: auto;
+}
 </style>

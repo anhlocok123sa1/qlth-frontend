@@ -13,7 +13,7 @@
     </div>
 
     <!-- search name khoa -->
-    <div class="row mt-2">
+    <div class="row mt-2 mb-2">
       <div class="col-sm-12">
         <div class="col-sm-4">
           <a-input-search
@@ -29,7 +29,7 @@
     </div>
 
     <!-- table -->
-    <div class="row-">
+    <div class="row">
       <div class="col-sm-12">
         <a-table :data-source="departments">
           <a-table-column key="stt" title="STT" data-index="stt" />

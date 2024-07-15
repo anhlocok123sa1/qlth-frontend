@@ -30,14 +30,14 @@
         </a-select>
       </a-card>
     </form>
-    <a-card class="mt-2">
+    <a-card class="mt-2" style="overflow: hidden; overflow-x: auto">
       <table v-if="selectView" class="styled-table">
         <thead>
           <tr>
             <th>Mã môn học</th>
             <th>Tên môn học</th>
+            <th>NMH</th>
             <th>Số tiết</th>
-            <th>Thứ</th>
             <th>Tiết bắt đầu</th>
             <th>Tiết kết thúc</th>
             <th>Phòng</th>
@@ -49,8 +49,8 @@
           <tr v-for="item in data" :key="item.key">
             <td>{{ item.MaMH }}</td>
             <td>{{ item.TenMH }}</td>
+            <td>{{ item.NMH }}</td>
             <td>{{ item.SoTiet }}</td>
-            <td>{{ item.Thu }}</td>
             <td>{{ item.TietBD }}</td>
             <td>{{ item.ST }}</td>
             <td>{{ item.Phong }}</td>
@@ -85,6 +85,7 @@ export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-thoikhoabieu"]);
+    const token = localStorage.getItem("token");
     const userStore = useUser();
     const magv = computed(() => userStore.getma);
     const hocKy = ref([]);
@@ -112,16 +113,18 @@ export default defineComponent({
     ]);
 
     const getHocKy = () => {
-      if (magv.value) {
-        axios
-          .get(`hocky/${magv.value}`)
-          .then((response) => {
-            extractHocKy(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      axios
+        .get(`hocky`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          extractHocKy(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     const extractHocKy = (lichValue) => {
@@ -229,9 +232,9 @@ export default defineComponent({
     });
     watch(tkbWeek, (data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
       }
-    })
+    });
 
     onMounted(() => {
       getHocKy();

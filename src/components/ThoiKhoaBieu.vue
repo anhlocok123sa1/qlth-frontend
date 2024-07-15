@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <table border="1" class="classTable">
+  <div class="classTable-warp">
+    <table class="classTable">
       <tr class="head-tr">
         <th></th>
         <th>Thứ 2</th>
@@ -24,6 +24,8 @@
                     <p>Tên môn học: {{ lesson.ten_mh }}</p>
                     <p>Phòng: {{ lesson.phong_hoc }}</p>
                     <p>Giảng viên: {{ lesson.ten_gv }}</p>
+                    <p>Nhóm: {{ lesson.nmh }}</p>
+                    <!-- {{ lesson }} -->
                   </template>
                   <td
                     :rowspan="lesson.st_kt - lesson.st_bd + 1"
@@ -59,13 +61,35 @@
       </tr>
     </table>
     <div class="mobile">
-      {{ data.map((item) => item.dayOfWeek) }}
+      <a-collapse v-model:activeKey="activeKey" @change="changeActivekey">
+        <a-collapse-panel
+          v-for="(lessons, day) in headers"
+          :key="day"
+          :header="day"
+        >
+          <a-collapse>
+            <a-collapse-panel
+              v-for="(courseLessons, course) in groupByCourse(lessons)"
+              :key="course"
+              :header="course"
+            >
+              <ul>
+                <li v-for="lesson in courseLessons" :key="lesson.ma_mh">
+                  Tiết: {{ lesson.st_bd }} - {{ lesson.st_kt }} - Nhóm: {{ lesson.nmh }}
+                  Phòng: {{ lesson.phong_hoc }} 
+                  - Giảng viên: {{ lesson.ten_gv }}
+                </li>
+              </ul>
+            </a-collapse-panel>
+          </a-collapse>
+        </a-collapse-panel>
+      </a-collapse>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, toRefs } from "vue";
+import { defineComponent, ref, toRefs, watch } from "vue";
 
 export default defineComponent({
   props: {
@@ -99,22 +123,68 @@ export default defineComponent({
       return getLessons(day, period).length > 0;
     };
 
+    // Mobile
+    const headers = ref({});
+    const activeKey = ref([]);
+    const text = `A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.`;
+    const changeActivekey = (key) => {
+      console.log(key);
+    };
+
+    watch(
+      data,
+      (newData) => {
+        activeKey.value = [];
+        const groupedHeaders = {};
+        newData.forEach((value) => {
+          if (!groupedHeaders[value.dayOfWeek]) {
+            groupedHeaders[value.dayOfWeek] = [];
+          }
+          groupedHeaders[value.dayOfWeek].push(value);
+        });
+        headers.value = groupedHeaders;
+      },
+      { immediate: true }
+    );
+
+    const groupByCourse = (lessons) => {
+      return lessons.reduce((acc, lesson) => {
+        if (!acc[lesson.ten_mh]) {
+          acc[lesson.ten_mh] = [];
+        }
+        acc[lesson.ten_mh].push(lesson);
+        return acc;
+      }, {});
+    };
+
     return {
       days,
       getLessons,
       isLesson,
+      activeKey,
+      text,
+      changeActivekey,
+      headers,
+      groupByCourse,
     };
   },
 });
 </script>
 <style>
+.classTable-warp {
+  width: 800px;
+}
 .classTable {
-  width: 100%;
   border-collapse: collapse;
+  font-size: 11px;
 }
 
 .classTable td {
   height: 33px;
+  border: 1px solid #ccc;
+}
+.classTable th {
+  border: 1px solid #ccc;
 }
 
 .classTable th,

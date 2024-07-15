@@ -29,7 +29,8 @@ import {
   Spin,
   Popconfirm,
   Upload,
-
+  Collapse,
+  CollapsePanel
 
 } from "ant-design-vue";
 import { createPinia } from "pinia";
@@ -72,6 +73,8 @@ app.use(Tabs);
 app.use(Table);
 app.use(Popover);
 app.use(Spin);
+app.use(Collapse);
+app.use(CollapsePanel);
 app.use(pinia);
 app.mount("#app");
 

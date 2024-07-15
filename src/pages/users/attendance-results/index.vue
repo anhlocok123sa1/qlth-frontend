@@ -20,8 +20,8 @@
       </div>
     </div>
   </a-card>
-  <a-modal v-model:open="modalVisible" title="KẾT QUẢ ĐIỂM DANH">
-    <a-table :dataSource="attendance" :columns="columnsAttendance">
+  <a-modal v-model:open="modalVisible" title="KẾT QUẢ ĐIỂM DANH" @ok="handleOk">
+    <a-table :dataSource="attendance" :columns="columnsAttendance" size="small">
       <a-table-column title="STT" dataIndex="stt"></a-table-column>
     </a-table>
   </a-modal>
@@ -40,7 +40,7 @@ export default {
     const subject = ref([]);
     const attendance = ref([]);
     const token = localStorage.getItem("token");
-    const apiSubject = "thoi-khoa-bieu";
+    const apiSubject = "mon-hoc-diem-danh";
     const ma_sv = localStorage.getItem("ma_sv");
 
     const showModal = (record) => {
@@ -121,6 +121,10 @@ export default {
       { title: "Điểm danh lần 1", dataIndex: "diem_danh1", key: "diem_danh1" },
       { title: "Điểm danh lần 2", dataIndex: "diem_danh2", key: "diem_danh2" },
     ];
+
+    const handleOk = () => {
+      modalVisible.value = false;
+    };
     return {
       subject,
       columns,
@@ -128,6 +132,7 @@ export default {
       modalVisible,
       columnsAttendance,
       attendance,
+      handleOk
     };
   },
 };

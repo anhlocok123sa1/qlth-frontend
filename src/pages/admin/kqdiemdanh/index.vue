@@ -25,7 +25,11 @@
     @ok="handleOk"
     width="800px"
   >
-    <a-table :dataSource="attendance" :columns="columnsAttendance" :scroll="{ x: 500 }">
+    <a-table
+      :dataSource="attendance"
+      :columns="columnsAttendance"
+      :scroll="{ x: 500 }"
+    >
       <a-table-column title="STT" dataIndex="stt"></a-table-column>
       <template
         #customFilterDropdown="{
@@ -87,6 +91,7 @@
         </span>
       </template>
     </a-table>
+    <a-button key="pdf" @click="handlePDF()">Xuất PDF</a-button>
   </a-modal>
 </template>
 
@@ -97,7 +102,7 @@ import { SearchOutlined } from "@ant-design/icons-vue";
 import { useMenu } from "../../../stores/use-menu";
 
 const store = useMenu();
-store.onSelectedKeys(['admin-kqdiemdanh'])
+store.onSelectedKeys(["admin-kqdiemdanh"]);
 const state = reactive({
   searchText: "",
   searchedColumn: "",
@@ -134,9 +139,9 @@ const columnsAttendance = [
     },
   },
   { title: "Họ và tên", dataIndex: "ten_sv", key: "ten_sv" },
-  { title: "Số buổi học", dataIndex: "sbh", key: "sbh", width:'10%' },
-  { title: "Số buổi điểm danh", dataIndex: "sbdd", key: "sbdd", width:'10%' },
-  { title: "Số buổi vắng", dataIndex: "sbv", key: "sbv", width:'10%' },
+  { title: "Số buổi học", dataIndex: "sbh", key: "sbh", width: "10%" },
+  { title: "Số buổi điểm danh", dataIndex: "sbdd", key: "sbdd", width: "10%" },
+  { title: "Số buổi vắng", dataIndex: "sbv", key: "sbv", width: "10%" },
 ];
 const handleSearch = (selectedKeys, confirm, dataIndex) => {
   confirm();
@@ -153,6 +158,7 @@ const subject = ref([]);
 const attendance = ref([]);
 const modalVisible = ref(false);
 const token = localStorage.getItem("token");
+const maGD = ref("");
 onMounted(() => {
   fetchSubject();
 });
@@ -174,6 +180,7 @@ const fetchSubject = async () => {
 const showModal = async (record) => {
   try {
     const ma_gd = record.ma_gd;
+    maGD.value = record.ma_gd;
 
     const response = await axios.get(`getDanhSachDiemDanh/${ma_gd}`, {
       headers: {
@@ -190,6 +197,26 @@ const showModal = async (record) => {
 };
 const handleOk = (e) => {
   modalVisible.value = false;
+};
+const handlePDF = async () => {
+  // console.log(maGD.value);
+  try {
+    const response = await axios.get(`exportDiemDanh/${maGD.value}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob",
+    });
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "danh_sach_diem_danh.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 
