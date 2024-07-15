@@ -91,6 +91,17 @@ const superAdmin = [
         component: () => import("../pages/super-admin/classroom/index.vue"),
       },
 
+      {
+        path: "classroom/:ma_lop/edit",
+        name: "classroom-edit",
+        component: () => import("../pages/super-admin/classroom/edit.vue"),
+      },
+
+      {
+        path: "classroom/create",
+        name: "classroom-create",
+        component: () => import("../pages/super-admin/classroom/create.vue"),
+      },
       //--------  Quản lý sinh viên 
       {
         path: "student",

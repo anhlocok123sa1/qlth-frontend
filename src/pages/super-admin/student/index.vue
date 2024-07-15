@@ -206,9 +206,10 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
           });
-        console.log("Selected Department:", valueDepartment.value);
-        console.log("Selected Classes:", selectedClasses.value);
       }
+    };
+    const handleOk = () => {
+      open.value = false;
     };
 
     // Nhập file
@@ -356,6 +357,7 @@ export default defineComponent({
       addStudent,
       showModal,
       open,
+      handleOk,
     };
   },
 });
