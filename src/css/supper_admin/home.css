@@ -37,11 +37,16 @@ a {
     background-color: rgb(255, 122, 122);
 }
 
-.item {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    align-items: center;
+.box5{
+    background-color: rgb(155, 87, 87);
+}
+.item{
+    height: 70px;
+}
+.item-img{
+    font-size: 50px;
+    margin-top: 6px;
+    color: rgb(95, 93, 88);
 }
 
 
