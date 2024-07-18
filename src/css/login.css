@@ -1,5 +1,5 @@
 
-.center-image {
+/* .center-image {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,4 +7,44 @@
   }
 .background{
     background-color: rgb(236, 236, 236);
+} */
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* background-color: #f0f2f5;  */
 }
+
+.center-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  
+}
+
+.background {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-card .ant-card-head-title {
+  font-size: 30px;
+  font-weight: 900;
+  font-family: system-ui;
+  text-align: center; 
+  
+}
+.login-name{
+  font-size: 18px;
+  font-family:  'Times New Roman', Times, serif;
+  color: rgb(0, 0, 0);
+  font-weight: 800;
+}
+.forget-password{
+  margin-top: 5px;
+}
+
+
+
+
