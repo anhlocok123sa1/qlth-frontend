@@ -4,6 +4,10 @@ import superAdmin from "./super_admin.js"
 import Login from '../pages/Login.vue';
 import axios from "../axios.js";
 import users from "./users.js";
+import ForgetPassword from "../pages/forget-password.vue";
+import ResetPassword from "../pages/reset-password.vue";
+import ResetPasswordAdmin from "../pages/reset-password-admin.vue";
+
 
 const routes = [
   ...admin,
@@ -13,6 +17,23 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/forget-password",
+    name: "forget-password",
+    component: ForgetPassword,
+  },
+  {
+    path: "/reset-password",
+    name: "reset-password",
+    component: ResetPassword,
+    props: route => ({ token: route.query.token, email: route.query.email })
+  },
+  {
+    path: "/reset-password-admin",
+    name: "reset-password-admin",
+    component: ResetPasswordAdmin,
+    props: route => ({ token: route.query.token, email: route.query.email })
   },
 ];
 

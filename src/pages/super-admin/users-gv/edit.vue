@@ -258,7 +258,7 @@
       </div>
 
       <div class="row">
-        <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
+        <div class="col-sm-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
           <router-link :to="{ name: 'admin-users-gv' }">
             <a-button class="w-100">
               <span>Hủy</span>
@@ -277,7 +277,6 @@
     </a-card>
   </form>
 </template>
-
 
 <script>
 import { message } from "ant-design-vue";

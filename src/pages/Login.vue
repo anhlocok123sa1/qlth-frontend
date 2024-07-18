@@ -1,167 +1,183 @@
 <template>
-  <div class="container">
-    <div class="row center-image">
-      <div class="col-sm-3"></div>
-      <div class="col-sm-6">
-        <form v-if="isUserLogin" @submit.prevent="loginUser">
-          <a-card title="Login" style="width: 100%" class="background">
-            <div class="row mb-3">
-              <div class="col-12 col-sm-3 text-start text-sm-end">
-                <label>
-                  <span class="text-danger me-1">*</span>
-                  <span
+  <div class="login">
+    <div class="container container-login">
+      <div class="row center-image">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <form v-if="isUserLogin" @submit.prevent="loginUser">
+            <a-card
+              title="Login"
+              style="width: 100%"
+              class="background login-card"
+            >
+              <div class="row mb-3">
+                <div class="col-12 col-sm-3 text-start text-sm-end">
+                  <label>
+                    <span class="text-danger me-1">*</span>
+                    <span
+                      :class="{
+                        'text-danger': errors.username,
+                      }"
+                    ></span>
+                    <span class="login-name">Username:</span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-5">
+                  <a-input
+                    placeholder="Username"
+                    allow-clear
+                    v-model:value="user.username"
                     :class="{
-                      'text-danger': errors.username,
+                      input_danger: errors.username,
                     }"
-                  ></span>
-                  <span>Username:</span>
-                </label>
+                  />
+                  <div class="w-100"></div>
+                  <small v-if="errors.username" class="text-danger">{{
+                    errors.username[0]
+                  }}</small>
+                </div>
               </div>
-              <div class="col-12 col-sm-5">
-                <a-input
-                  placeholder="Username"
-                  allow-clear
-                  v-model:value="user.username"
-                  :class="{
-                    input_danger: errors.username,
-                  }"
-                />
-                <div class="w-100"></div>
-                <small v-if="errors.username" class="text-danger">{{
-                  errors.username[0]
-                }}</small>
-              </div>
-            </div>
 
-            <div class="row mb-3">
-              <div class="col-12 col-sm-3 text-start text-sm-end">
-                <label>
-                  <span class="text-danger me-1">*</span>
-                  <span
+              <div class="row mb-3">
+                <div class="col-12 col-sm-3 text-start text-sm-end">
+                  <label>
+                    <span class="text-danger me-1">*</span>
+                    <span
+                      :class="{
+                        'text-danger': errors.password,
+                      }"
+                    ></span>
+                    <span class="login-name">Password:</span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-5">
+                  <a-input-password
+                    placeholder="Password"
+                    v-model:value="user.password"
                     :class="{
-                      'text-danger': errors.password,
+                      input_danger: errors.password,
                     }"
-                  ></span>
-                  <span>Password:</span>
-                </label>
+                  />
+                  <div class="w-100"></div>
+                  <small v-if="errors.password" class="text-danger">{{
+                    errors.password[0]
+                  }}</small>
+                </div>
               </div>
-              <div class="col-12 col-sm-5">
-                <a-input-password
-                  placeholder="Password"
-                  v-model:value="user.password"
-                  :class="{
-                    input_danger: errors.password,
-                  }"
-                />
-                <div class="w-100"></div>
-                <small v-if="errors.password" class="text-danger">{{
-                  errors.password[0]
-                }}</small>
-              </div>
-            </div>
-
-            <div class="row">
-              <div
-                class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
-              >
-                <a-button
-                  type="primary"
-                  html-type="submit"
-                  class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+              <div class="row">
+                <div
+                  class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
                 >
-                  <span>Login</span>
-                </a-button>
+                  <a href="/forget-password" class="forget-password"
+                    >Quên mật khẩu</a
+                  >
+                  <a-button
+                    type="primary"
+                    html-type="submit"
+                    class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+                  >
+                    <span>Login</span>
+                  </a-button>
+                </div>
               </div>
-            </div>
-          </a-card>
-        </form>
-        <form v-else @submit.prevent="loginAdmin">
-          <a-card title="Login Admin" style="width: 100%" class="background">
-            <div class="row mb-3">
-              <div class="col-12 col-sm-3 text-start text-sm-end">
-                <label>
-                  <span class="text-danger me-1">*</span>
-                  <span
-                    :class="{
-                      'text-danger': errors.username,
-                    }"
-                  ></span>
-                  <span>Username:</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-5">
-                <a-input
-                  placeholder="Username"
-                  allow-clear
-                  v-model:value="admin.username"
-                  :class="{
-                    input_danger: errors.username,
-                  }"
-                />
-                <div class="w-100"></div>
-                <small v-if="errors.username" class="text-danger">{{
-                  errors.username[0]
-                }}</small>
-              </div>
-            </div>
+            </a-card>
+          </form>
+          <form v-else @submit.prevent="loginAdmin">
+            <a-card
+              title="Login Admin"
+              style="width: 100%"
+              class="background login-card"
+            >
+              <div class="row mb-3">
+                <div class="col-12 col-sm-3 text-start text-sm-end">
+                  <label>
+                    <span class="text-danger me-1">*</span>
 
-            <div class="row mb-3">
-              <div class="col-12 col-sm-3 text-start text-sm-end">
-                <label>
-                  <span class="text-danger me-1">*</span>
-                  <span
+                    <span
+                      :class="{
+                        'text-danger': errors.username,
+                      }"
+                    ></span>
+                    <span class="login-name">Username:</span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-5">
+                  <a-input
+                    placeholder="Username"
+                    allow-clear
+                    v-model:value="admin.username"
                     :class="{
-                      'text-danger': errors.password,
+                      input_danger: errors.username,
                     }"
-                  ></span>
-                  <span>Password:</span>
-                </label>
+                  />
+                  <div class="w-100"></div>
+                  <small v-if="errors.username" class="text-danger">{{
+                    errors.username[0]
+                  }}</small>
+                </div>
               </div>
-              <div class="col-12 col-sm-5">
-                <a-input-password
-                  placeholder="Password"
-                  v-model:value="admin.password"
-                  :class="{
-                    input_danger: errors.password,
-                  }"
-                />
-                <div class="w-100"></div>
-                <small v-if="errors.password" class="text-danger">{{
-                  errors.password[0]
-                }}</small>
-              </div>
-            </div>
 
-            <div class="row">
-              <div
-                class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
-              >
-                <a-button
-                  type="primary"
-                  html-type="submit"
-                  class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+              <div class="row mb-3">
+                <div class="col-12 col-sm-3 text-start text-sm-end">
+                  <label>
+                    <span class="text-danger me-1">*</span>
+                    <span
+                      :class="{
+                        'text-danger': errors.password,
+                      }"
+                    ></span>
+                    <span class="login-name">Password:</span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-5">
+                  <a-input-password
+                    placeholder="Password"
+                    v-model:value="admin.password"
+                    :class="{
+                      input_danger: errors.password,
+                    }"
+                  />
+                  <div class="w-100"></div>
+                  <small v-if="errors.password" class="text-danger">{{
+                    errors.password[0]
+                  }}</small>
+                </div>
+              </div>
+
+              <div class="row">
+                <div
+                  class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
                 >
-                  <span>Login</span>
-                </a-button>
+                  <a href="/forget-password" class="forget-password"
+                    >Quên mật khẩu</a
+                  >
+                  <a-button
+                    type="primary"
+                    html-type="submit"
+                    class="ms-0 ms-sm-2 mt-3 mt-sm-0"
+                  >
+                    <span>Login</span>
+                  </a-button>
+                </div>
               </div>
-            </div>
-          </a-card>
-        </form>
-        <a-space wrap class="d-flex justify-content-center mt-2">
-          <a-button
-            @click="toggleLogin(true)"
-            :type="isUserLogin ? 'primary' : 'default'"
-            class="me-2"
-            >User</a-button
-          >
-          <a-button
-            @click="toggleLogin(false)"
-            :type="!isUserLogin ? 'primary' : 'default'"
-            >Admin</a-button
-          >
-        </a-space>
+            </a-card>
+          </form>
+          <a-space wrap class="d-flex justify-content-center mt-2">
+            <a-button
+              @click="toggleLogin(true)"
+              :type="isUserLogin ? 'primary' : 'default'"
+              class="me-2"
+              >User</a-button
+            >
+            <a-button
+              @click="toggleLogin(false)"
+              :type="!isUserLogin ? 'primary' : 'default'"
+              >Admin</a-button
+            >
+          </a-space>
+        </div>
+        <div class="col-sm-3"></div>
       </div>
-      <div class="col-sm-3"></div>
     </div>
   </div>
 </template>
@@ -220,6 +236,8 @@ export default defineComponent({
           withCredentials: "include",
         })
         .then((response) => {
+          message.loading();
+
           if (response.status === 200) {
             // console.log(response);
             message.success("Đăng nhập thành công");

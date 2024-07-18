@@ -9,7 +9,6 @@ function checkAdminRole(to, from, next) {
     next({ name: "login" }); // Redirect to login if the role is not 'teacher'
   }
 }
-
 const admin = [
   {
     path: "/admin",
