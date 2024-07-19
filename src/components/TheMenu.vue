@@ -4,7 +4,6 @@
     v-model:selectedKeys="selectedKeys"
     mode="inline"
   >
-
     <!-- Điểm danh sinh viên -->
     <a-menu-item key="admin-diemdanh">
       <router-link :to="{ name: 'admin-diemdanh' }">
@@ -13,7 +12,7 @@
     </a-menu-item>
 
     <!-- Xem kết quả điểm danh -->
-     <a-menu-item key="admin-kqdiemdanh">
+    <a-menu-item key="admin-kqdiemdanh">
       <router-link :to="{ name: 'admin-kqdiemdanh' }">
         <span><i class="fa-solid fa-file me-1"></i>Xem kết quả điểm danh</span>
       </router-link>
@@ -22,9 +21,9 @@
     <!-- Xem thời khóa biểu -->
     <a-menu-item key="admin-thoikhoabieu">
       <router-link :to="{ name: 'admin-thoikhoabieu' }">
-
-        <span><i class="fa-regular fa-calendar-days me-1"></i>Thời khóa biểu</span>
-
+        <span
+          ><i class="fa-regular fa-calendar-days me-1"></i>Thời khóa biểu</span
+        >
       </router-link>
     </a-menu-item>
 
@@ -35,7 +34,7 @@
       </router-link>
     </a-menu-item>
 
-    <a-menu-item key="admin-roles">
+    <!-- <a-menu-item key="admin-roles">
       <router-link :to="{ name: 'admin-roles' }">
         <span><i class="fa-solid fa-tag me-1"></i>Vai trò</span>
       </router-link>
@@ -45,7 +44,7 @@
       <router-link :to="{ name: 'admin-settings' }">
         <span><i class="fa-solid fa-gear me-1"></i>Cài đặt</span>
       </router-link>
-    </a-menu-item>
+    </a-menu-item> -->
   </a-menu>
 </template>
 

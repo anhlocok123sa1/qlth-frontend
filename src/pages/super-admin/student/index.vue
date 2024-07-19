@@ -122,7 +122,11 @@
       <br />
       <b>2. Chỉ hỗ trợ file .xlsx, .xls</b>
       <br />
-      <b>3. Vui lòng kiểm tra dữ liệu trước khi upload</b>
+      <br />
+      <b>3. Tải xuống file mẫu: </b><a href="/data.xlsx" download>excel</a>
+      <br />
+      <br />
+      <b>4. Vui lòng kiểm tra dữ liệu trước khi upload</b>
       <a-button
         type="primary"
         style="margin-left: 8px"
@@ -205,6 +209,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
+            message.warn(error.response.data.message);
           });
       }
     };

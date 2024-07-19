@@ -28,7 +28,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <a-input
+                  <a-input-password
                     v-model:value="user.password"
                     placeholder="Nhập Mật khẩu"
                     allow-clear
@@ -44,7 +44,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <a-input
+                  <a-input-password
                     v-model:value="user.password_confirmation"
                     placeholder="Xác nhận mật khẩu"
                     allow-clear

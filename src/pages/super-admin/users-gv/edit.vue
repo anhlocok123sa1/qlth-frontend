@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="updateUsers()">
-    <a-card title="Cập nhật tài khoản" style="width: 100%">
+    <a-card title="Cập nhật tài khoản giáo viên" style="width: 100%">
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="row">

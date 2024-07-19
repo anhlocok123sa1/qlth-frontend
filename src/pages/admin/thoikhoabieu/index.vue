@@ -42,7 +42,7 @@
             <th>Tiết kết thúc</th>
             <th>Phòng</th>
             <th>Tuần</th>
-            <th>Action</th>
+            <!-- <th>Action</th> -->
           </tr>
         </thead>
         <tbody>
@@ -55,7 +55,7 @@
             <td>{{ item.ST }}</td>
             <td>{{ item.Phong }}</td>
             <td>{{ item.NgayBD }} - {{ item.NgayKT }}</td>
-            <td><a>action</a></td>
+            <!-- <td><a>action</a></td> -->
           </tr>
         </tbody>
       </table>

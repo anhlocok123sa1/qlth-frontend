@@ -15,7 +15,7 @@
         class="col-10 col-sm-9 d-flex align-items-center justify-content-center justify-content-sm-start"
       >
         <img
-          src="../assets/logo.png"
+          src="../assets/qtv.png"
           alt="Logo"
           height="32"
           width="34"
