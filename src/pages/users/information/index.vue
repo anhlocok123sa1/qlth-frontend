@@ -1,21 +1,27 @@
 <template>
-  <form @submit.prevent="save()">
+  <form @submit.prevent="save">
     <a-card title="Thông tin cá nhân" style="width: 100%">
       <div class="row">
-        <!-- ảnh dại diện -->
+        <!-- ảnh đại diện -->
         <div class="col-12 col-sm-4">
           <div class="row">
             <div class="col-12 d-flex justify-content-center mb-3">
               <a-avatar shape="square" :size="200">
                 <template #icon>
-                  <img src="../../../assets/users.png" alt="" />
+                  <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" />
+                  <img v-else src="../../../assets/users.png" alt="Default Avatar" />
                 </template>
               </a-avatar>
             </div>
             <div class="col-12 d-flex justify-content-center">
-              <a-button type="primary">
-                <span>Chọn ảnh</span>
-              </a-button>
+              <a-upload
+                :show-upload-list="false"
+                :before-upload="handleAvatarChange"
+              >
+                <a-button type="primary">
+                  <span>Chọn ảnh</span>
+                </a-button>
+              </a-upload>
             </div>
           </div>
         </div>
@@ -129,7 +135,7 @@
             </div>
           </div>
 
-          <div class="row mb-3" v-if="taikhoansv.change_password">
+          <div class="row mb-3" v-if="taikhoansv.change_password && !readonly">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -151,7 +157,7 @@
             </div>
           </div>
 
-          <div class="row mb-3" v-if="taikhoansv.change_password">
+          <div class="row mb-3" v-if="taikhoansv.change_password && !readonly">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
                 <span class="text-danger me-1">*</span>
@@ -181,9 +187,9 @@
     </a-card>
   </form>
 </template>
+
 <script>
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
-
 import { onMounted, toRef } from "vue";
 import axios from "../../../axios";
 import { ref, reactive } from "vue";
@@ -193,12 +199,12 @@ import { useRouter } from "vue-router";
 
 export default {
   setup() {
-    // Lấy store từ useMenuUsers
     const store = useMenuUsers();
     store.onSelectedKeys(["users-information"]);
     const users = ref({});
     const readonly = ref(true);
     const router = useRouter();
+    const avatarUrl = ref('');
 
     const taikhoansv = reactive({
       email: "",
@@ -223,16 +229,40 @@ export default {
         users.value = response.data;
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
+        if (response.data.avatar) {
+          avatarUrl.value = 'http://127.0.0.1:8000/storage/' + response.data.avatar;
+        }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     });
-
-    // Edit
+    console.log(avatarUrl);
     const edit = () => {
       readonly.value = !readonly.value;
-      // console.log(readonly.value);
     };
+
+    const handleAvatarChange = async (file) => {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post("/upload-avatar", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
+          }
+        });
+        avatarUrl.value = 'http://127.0.0.1:8000' + response.data.avatarUrl;
+        message.success("Ảnh đại diện đã được cập nhật");
+      } catch (error) {
+        message.error("Cập nhật ảnh đại diện thất bại");
+        console.log(error);
+      }
+      
+      return false;
+    };
+
     const save = () => {
       axios
         .post("/edit", {
@@ -274,7 +304,11 @@ export default {
       save,
       taikhoansv,
       errors,
+      avatarUrl,
+      handleAvatarChange
     };
   },
 };
 </script>
+
+
