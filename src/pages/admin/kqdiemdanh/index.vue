@@ -1,5 +1,5 @@
 <template>
-  <a-card title="KÊT QUẢ ĐIỂM DANH" style="width: 100%">
+  <a-card title="KẾT QUẢ ĐIỂM DANH" style="width: 100%">
     <div class="row">
       <div class="col-12">
         <a-table :dataSource="subject" :columns="columns">
@@ -139,6 +139,7 @@ const columnsAttendance = [
     },
   },
   { title: "Họ và tên", dataIndex: "ten_sv", key: "ten_sv" },
+  { title: "Tên lớp", dataIndex: "ma_lop", key: "ma_lop" },
   { title: "Số buổi học", dataIndex: "sbh", key: "sbh", width: "10%" },
   { title: "Số buổi điểm danh", dataIndex: "sbdd", key: "sbdd", width: "10%" },
   { title: "Số buổi vắng", dataIndex: "sbv", key: "sbv", width: "10%" },
@@ -188,7 +189,6 @@ const showModal = async (record) => {
       },
     });
     attendance.value = response.data;
-    // console.log(response);
   } catch (error) {
     console.log(error);
   }
@@ -199,7 +199,6 @@ const handleOk = (e) => {
   modalVisible.value = false;
 };
 const handlePDF = async () => {
-  // console.log(maGD.value);
   try {
     const response = await axios.get(`exportDiemDanh/${maGD.value}`, {
       headers: {
@@ -220,5 +219,4 @@ const handlePDF = async () => {
 };
 </script>
 
-<style>
-</style>
+<style></style>

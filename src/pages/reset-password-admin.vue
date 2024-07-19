@@ -7,7 +7,7 @@
           <a-spin :spinning="indicator" />
           <form @submit.prevent="forgetpassworduser">
             <a-card
-              title="Xác nhận mật khẩuu"
+              title="Xác nhận mật khẩu"
               style="width: 100%"
               class="background"
             >
@@ -28,7 +28,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <a-input
+                  <a-input-password
                     v-model:value="user.password"
                     placeholder="Nhập Mật khẩu"
                     allow-clear
@@ -44,7 +44,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <a-input
+                  <a-input-password
                     v-model:value="user.password_confirmation"
                     placeholder="Xác nhận mật khẩu"
                     allow-clear

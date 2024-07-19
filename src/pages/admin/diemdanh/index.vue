@@ -60,7 +60,7 @@
             >
 
             <!-- Xuát excel -->
-            <a-button type="primary" class="me-2 mb-2">Xuất excel</a-button>
+            <!-- <a-button type="primary" class="me-2 mb-2">Xuất excel</a-button> -->
 
             <!-- Hiện mã QR -->
             <a-button
@@ -277,8 +277,11 @@ export default defineComponent({
           error.response.data.message
         ) {
           message.error(error.response.data.message);
+
+          result.value = "";
         } else {
           message.error("Có lỗi xảy ra, vui lòng thử lại.");
+          result.value = "";
         }
       }
     };
@@ -507,6 +510,7 @@ export default defineComponent({
             ma_gd: keyATab.value,
             ngay_hoc: dayjs(selectedDate.value).format("YYYY-MM-DD"),
           });
+          console.log(response.data);
           ma_gd_diemdanh.value = keyATab.value;
           ngay_diem_danh.value = dayjs(selectedDate.value).format("YYYY-MM-DD");
           users.value = response.data.map((user) => ({
@@ -527,6 +531,7 @@ export default defineComponent({
         message.warn("Vui lòng chọn đầy đủ thông tin để tìm lịch điểm danh.");
       }
     };
+
     // xử lý khi selectedHocKy thay đổi
     watch(selectedHocKy, (newHocKy) => {
       filteredMonHoc.value = monHoc.value.filter(

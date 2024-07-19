@@ -69,7 +69,7 @@
                   class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
                 >
                   <a href="/forget-password" class="forget-password"
-                    >Quên mật khẩu</a
+                    >Forgot my password</a
                   >
                   <a-button
                     type="primary"
@@ -149,7 +149,7 @@
                   class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
                 >
                   <a href="/forget-password" class="forget-password"
-                    >Quên mật khẩu</a
+                    >Forgot my password</a
                   >
                   <a-button
                     type="primary"

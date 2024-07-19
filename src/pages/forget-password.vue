@@ -6,7 +6,7 @@
         <div class="col-sm-6">
           <form v-if="isUserLogin" @submit.prevent="forgetpassworduser">
             <a-card
-              title="Lấy lại mật khẩu"
+              title="Forget password"
               style="width: 100%"
               class="background"
             >
@@ -19,7 +19,7 @@
                 <div class="col-12 col-sm-6">
                   <a-input
                     v-model:value="user.emailUser"
-                    placeholder="Nhập email"
+                    placeholder="Input email"
                     allow-clear
                   />
                 </div>
@@ -34,7 +34,7 @@
                     html-type="submit"
                     class="ms-0 ms-sm-2 mt-3 mt-sm-0"
                   >
-                    <span>Gửi</span>
+                    <span>Submit</span>
                   </a-button>
                 </div>
               </div>
@@ -42,7 +42,7 @@
           </form>
           <form v-else @submit.prevent="forgetpasswordadmin">
             <a-card
-              title="Lấy lại mật khẩu Admin"
+              title="Forget password Admin"
               style="width: 100%"
               class="background"
             >
@@ -55,7 +55,7 @@
                 <div class="col-12 col-sm-6">
                   <a-input
                     v-model:value="admin.emailAdmin"
-                    placeholder="Nhập email"
+                    placeholder="Input email"
                     allow-clear
                   />
                 </div>

@@ -2,7 +2,7 @@ function checkAdminRole(to, from, next) {
   const role = localStorage.getItem("role");
   if (role === "teacher") {
     if (to.name == 'admin') {
-      next({ name: "admin-diemdanh" });
+      next({ name: "admin-thoikhoabieu" });
     }
     next();
   } else {
