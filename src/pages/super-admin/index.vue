@@ -65,7 +65,9 @@
             <i class="fa-solid fa-building-user item-img"></i>
           </div>
         </div>
-        <div class="row link"><a href="" class="item-link">Xem Thêm</a></div>
+        <div class="row link">
+          <a href="classroom" class="item-link">Xem Thêm</a>
+        </div>
       </div>
     </div>
 
