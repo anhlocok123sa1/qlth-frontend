@@ -209,7 +209,9 @@ export default {
     const readonly = ref(true);
     const router = useRouter();
     const avatarUrl = ref("");
+
     const imageUrl = ref("");
+
 
     const taikhoansv = reactive({
       email: "",
@@ -235,8 +237,10 @@ export default {
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
         if (response.data.avatar) {
+
           imageUrl.value = response.data.avatar;
           changeAvatar();
+
         }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -263,8 +267,10 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
+
         // Kiểm tra URL từ phản hồi
         imageUrl.value = response.data.avatarUrl;
+
         message.success("Ảnh đại diện đã được cập nhật");
         changeAvatar();
       } catch (error) {
@@ -323,5 +329,3 @@ export default {
   },
 };
 </script>
-
-
