@@ -2,20 +2,30 @@
   <form @submit.prevent="updateUsers()">
     <a-card title="Cập nhật tài khoản giáo viên" style="width: 100%">
       <div class="row">
+        <!-- ảnh đại diện -->
         <div class="col-12 col-sm-4">
           <div class="row">
             <div class="col-12 d-flex justify-content-center mb-3">
               <a-avatar shape="square" :size="200">
                 <template #icon>
-                  <img src="../../../assets/users.png" alt="users" />
+                  <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" />
+                  <img
+                    v-else
+                    src="../../../assets/users.png"
+                    alt="Default Avatar"
+                  />
                 </template>
               </a-avatar>
             </div>
             <div class="col-12 d-flex justify-content-center">
-              <a-button type="primary">
-                <i class="fa-solid fa-plus me-2"></i>
-                <span>Chọn ảnh</span>
-              </a-button>
+              <a-upload
+                :show-upload-list="false"
+                :before-upload="handleAvatarChange"
+              >
+                <a-button type="primary">
+                  <span>Chọn ảnh</span>
+                </a-button>
+              </a-upload>
             </div>
           </div>
         </div>
@@ -307,6 +317,8 @@ export default defineComponent({
     });
 
     const errors = ref({});
+    const avatarUrl = ref("");
+    const imageUrl = ref("");
     const dateFormat = "YYYY-MM-DD";
     const getUsersEdit = () => {
       axios
@@ -319,6 +331,10 @@ export default defineComponent({
           users.dia_chi = response.data.dia_chi;
           users.sdt = response.data.sdt;
           users.email = response.data.email;
+          if (response.data.avatar) {
+            imageUrl.value = response.data.avatar;
+            changeAvatar();
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -354,6 +370,35 @@ export default defineComponent({
     const filterOption = (input, option) => {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     };
+    const changeAvatar = () => {
+      avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
+      // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
+      console.log(avatarUrl.value);
+    };
+
+    const handleAvatarChange = async (file) => {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(`/upload-avatar-gv/${route.params.id}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // Kiểm tra URL từ phản hồi
+        imageUrl.value = response.data.avatarUrl;
+        message.success("Ảnh đại diện đã được cập nhật");
+        changeAvatar();
+      } catch (error) {
+        message.error("Cập nhật ảnh đại diện thất bại");
+        console.log(error);
+      }
+
+      return false;
+    };
 
     getUsersEdit();
     return {
@@ -361,6 +406,8 @@ export default defineComponent({
       errors,
       filterOption,
       updateUsers,
+      avatarUrl,
+      handleAvatarChange
     };
   },
 });
