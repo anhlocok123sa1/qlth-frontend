@@ -9,13 +9,24 @@
         </router-link>
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-mb-4 col-sm-4 d-flex justify-content-end">
+        <a-input-search
+          v-model:value="data"
+          placeholder="Nhập tên hoặc mã giáo viên"
+          enter-button
+          allow-clear
+          @search="onSearch"
+        />
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-12">
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
           <template #bodyCell="{ column, index, record }">
             <template v-if="column.key === 'index'">
               <span>{{ index + 1 }}</span>
-              <!-- <span>{{ record.id }}</span> -->
             </template>
 
             <template v-if="column.key == 'sex'">
@@ -56,14 +67,14 @@ import axios from "../../../axios.js";
 import { Modal } from "ant-design-vue";
 import { message } from "ant-design-vue";
 import { useMenu } from "../../../stores/use-menu.js";
-import { defineComponent, ref, createVNode } from "vue";
+import { defineComponent, ref, createVNode, onMounted } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   setup() {
     const store = useMenu();
     store.onSelectedKeys(["admin-users-gv"]);
-
+    const data = ref("");
     const users = ref([]);
     const columns = [
       {
@@ -82,12 +93,7 @@ export default defineComponent({
         dataIndex: "name",
         key: "name",
       },
-      // {
-      //   title: "Phòng ban",
-      //   dataIndex: "departments",
-      //   key: "departments",
-      //   responsive: ["sm"],
-      // },
+
       {
         title: "Email",
         dataIndex: "email",
@@ -107,9 +113,17 @@ export default defineComponent({
 
     const getUsers = () => {
       axios
-        .get("taikhoangvs")
+        .get("taikhoangvs", {
+          params: {
+            nameOrID: data.value,
+          },
+        })
         .then((response) => {
           users.value = response.data;
+          console.log(response.data);
+          if (users.value.length == 0) {
+            message.warn("Không tìm thấy ");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -133,7 +147,7 @@ export default defineComponent({
               console.log(error);
             });
         },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+
         cancelText: "Hủy",
         onCancel() {
           Modal.destroyAll();
@@ -141,8 +155,14 @@ export default defineComponent({
       });
     };
 
-    getUsers();
-    return { users, columns, deleteUsers };
+    const onSearch = () => {
+      getUsers();
+    };
+    onMounted(() => {
+      getUsers();
+    });
+
+    return { users, columns, deleteUsers, data, onSearch };
   },
 });
 </script>

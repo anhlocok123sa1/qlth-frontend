@@ -9,7 +9,11 @@
               <a-avatar shape="square" :size="200">
                 <template #icon>
                   <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" />
-                  <img v-else src="../../../assets/users.png" alt="Default Avatar" />
+                  <img
+                    v-else
+                    src="../../../assets/users.png"
+                    alt="Default Avatar"
+                  />
                 </template>
               </a-avatar>
             </div>
@@ -204,7 +208,7 @@ export default {
     const users = ref({});
     const readonly = ref(true);
     const router = useRouter();
-    const avatarUrl = ref('');
+    const avatarUrl = ref("");
 
     const taikhoansv = reactive({
       email: "",
@@ -230,7 +234,8 @@ export default {
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
         if (response.data.avatar) {
-          avatarUrl.value = 'http://127.0.0.1:8000/storage/' + response.data.avatar;
+          avatarUrl.value =
+            "http://127.0.0.1:8000/storage/" + response.data.avatar;
         }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -244,22 +249,22 @@ export default {
     const handleAvatarChange = async (file) => {
       const formData = new FormData();
       formData.append("avatar", file);
-      
+
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post("/upload-avatar", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
-        avatarUrl.value = 'http://127.0.0.1:8000' + response.data.avatarUrl;
+        avatarUrl.value = "http://127.0.0.1:8000" + response.data.avatarUrl;
         message.success("Ảnh đại diện đã được cập nhật");
       } catch (error) {
         message.error("Cập nhật ảnh đại diện thất bại");
         console.log(error);
       }
-      
+
       return false;
     };
 
@@ -305,10 +310,8 @@ export default {
       taikhoansv,
       errors,
       avatarUrl,
-      handleAvatarChange
+      handleAvatarChange,
     };
   },
 };
 </script>
-
-

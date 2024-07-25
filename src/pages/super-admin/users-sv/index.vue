@@ -9,6 +9,17 @@
         </router-link>
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-mb-4 col-sm-4 d-flex justify-content-end">
+        <a-input-search
+          v-model:value="data"
+          placeholder="Nhập tên hoặc mã sinh viên"
+          enter-button
+          allow-clear
+          @search="onSearch"
+        />
+      </div>
+    </div>
     <div class="row">
       <div class="col-12">
         <a-table
@@ -74,7 +85,7 @@ export default defineComponent({
     const currentPage = ref(1);
     const pageSize = ref(10);
     const loading = ref(false);
-
+    const data = ref("");
     const columns = [
       {
         title: "#",
@@ -91,6 +102,11 @@ export default defineComponent({
         title: "Họ tên",
         dataIndex: "ten_sv",
         key: "name",
+      },
+      {
+        title: "Tên lớp",
+        dataIndex: "ma_lop",
+        key: "ma_lop",
       },
       {
         title: "Email",
@@ -112,13 +128,20 @@ export default defineComponent({
     const getUsers = (params = {}) => {
       loading.value = true;
       axios
-        .get("taikhoansvs", { params })
+        .get("taikhoansvs", {
+          params: {
+            nameOrID: data.value,
+          },
+        })
         .then((response) => {
           users.value = response.data.data;
           totalUsers.value = response.data.total;
           currentPage.value = response.data.current_page;
           pageSize.value = response.data.per_page;
           loading.value = false;
+          if (users.value.length == 0) {
+            message.warn("Không tìm thấy");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -167,7 +190,10 @@ export default defineComponent({
         },
       });
     };
-
+    const onSearch = () => {
+      console.log(data.value);
+      getUsers();
+    };
     getUsers({ page: currentPage.value, per_page: pageSize.value });
 
     return {
@@ -180,6 +206,8 @@ export default defineComponent({
       handleTableChange,
       deleteUsers,
       pagination,
+      onSearch,
+      data,
     };
   },
 });
