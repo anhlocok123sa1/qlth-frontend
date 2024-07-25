@@ -1,8 +1,7 @@
 <template>
   <a-card title="Xem điểm">
     <div class="view-score">
-      <a-table :columns="columns" size="small" :dataSource="dataDiem" v-if="dataDiem.length > 0"> </a-table>
-      <a-spin v-else></a-spin>
+      <a-table :columns="columns" size="small" :dataSource="dataDiem"> </a-table>
     </div>
   </a-card>
 </template>
