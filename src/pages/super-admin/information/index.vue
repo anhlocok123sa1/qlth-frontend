@@ -2,20 +2,30 @@
   <form @submit.prevent="save()">
     <a-card title="Thông tin cá nhân" style="width: 100%">
       <div class="row">
-        <!-- ảnh dại diện -->
+        <!-- ảnh đại diện -->
         <div class="col-12 col-sm-4">
           <div class="row">
             <div class="col-12 d-flex justify-content-center mb-3">
               <a-avatar shape="square" :size="200">
                 <template #icon>
-                  <img src="../../../assets/users.png" alt="" />
+                  <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" />
+                  <img
+                    v-else
+                    src="../../../assets/users.png"
+                    alt="Default Avatar"
+                  />
                 </template>
               </a-avatar>
             </div>
             <div class="col-12 d-flex justify-content-center">
-              <a-button type="primary">
-                <span>Chọn ảnh</span>
-              </a-button>
+              <a-upload
+                :show-upload-list="false"
+                :before-upload="handleAvatarChange"
+              >
+                <a-button type="primary">
+                  <span>Chọn ảnh</span>
+                </a-button>
+              </a-upload>
             </div>
           </div>
         </div>
@@ -147,10 +157,12 @@ export default defineComponent({
   setup() {
     // Lấy store từ usestore
     const store = useMenu();
-    console.log(store);
+    // console.log(store);
     store.onSelectedKeys(["super-admin-information"]);
     const users = ref({});
     const readonly = ref(true);
+    const avatarUrl = ref("");
+    const imageUrl = ref("");
 
     const taikhoang = reactive({
       email: "",
@@ -177,11 +189,42 @@ export default defineComponent({
         taikhoang.email = response.data.email;
         taikhoang.full_name = response.data.full_name;
         taikhoang.username = response.data.username;
+        if (response.data.avatar) {
+          imageUrl.value = response.data.avatar;
+          changeAvatar();
+        }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     });
 
+    const changeAvatar = () => {
+      avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
+      // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
+    }
+    const handleAvatarChange = async (file) => {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post("/upload-avatar-admin", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // Kiểm tra URL từ phản hồi
+        imageUrl.value = response.data.avatarUrl;
+        message.success("Ảnh đại diện đã được cập nhật");
+        changeAvatar();
+      } catch (error) {
+        message.error("Cập nhật ảnh đại diện thất bại");
+        console.log(error);
+      }
+
+      return false;
+    };
     // Edit
     const edit = () => {
       readonly.value = !readonly.value;
@@ -224,6 +267,8 @@ export default defineComponent({
       save,
       taikhoang,
       errors,
+      avatarUrl,
+      handleAvatarChange
     };
   },
 });
