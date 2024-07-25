@@ -9,7 +9,11 @@
               <a-avatar shape="square" :size="200">
                 <template #icon>
                   <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" />
-                  <img v-else src="../../../assets/users.png" alt="Default Avatar" />
+                  <img
+                    v-else
+                    src="../../../assets/users.png"
+                    alt="Default Avatar"
+                  />
                 </template>
               </a-avatar>
             </div>
@@ -190,7 +194,7 @@
 
 <script>
 import { useMenuUsers } from "../../../stores/use-menu-users.js";
-import { onMounted, toRef } from "vue";
+import { onMounted } from "vue";
 import axios from "../../../axios";
 import { ref, reactive } from "vue";
 import "../../../css/users/information.css";
@@ -204,7 +208,8 @@ export default {
     const users = ref({});
     const readonly = ref(true);
     const router = useRouter();
-    const avatarUrl = ref('');
+    const avatarUrl = ref("");
+    const imageUrl = ref("");
 
     const taikhoansv = reactive({
       email: "",
@@ -230,39 +235,47 @@ export default {
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
         if (response.data.avatar) {
-          avatarUrl.value = 'http://127.0.0.1:8000/storage/' + response.data.avatar;
+          imageUrl.value = response.data.avatar;
+          changeAvatar();
         }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     });
-    console.log(avatarUrl);
     const edit = () => {
       readonly.value = !readonly.value;
     };
+    const changeAvatar = () => {
+      avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
+      // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
+      console.log(avatarUrl.value);
+    }
 
     const handleAvatarChange = async (file) => {
       const formData = new FormData();
       formData.append("avatar", file);
-      
+
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post("/upload-avatar", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
-        avatarUrl.value = 'http://127.0.0.1:8000' + response.data.avatarUrl;
+        // Kiểm tra URL từ phản hồi
+        imageUrl.value = response.data.avatarUrl;
         message.success("Ảnh đại diện đã được cập nhật");
+        changeAvatar();
       } catch (error) {
         message.error("Cập nhật ảnh đại diện thất bại");
         console.log(error);
       }
-      
+
       return false;
     };
 
+    
     const save = () => {
       axios
         .post("/edit", {
@@ -305,7 +318,7 @@ export default {
       taikhoansv,
       errors,
       avatarUrl,
-      handleAvatarChange
+      handleAvatarChange,
     };
   },
 };
