@@ -2,7 +2,11 @@
   <a-card title="KÊT QUẢ ĐIỂM DANH" style="width: 100%">
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="subject" :columns="columns" v-if="subject.length > 0">
+        <a-table
+          :dataSource="subject"
+          :columns="columns"
+          v-if="subject.length > 0"
+        >
           <template #bodyCell="{ column, record }">
             <!-- <template v-if="column.key === 'index'"> </template> -->
 
@@ -45,7 +49,6 @@ export default {
 
     const showModal = (record) => {
       const ma_gd = record.ma_gd;
-      // console.log(ma_gd);
 
       axios
         .get(`ket-qua-diem-danh/${ma_gd}/${ma_sv}`, {
@@ -64,13 +67,10 @@ export default {
                 item.diem_danh.diem_danh2 !== "0000-00-00 00:00:00"
                   ? item.diem_danh.diem_danh2
                   : "",
-              // stt: index + 1, // Tự động tính STT từ 1
             }));
           } else {
             attendance.value = [];
           }
-          // console.log(ma_gd);
-          // console.log(localStorage.getItem("ma_sv"));
         })
         .catch((error) => {
           console.error("Lỗi không gọi được api", error);
@@ -132,7 +132,7 @@ export default {
       modalVisible,
       columnsAttendance,
       attendance,
-      handleOk
+      handleOk,
     };
   },
 };

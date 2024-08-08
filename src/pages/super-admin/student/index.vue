@@ -97,9 +97,12 @@
     <div class="row">
       <div class="col-sm-12">
         <a-table :columns="columns" :data-source="data" :scroll="{ x: 1000 }">
-          <template #bodyCell="{ column }">
+          <template #bodyCell="{ column, index }">
             <template v-if="column.key === 'operation'">
               <a>action</a>
+            </template>
+            <template v-if="column.key === 'stt'">
+              {{ index + 1 }}
             </template>
           </template>
         </a-table>
@@ -275,7 +278,7 @@ export default defineComponent({
     };
     // table
     const columns = [
-      { title: "STT", dataIndex: "key", key: "key", width: 50, fixed: "left" },
+      { title: "STT", dataIndex: "stt", key: "stt", width: 50, fixed: "left" },
       {
         title: "Mã SV",
         dataIndex: "ma_sv",

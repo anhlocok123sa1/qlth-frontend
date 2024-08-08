@@ -91,7 +91,14 @@
         </span>
       </template>
     </a-table>
-    <a-button key="pdf" @click="handlePDF()">Xuất PDF</a-button>
+    <a-button
+      style="margin-right: 3px"
+      type="primary"
+      key="pdf"
+      @click="handlePDF()"
+      >Xuất Excel</a-button
+    >
+    <!-- <a-button type="primary" key="pdf" @click="handleExcel()">Excel</a-button> -->
   </a-modal>
 </template>
 
@@ -100,6 +107,7 @@ import axios from "../../../axios";
 import { onMounted, reactive, ref } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import { useMenu } from "../../../stores/use-menu";
+import { parse } from "date-fns/fp";
 
 const store = useMenu();
 store.onSelectedKeys(["admin-kqdiemdanh"]);
@@ -206,16 +214,42 @@ const handlePDF = async () => {
       },
       responseType: "blob",
     });
-    const blob = new Blob([response.data], { type: "application/pdf" });
+    const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "danh_sach_diem_danh.pdf";
+    link.href = url;
+    link.setAttribute("download", "students.xlsx");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   } catch (error) {
     console.log(error);
   }
+};
+
+const handleExcel = () => {
+  // console.log(maGD.value);
+  axios
+    .post(
+      "/export-data-diemdanhs",
+
+      {
+        responseType: "blob",
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "students.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      console.error("Error exporting data:", error);
+      message.error("Failed to export data.");
+    });
 };
 </script>
 

@@ -110,11 +110,21 @@
   <!-- chart -->
   <div class="container">
     <div class="row">
+      <div class="col-sm-8">
+        <label for="">Biểu đồ thống kê số lượng sinh viên theo khoa</label>
+        <div class="col-sm-12"><canvas id="myChart2"></canvas></div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
       <div class="col-sm-12 d-sm-flex">
         <div class="col-sm-4">
           <div class="row">
             <div class="col-sm-12 d-sm-flex justify-content-center">
-              <label for="">Biểu đồ thống kê số lượng sinh viên nghỉ học</label>
+              <label for=""
+                >Biểu đồ thống kê số lượng sinh viên theo khoa</label
+              >
             </div>
           </div>
           <div class="row">
@@ -199,6 +209,27 @@ export default defineComponent({
         .catch((error) => {
           console.log("Lỗi: ", error);
         });
+
+      axios.get("/so-luong-sinh-vien").then((response) => {
+        //  bđ cột
+        const data = response.data;
+        const labels = data.map((item) => item.ma_khoa);
+        const values = data.map((item) => item.so_luong_sinh_vien);
+        console.log(response.data);
+        const ctx2 = document.getElementById("myChart2");
+        new Chart(ctx2, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: values,
+                borderWidth: 1,
+              },
+            ],
+          },
+        });
+      });
     });
 
     store.onSelectedKeys(["home"]);

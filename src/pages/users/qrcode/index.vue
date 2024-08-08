@@ -34,7 +34,7 @@ const qrcodeCanvasRef = ref();
 const dowloadChange = async () => {
   try {
     if (!user.value) {
-      console.error("User data not available.");
+      console.error("Dữ liệu người dùng không có sẵn.");
       return;
     }
     const url = await qrcodeCanvasRef.value.toDataURL();
@@ -45,7 +45,7 @@ const dowloadChange = async () => {
     a.click();
     document.body.removeChild(a);
   } catch (error) {
-    console.error("Error downloading QR code:", error);
+    console.error("Lỗi khi tải mã QR:", error);
   }
 };
 
@@ -65,7 +65,7 @@ onMounted(async () => {
 
     qrValue.value = `${user.value.ma_sv}-${user.value.ten_sv}-${user.value.ma_lop}`;
   } catch (error) {
-    console.error("Failed to fetch user profile:", error);
+    console.error("Không thể tải hồ sơ người dùng:", error);
   }
 });
 </script>

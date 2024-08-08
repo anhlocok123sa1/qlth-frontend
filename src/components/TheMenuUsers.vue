@@ -41,11 +41,11 @@
     </a-menu-item>
 
     <!-- Xem điểm -->
-     <a-menu-item key="users-view-score">
+    <!-- <a-menu-item key="users-view-score">
       <router-link :to="{ name: 'users-view-score' }">
         <span><TableOutlined /> Xem điểm </span>
       </router-link>
-    </a-menu-item>
+    </a-menu-item> -->
   </a-menu>
 </template>
 

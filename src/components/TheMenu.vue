@@ -27,6 +27,13 @@
       </router-link>
     </a-menu-item>
 
+    <!-- Tạo lịch học -->
+    <a-menu-item key="admin-lichgiangday">
+      <router-link :to="{ name: 'admin-lichgiangday' }">
+        <span><i class="fa-solid fa-user me-1"></i>Quản lý giảng dạy</span>
+      </router-link>
+    </a-menu-item>
+
     <!-- information -->
     <a-menu-item key="admin-information">
       <router-link :to="{ name: 'admin-information' }">

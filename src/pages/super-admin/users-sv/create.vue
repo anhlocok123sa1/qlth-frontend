@@ -215,12 +215,12 @@
                 v-model:value="taikhoansv.mat_khau"
                 placeholder="Mật khẩu"
                 :class="{
-                  input_danger: errors.mat_khau,
+                  input_danger: errors.password,
                 }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.mat_khau" class="text-danger">{{
-                errors.mat_khau[0]
+              <small v-if="errors.password" class="text-danger">{{
+                errors.password[0]
               }}</small>
             </div>
           </div>
@@ -236,7 +236,14 @@
               <a-input-password
                 v-model:value="taikhoansv.password_confirmation"
                 placeholder="Xác nhận mật khẩu"
+                :class="{
+                  input_danger: errors.password,
+                }"
               />
+              <div class="w-100"></div>
+              <small v-if="errors.password" class="text-danger">{{
+                errors.password[0]
+              }}</small>
             </div>
           </div>
         </div>
