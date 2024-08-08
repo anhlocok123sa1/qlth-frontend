@@ -1,8 +1,9 @@
 <template>
   <a-card title="Xem điểm">
     <div class="view-score">
-      <a-table :columns="columns" size="small" :dataSource="dataDiem">
-      </a-table>
+
+      <a-table :columns="columns" size="small" :dataSource="dataDiem"> </a-table>
+
     </div>
   </a-card>
 </template>

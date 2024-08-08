@@ -247,8 +247,10 @@ export default {
         taikhoansv.email = response.data.email;
         taikhoansv.sdt = response.data.sdt;
         if (response.data.avatar) {
+
           imageUrl.value = response.data.avatar;
           changeAvatar();
+
         }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -261,7 +263,9 @@ export default {
       avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
       // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
       console.log(avatarUrl.value);
-    };
+
+    }
+
 
     const handleAvatarChange = async (file) => {
       const formData = new FormData();
@@ -289,6 +293,7 @@ export default {
       return false;
     };
 
+    
     const save = () => {
       axios
         .post("/edit", {
