@@ -57,11 +57,22 @@
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
-                <span>Mã Lớp</span>
+                <span>Tên lớp</span>
               </label>
             </div>
             <div class="col-12 col-sm-4">
               <a-input :value="users.ma_lop" :readonly="true"></a-input>
+            </div>
+          </div>
+          <!-- Ngày sinh -->
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span>Ngày sinh</span>
+              </label>
+            </div>
+            <div class="col-12 col-sm-4">
+              <a-input :value="users.ngay_sinh" :readonly="true"></a-input>
             </div>
           </div>
           <!-- Giới tính -->
@@ -212,7 +223,6 @@ export default {
 
     const imageUrl = ref("");
 
-
     const taikhoansv = reactive({
       email: "",
       sdt: "",
@@ -253,7 +263,9 @@ export default {
       avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
       // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
       console.log(avatarUrl.value);
+
     }
+
 
     const handleAvatarChange = async (file) => {
       const formData = new FormData();

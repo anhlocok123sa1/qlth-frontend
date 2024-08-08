@@ -30,7 +30,8 @@ import {
   Popconfirm,
   Upload,
   Collapse,
-  CollapsePanel
+  CollapsePanel,
+  Anchor
 
 } from "ant-design-vue";
 import { createPinia } from "pinia";
@@ -46,6 +47,7 @@ const app = createApp(App);
 
 app.config.globalProperties.$axios = axios;
 
+app.use(Anchor);
 app.use(Upload);
 app.use(Popconfirm);
 app.use(Alert);

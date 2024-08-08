@@ -39,6 +39,9 @@
           <a-table-column key="action" title="Thao tác">
             <template #default="{ record }">
               <span>
+                <router-link to="#" @click.prevent="openModal(record.ma_lop)">
+                  <i class="fa-solid fa-eye" style="margin-right: 10px"></i>
+                </router-link>
                 <router-link
                   :to="{
                     name: 'classroom-edit',
@@ -67,6 +70,21 @@
       </div>
     </div>
   </div>
+  <a-modal
+    v-model:open="open"
+    width="1200px"
+    title="Danh Sách Lớp"
+    @ok="handleOk"
+  >
+    <a-table :data-source="students" :pagination="false">
+      <a-table-column key="stt" title="STT" data-index="stt" />
+      <a-table-column key="ma_sv" title="Mã sinh viên" data-index="ma_sv" />
+      <a-table-column key="ten_sv" title="Tên Sinh Viên" data-index="ten_sv" />
+      <a-table-column key="phai" title="Phái" data-index="phai" />
+      <a-table-column key="ten_lop" title="Tên lớp" data-index="ten_lop" />
+      <a-table-column key="email" title="Email" data-index="email" />
+    </a-table>
+  </a-modal>
 </template>
 
 <script>
@@ -81,8 +99,10 @@ export default defineComponent({
   setup() {
     const store = useMenu();
     const departments = ref([]);
+    const students = ref([]);
     const searchValue = ref("");
     const router = useRouter();
+    const open = ref(false);
     const getListDepartment = () => {
       axios
         .get("list-classroom", {
@@ -129,6 +149,30 @@ export default defineComponent({
       });
     };
     //=====================*===============
+
+    // Hiển thị danh sách lớp
+    const openModal = (maLop) => {
+      open.value = true;
+      axios
+        .get("/class-list-student", {
+          params: {
+            maLop: maLop,
+          },
+        })
+        .then((response) => {
+          students.value = response.data.map((student, index) => ({
+            ...student,
+            phai: student.phai == 1 ? "Nam" : "Nữ",
+            stt: index + 1,
+          }));
+        });
+      console.log(maLop);
+    };
+    const handleOk = (e) => {
+      console.log(e);
+      open.value = false;
+    };
+    //
     store.onSelectedKeys(["classroom"]);
     getListDepartment();
     return {
@@ -138,6 +182,10 @@ export default defineComponent({
       searchValue,
       add,
       confirm,
+      openModal,
+      handleOk,
+      open,
+      students,
     };
   },
 });

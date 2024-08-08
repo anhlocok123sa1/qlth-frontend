@@ -49,6 +49,30 @@ const admin = [
         component: () => import("../pages/admin/thoikhoabieu/index.vue"),
         props: (route) => ({ query: route.query.q }),
       },
+      // detail giảng dạy
+      {
+        path: "lich-giang-day",
+        name: "admin-lichgiangday",
+        component: () => import("../pages/admin/lichgd/index.vue"),
+      },
+      //tạo lịch giảng dạy
+      {
+        path: "lich-giang-day/create",
+        name: "admin-lichgiangday/create",
+        component: () => import("../pages/admin/lichgd/create.vue"),
+      },
+
+      //tạo lịch giảng dạy
+      {
+        path: "lich-giang-day/create-custom",
+        name: "admin-lichgiangday/create-custom",
+        component: () => import("../pages/admin/lichgd/create_custom.vue"),
+      },
+      {
+        path: "lich-giang-day/edit/:ma_gd/:ten_mh/:nmh",
+        name: "admin-lichgiangday/edit",
+        component: () => import("../pages/admin/lichgd/edit.vue"),
+      },
       //Thông tin cá nhân
       {
         path: "information",

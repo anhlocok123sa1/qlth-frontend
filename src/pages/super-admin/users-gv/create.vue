@@ -190,13 +190,10 @@
               <a-input-password
                 v-model:value="taikhoangv.mat_khau"
                 placeholder="Mật khẩu"
-                :class="{
-                  input_danger: errors.mat_khau,
-                }"
               />
               <div class="w-100"></div>
-              <small v-if="errors.mat_khau" class="text-danger">{{
-                errors.mat_khau[0]
+              <small v-if="errors.password" class="text-danger">{{
+                errors.password[0]
               }}</small>
             </div>
           </div>
@@ -212,7 +209,14 @@
               <a-input-password
                 v-model:value="taikhoangv.password_confirmation"
                 placeholder="Xác nhận mật khẩu"
+                :class="{
+                  input_danger: errors.password,
+                }"
               />
+              <div class="w-100"></div>
+              <small v-if="errors.password" class="text-danger">{{
+                errors.password[0]
+              }}</small>
             </div>
           </div>
         </div>
@@ -221,7 +225,7 @@
       <div class="row">
         <div class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto">
           <router-link :to="{ name: 'admin-users-gv' }">
-            <a-button class="w-100">
+            <a-button class="col-12 justify-content-sm-end">
               <span>Hủy</span>
             </a-button>
           </router-link>
@@ -237,7 +241,6 @@
     </a-card>
   </form>
 </template>
-
 
 <script>
 import { message } from "ant-design-vue";
@@ -280,7 +283,7 @@ export default defineComponent({
           sdt: taikhoangv.sdt,
           email: taikhoangv.email,
           password: taikhoangv.mat_khau,
-          password_confirmation: taikhoangv.password_confirmation
+          password_confirmation: taikhoangv.password_confirmation,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -308,7 +311,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <style>
 .select_danger {

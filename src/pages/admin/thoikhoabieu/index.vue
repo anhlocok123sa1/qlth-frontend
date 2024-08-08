@@ -216,6 +216,7 @@ export default defineComponent({
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data);
       tkbWeek.value = response.data;
     };
 

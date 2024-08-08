@@ -36,7 +36,11 @@
               <div
                 class="col-12 col-sm-3 d-flex justify-content-end align-items-end mt-3 mt-sm-0"
               >
-                <a-button type="primary" html-type="submit">
+                <a-button
+                  style="background-color: darkslategrey"
+                  type="primary"
+                  html-type="submit"
+                >
                   <span>Tìm lịch</span>
                 </a-button>
               </div>
@@ -65,15 +69,15 @@
             <!-- Hiện mã QR -->
             <a-button
               type="primary"
+              danger
               class="me-2 mb-2"
               @click="showModalSetQR"
               @ok="handleOk"
               >QR điểm danh</a-button
             >
-
             <!-- Quét mã điểm danh -->
             <a-button
-              type="primary"
+              style="background-color: white"
               class="me-2 mb-2"
               @click="showModalScanQR"
               @ok="handleOk"
@@ -230,7 +234,7 @@ export default defineComponent({
     const selectedHocKy = ref("");
     const selectedMonHoc = ref("");
     const filteredMonHoc = ref([]);
-    const selectedDate = ref("");
+    const selectedDate = ref(dayjs());
     const getListMH = ref([]);
     const selectedTabs = ref([]);
     const activeKey = ref("");
@@ -454,6 +458,7 @@ export default defineComponent({
     //Hien thi danh sach sinh vien
     const handleTabChange = (key) => {
       keyATab.value = key;
+      // filterCalendar();
     };
 
     //Tim lich
@@ -472,10 +477,16 @@ export default defineComponent({
       getListMH.value = lichValue;
       const transformedHocKy = Array.from(
         new Set(lichValue.map((item) => item.hoc_ky))
-      ).map((hoc_ky) => ({
-        label: "Học Kỳ " + hoc_ky,
-        value: hoc_ky,
-      }));
+      ).map((hoc_ky) => {
+        const nam_hoc = lichValue.find(
+          (item) => item.hoc_ky === hoc_ky
+        ).nam_hoc;
+        return {
+          label: nam_hoc,
+          value: hoc_ky,
+        };
+      });
+
       hocKy.value = transformedHocKy;
       const seen = new Set();
       const uniqueMonHoc = lichValue
@@ -513,12 +524,13 @@ export default defineComponent({
           console.log(response.data);
           ma_gd_diemdanh.value = keyATab.value;
           ngay_diem_danh.value = dayjs(selectedDate.value).format("YYYY-MM-DD");
-          users.value = response.data.map((user) => ({
+          users.value = response.data.map((user, index) => ({
             ...user,
             cophep: false,
             khongphep: false,
             comat: false,
             ghichu: "",
+            stt: index + 1,
           }));
         } catch (error) {
           ma_gd_diemdanh.value = 0;
@@ -545,6 +557,7 @@ export default defineComponent({
     });
     // xử lý khi selectedMonHoc thay đổi
     watch(selectedMonHoc, (newMonHoc) => {
+      // handleTabChange();
       selectedTabs.value = getListMH.value.filter(
         (item) => item.ma_mh === newMonHoc
       );
@@ -563,7 +576,7 @@ export default defineComponent({
     const columns = [
       {
         title: "STT",
-        dataIndex: "key",
+        dataIndex: "stt",
         key: "id",
         fixed: true,
         width: 50,
