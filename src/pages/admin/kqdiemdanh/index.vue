@@ -18,7 +18,7 @@
         </a-table>
       </div>
     </div>
-    <a-button key="test" @click="handleTest()">Xuất Excel</a-button>
+    <a-button key="test" @click="handleExportListAttendance()">Xuất Excel</a-button>
   </a-card>
   <a-modal
     v-model:open="modalVisible"
@@ -96,7 +96,7 @@
       style="margin-right: 3px"
       type="primary"
       key="pdf"
-      @click="handlePDF()"
+      @click="handleExport()"
       >Xuất Excel</a-button
     >
     <!-- <a-button type="primary" key="pdf" @click="handleExcel()">Excel</a-button> -->
@@ -207,30 +207,34 @@ const showModal = async (record) => {
 const handleOk = (e) => {
   modalVisible.value = false;
 };
-const handlePDF = async () => {
+const handleExport = async () => {
   try {
     const response = await axios.get(`exportDiemDanh/${maGD.value}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      responseType: "blob",
+      responseType: "json",
     });
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+
+    const { fileName, fileData } = response.data;
+
+    const blob = new Blob([fileData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "students.xlsx");
+    link.setAttribute("download", fileName);
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    document.body.removeChild(link); 
   } catch (error) {
-    console.log(error);
+    console.log("Error downloading the file:", error);
   }
 };
 
-const handleTest = () => {
+const handleExportListAttendance = () => {
       axios
         .get(
-          "/testExport",
+          "/exportListAttendance",
           {
             responseType: "blob",
           }
@@ -239,7 +243,7 @@ const handleTest = () => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "students.xlsx");
+          link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

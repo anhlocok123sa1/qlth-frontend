@@ -262,21 +262,21 @@ export default defineComponent({
 
       if (currentMonth >= 9) {
         // Tháng 9 đến tháng 12 (Học kỳ 1 của năm hiện tại)
-        semesterss.push(`1${currentYearShort}`);
-        semesterss.push(`2${currentYearShort}`);
+        semesterss.push(`Học kỳ 1 năm học 20${currentYearShort}-20${currentYearShort+1}`);
+        semesterss.push(`Học kỳ 2 năm học 20${currentYearShort}-20${currentYearShort+1}`);
       } else if (currentMonth <= 1) {
         // Tháng 1 (Học kỳ 1 của năm học trước)
-        semesterss.push(`1${prevYearShort}`);
-        semesterss.push(`2${currentYearShort}`);
+        semesterss.push(`Học kỳ 1 năm học 20${prevYearShort}-20${prevYearShort+1}`);
+        semesterss.push(`Học kỳ 2 năm học 20${currentYearShort}-20${currentYearShort+1}`);
       } else if (currentMonth >= 2 && currentMonth <= 6) {
         // Tháng 2 đến tháng 6 (Học kỳ 2 của năm hiện tại)
-        semesterss.push(`2${currentYearShort}`);
-        semesterss.push(`3${currentYearShort}`);
+        semesterss.push(`Học kỳ 2 năm học 20${currentYearShort}-20${currentYearShort+1}`);
+        semesterss.push(`Học kỳ 3 năm học 20${currentYearShort}-20${currentYearShort+1}`);
       } else if (currentMonth >= 7 && currentMonth <= 8) {
         // Tháng 7 đến tháng 8 (Học kỳ 3 của năm hiện tại)
-        semesterss.push(`3${prevYearShort}`);
-        semesterss.push(`1${currentYearShort}`);
-        semesterss.push(`2${currentYearShort}`);
+        semesterss.push(`Học kỳ 3 năm học 20${prevYearShort}-20${prevYearShort+1}`);
+        semesterss.push(`Học kỳ 1 năm học 20${currentYearShort}-20${currentYearShort+1}`);
+        semesterss.push(`Học kỳ 2 năm học 20${currentYearShort}-20${currentYearShort+1}`);
       }
       return semesterss;
     });
