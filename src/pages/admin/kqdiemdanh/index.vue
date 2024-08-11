@@ -18,13 +18,16 @@
         </a-table>
       </div>
     </div>
-    <a-button key="test" @click="handleExportListAttendance()">Xuất Excel</a-button>
+
+    <a-button type="primary" dange key="test" @click="handleExportListAttendance()">Xuất danh sách điểm danh</a-button>
+
   </a-card>
   <a-modal
     v-model:open="modalVisible"
     title="KẾT QUẢ ĐIỂM DANH"
     @ok="handleOk"
     width="800px"
+    footer=""
   >
     <a-table
       :dataSource="attendance"
@@ -96,10 +99,12 @@
       style="margin-right: 3px"
       type="primary"
       key="pdf"
+
       @click="handleExport()"
+      danger
+
       >Xuất Excel</a-button
     >
-    <!-- <a-button type="primary" key="pdf" @click="handleExcel()">Excel</a-button> -->
   </a-modal>
 </template>
 
@@ -231,6 +236,7 @@ const handleExport = async () => {
   }
 };
 
+
 const handleExportListAttendance = () => {
       axios
         .get(
@@ -253,6 +259,7 @@ const handleExportListAttendance = () => {
           message.error("Failed to export data.");
         });
     };
+
 
 </script>
 

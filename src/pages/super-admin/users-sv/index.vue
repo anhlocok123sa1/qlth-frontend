@@ -88,13 +88,13 @@ export default defineComponent({
     const data = ref("");
     const columns = [
       {
-        title: "#",
+        title: "STT",
         dataIndex: "id",
         key: "index",
         width: "5%",
       },
       {
-        title: "Tài khoản",
+        title: "Mã sinh viên",
         dataIndex: "ma_sv",
         key: "username",
       },
@@ -102,6 +102,7 @@ export default defineComponent({
         title: "Họ tên",
         dataIndex: "ten_sv",
         key: "name",
+        width: "200px",
       },
       {
         title: "Tên lớp",
@@ -112,6 +113,7 @@ export default defineComponent({
         title: "Email",
         dataIndex: "email",
         key: "email",
+        width: "300px",
       },
       {
         title: "Giới tính",

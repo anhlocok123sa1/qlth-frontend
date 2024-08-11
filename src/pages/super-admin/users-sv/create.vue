@@ -12,10 +12,10 @@
               </a-avatar>
             </div>
             <div class="col-12 d-flex justify-content-center">
-              <a-button type="primary">
+              <!-- <a-button type="primary">
                 <i class="fa-solid fa-plus me-2"></i>
                 <span>Chọn ảnh</span>
-              </a-button>
+              </a-button> -->
             </div>
           </div>
         </div>

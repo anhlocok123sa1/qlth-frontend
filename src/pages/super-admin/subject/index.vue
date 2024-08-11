@@ -2,7 +2,7 @@
   <div class="container-fluid department">
     <div class="row">
       <div class="col-sm-12 d-sm-flex">
-        <div class="col-12 col-sm-6"><h2>DANH SÁCH LỚP</h2></div>
+        <div class="col-12 col-sm-6"><h2>DANH SÁCH MÔN HỌC</h2></div>
         <div class="col-12 col-sm-6 d-sm-flex justify-content-sm-end">
           <a-button type="primary" @click="add">
             <i class="fa-solid fa-circle-plus" style="margin-right: 2px"> </i>
@@ -13,12 +13,12 @@
     </div>
 
     <!-- search name khoa -->
-    <div class="row mt-2">
+    <div class="row mt-2 mb-2">
       <div class="col-sm-12">
         <div class="col-sm-4">
           <a-input-search
             v-model:value="searchValue"
-            placeholder="Nhập mã hoặc tên lớp cần tìm"
+            placeholder="Nhập mã hoặc tên môn học cần tìm"
             enter-button="Tìm kiếm"
             size="smoll"
             allow-clear
@@ -29,30 +29,20 @@
     </div>
 
     <!-- table -->
-    <div class="row-">
+    <div class="row">
       <div class="col-sm-12">
-        <a-table :data-source="departments">
+        <a-table :data-source="subjects">
           <a-table-column key="stt" title="STT" data-index="stt" />
-          <a-table-column key="stt" title="Mã lớp" data-index="ma_lop" />
-
-          <a-table-column key="stt" title="Tên lớp" data-index="ten_lop">
+          <a-table-column key="stt" title="Mã môn học" data-index="ma_mh" />
+          <a-table-column key="stt" title="Tên môn học" data-index="ten_mh">
           </a-table-column>
-          <a-table-column key="stt" title="Cố vấn học tập" data-index="gvcn" />
-          <a-table-column
-            key="stt"
-            title="Số điện thoại "
-            data-index="sdt_gvcn"
-          />
           <a-table-column key="action" title="Thao tác">
             <template #default="{ record }">
               <span>
-                <router-link to="#" @click.prevent="openModal(record.ma_lop)">
-                  <i class="fa-solid fa-eye" style="margin-right: 10px"></i>
-                </router-link>
                 <router-link
                   :to="{
-                    name: 'classroom-edit',
-                    params: { ma_lop: record.ma_lop },
+                    name: 'subject-edit',
+                    params: { ma_mh: record.ma_mh },
                   }"
                 >
                   <i
@@ -62,10 +52,10 @@
                 </router-link>
                 <a>
                   <a-popconfirm
-                    :title="`Bạn có muốn xóa mã lớp ${record.ma_lop}`"
+                    :title="`Bạn có muốn xóa mã khoa ${record.ma_mh}`"
                     ok-text="Yes"
                     cancel-text="No"
-                    @confirm="() => confirm(record.ma_lop)"
+                    @confirm="() => confirm(record.ma_mh)"
                   >
                     <a href="#">Delete</a>
                   </a-popconfirm>
@@ -77,21 +67,6 @@
       </div>
     </div>
   </div>
-  <a-modal
-    v-model:open="open"
-    width="1200px"
-    title="Danh Sách Lớp"
-    @ok="handleOk"
-  >
-    <a-table :data-source="students" :pagination="false">
-      <a-table-column key="stt" title="STT" data-index="stt" />
-      <a-table-column key="ma_sv" title="Mã sinh viên" data-index="ma_sv" />
-      <a-table-column key="ten_sv" title="Tên Sinh Viên" data-index="ten_sv" />
-      <a-table-column key="phai" title="Phái" data-index="phai" />
-      <a-table-column key="ten_lop" title="Tên lớp" data-index="ten_lop" />
-      <a-table-column key="email" title="Email" data-index="email" />
-    </a-table>
-  </a-modal>
 </template>
 
 <script>
@@ -105,22 +80,20 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const store = useMenu();
-    const departments = ref([]);
-    const students = ref([]);
+    const subjects = ref([]);
     const searchValue = ref("");
     const router = useRouter();
-    const open = ref(false);
-    const getListDepartment = () => {
+    const getListSubject = () => {
       axios
-        .get("list-classroom", {
+        .get("list-subject", {
           params: {
-            ten_lop: searchValue.value,
+            ten_mh: searchValue.value,
           },
         })
         .then((response) => {
-          departments.value = response.data;
-          console.log(response.data);
-          if (departments.value.length == 0) {
+          subjects.value = response.data;
+          console.log(subjects.value);
+          if (subjects.value.length == 0) {
             message.warn("Không tìm thấy ");
             return;
           }
@@ -132,18 +105,18 @@ export default defineComponent({
 
     //tìm kiếm theo tên
     const onSearch = () => {
-      getListDepartment();
+      getListSubject();
     };
     // chuyen hướng qua trang thêm sinh viên
     const add = () => {
-      router.push({ name: "classroom-create" });
+      router.push({ name: "subject-create" });
     };
-    const confirm = (ma_lop) => {
+    const confirm = (ma_mh) => {
       return new Promise((resolve) => {
         setTimeout(() => resolve(true), 1000, {});
       }).then(() => {
         axios
-          .delete(`/delete-classroom/${ma_lop}`)
+          .delete(`/delete-subject/${ma_mh}`)
           .then((response) => {
             message.success(response.data.message);
             setTimeout(() => {
@@ -156,43 +129,15 @@ export default defineComponent({
       });
     };
     //=====================*===============
-
-    // Hiển thị danh sách lớp
-    const openModal = (maLop) => {
-      open.value = true;
-      axios
-        .get("/class-list-student", {
-          params: {
-            maLop: maLop,
-          },
-        })
-        .then((response) => {
-          students.value = response.data.map((student, index) => ({
-            ...student,
-            phai: student.phai == 1 ? "Nam" : "Nữ",
-            stt: index + 1,
-          }));
-        });
-      console.log(maLop);
-    };
-    const handleOk = (e) => {
-      console.log(e);
-      open.value = false;
-    };
-    //
-    store.onSelectedKeys(["classroom"]);
-    getListDepartment();
+    store.onSelectedKeys(["subject"]);
+    getListSubject();
     return {
-      departments,
-      getListDepartment,
+      subjects,
+      getListSubject,
       onSearch,
       searchValue,
       add,
       confirm,
-      openModal,
-      handleOk,
-      open,
-      students,
     };
   },
 });

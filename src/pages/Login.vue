@@ -236,8 +236,6 @@ export default defineComponent({
           withCredentials: "include",
         })
         .then((response) => {
-          message.loading();
-
           if (response.status === 200) {
             // console.log(response);
             message.success("Đăng nhập thành công");
