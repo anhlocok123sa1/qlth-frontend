@@ -138,7 +138,9 @@
           :key="semester"
           :value="semester"
         >
-          Học kỳ {{ semester[0] }} năm học 20{{ semester[1] }}{{ semester[2] }}
+
+         Học kỳ {{ semester[0] }} năm học 20{{ semester[1] }}{{ semester[2] }}
+
         </a-select-option>
       </a-select>
       <br />
@@ -323,7 +325,6 @@ export default defineComponent({
       semester,
       errors,
       checkSchoolDay,
-
       semesterOptions,
       handleSemesterChange,
     };
