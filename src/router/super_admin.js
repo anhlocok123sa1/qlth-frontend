@@ -113,9 +113,36 @@ const superAdmin = [
         name: "student-create",
         component: () => import("../pages/super-admin/student/create.vue"),
       },
+      //Tra cuu thong tin sinh vien
+      {
+        path: "student/see-details-student/:ma_sv",
+        name: "student/see-details-student",
+        component: () => import("../pages/super-admin/student/look-up-student.vue"),
+      },
 
+      //--------  Quản lý Môn học
+      {
+        path: "subject",
+        name: "subject",
+        component: () => import("../pages/super-admin/subject/index.vue"),
+      },
 
-      // Quản lý giáo viên TE
+      {
+        path: "subject/:ma_mh/edit",
+        name: "subject-edit",
+        component: () => import("../pages/super-admin/subject/edit.vue"),
+      },
+      {
+        path: "subject/create",
+        name: "subject-create",
+        component: () => import("../pages/super-admin/subject/create.vue"),
+      },
+      // tra cứu thông tin
+      {
+        path: "look-up-students",
+        name: "look-up-students",
+        component: () => import("../pages/super-admin/look-up/index.vue"),
+      },
     ],
   },
 ];

@@ -2,7 +2,7 @@
   <div class="container-fuild">
     <div
       class="row text-white"
-      style="background-color: #0c713d; padding: 1rem"
+      style="background-color: darkcyan; padding: 1rem"
     >
       <div
         class="col-1 d-flex d-sm-none align-items-center justify-content-center"
@@ -27,9 +27,13 @@
         class="col-sm-3 d-none d-sm-flex align-items-center justify-content-sm-end"
       >
         <span>{{ userName }}</span>
-        <a-button type="primary" class="ms-2" @click="logout"
-          >Đăng xuất</a-button
-        >
+        <a-button
+          style="background-color: lightseagreen"
+          type="primary"
+          class="ms-2"
+          @click="logout"
+          ><i class="fa-solid fa-right-from-bracket"></i
+        ></a-button>
       </div>
 
       <div

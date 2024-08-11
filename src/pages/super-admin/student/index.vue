@@ -10,7 +10,10 @@
           style="width: 100%"
           :options="departmentList"
           :filter-option="filterOption"
+          @focus="handleFocus"
+          @blur="handleBlur"
           @change="handleChangeDepartment"
+          allow-clear
         ></a-select>
       </div>
       <div class="col-sm-4 mb-2">
@@ -20,16 +23,24 @@
           style="width: 100%"
           placeholder="Chọn Lớp"
           :options="classList"
-          @change="handleChangeClass"
         ></a-select>
       </div>
 
       <div class="col-sm-3">
-        <a-button type="primary" @click="search()" style="margin-right: 4px">
+        <a-button
+          type="primary"
+          @click="search()"
+          style="margin-right: 4px; background-color: cadetblue"
+        >
           <i class="fa-solid fa-magnifying-glass" style="margin-right: 4px"></i
           >Tìm Kiếm</a-button
         >
-        <a-button type="primary" @click="addStudent" class="mt-1">
+        <a-button
+          style="background-color: crimson"
+          type="primary"
+          @click="addStudent"
+          class="mt-1"
+        >
           <i class="fa-solid fa-circle-plus" style="margin-right: 4px"></i>Thêm
           sinh viên</a-button
         >
@@ -40,23 +51,13 @@
     <div class="row">
       <div class="col-sm-12 d-flex">
         <div class="col-sm-8 d-sm-flex m-1">
-          <div class="col-sm-5 me-2 mb-2">
+          <div class="col-sm-7 me-2 mb-2">
             <a-input-search
               v-model:value="nameFilter"
-              placeholder="Nhập họ và tên"
+              placeholder="Nhập tên hoặc mã sinh viên"
               allow-clear
               enter-button
-              @search="searchName"
-            />
-          </div>
-          <div class="col-sm-5">
-            <a-input-search
-              class=""
-              v-model:value="idFilter"
-              placeholder="Nhập MSSV "
-              allow-clear
-              enter-button
-              @search="searchID"
+              @search="search"
             />
           </div>
         </div>
@@ -96,13 +97,24 @@
     <br />
     <div class="row">
       <div class="col-sm-12">
-        <a-table :columns="columns" :data-source="data" :scroll="{ x: 1000 }">
-          <template #bodyCell="{ column, index }">
-            <template v-if="column.key === 'operation'">
-              <a>action</a>
-            </template>
-            <template v-if="column.key === 'stt'">
-              {{ index + 1 }}
+        <a-table
+          v-if="data.length > 0"
+          :columns="columns"
+          :data-source="data"
+          :scroll="{ x: 1000 }"
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'action'">
+              <router-link
+                :to="{
+                  name: 'student/see-details-student',
+                  params: {
+                    ma_sv: record.ma_sv,
+                  },
+                }"
+              >
+                <a-button style="background-color: lavender">Tra cứu</a-button>
+              </router-link>
             </template>
           </template>
         </a-table>
@@ -120,13 +132,14 @@
     <div class="div">
       <b>1. Đảm bảo File excel có định dạng như bên dưới</b>
 
-      <img src="../../../assets/import.png" alt="" width="100%" />
+      <img src="../../../assets/hdsd.png" alt="" width="100%" />
       <br />
       <br />
       <b>2. Chỉ hỗ trợ file .xlsx, .xls</b>
       <br />
       <br />
-      <b>3. Tải xuống file mẫu: </b><a href="/data.xlsx" download>excel</a>
+      <b>3. Tải xuống file mẫu: </b
+      ><a href="/import-students.xlsx" download>excel</a>
       <br />
       <br />
       <b>4. Vui lòng kiểm tra dữ liệu trước khi upload</b>
@@ -163,7 +176,7 @@ export default defineComponent({
     const valueDepartment = ref(undefined);
     const data = ref("");
     const nameFilter = ref("");
-    const idFilter = ref("");
+
     const router = useRouter();
 
     // Thêm sinh viên
@@ -174,13 +187,13 @@ export default defineComponent({
     //end
 
     // khoa
-    const filterOption = (input, option) => {
-      return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    const filterOption = (inputValue, option) => {
+      return option.label.toLowerCase().includes(inputValue.toLowerCase());
     };
 
     const handleChangeDepartment = (value) => {
       selectedClasses.value = [];
-      console.log(`selected ${value}`);
+
       axios
         .get(`/get-department-class/${value}`)
         .then((response) => {
@@ -188,7 +201,6 @@ export default defineComponent({
             label: classItem.ten_lop,
             value: classItem.ma_lop,
           }));
-          console.log(listID.value);
         })
         .catch((error) => {
           console.log(error);
@@ -197,24 +209,33 @@ export default defineComponent({
 
     // Tìm kiếm
     const search = () => {
-      if (!valueDepartment.value || selectedClasses.value.length === 0) {
-        message.warn("Vui lòng chọn thông tin");
-      } else {
-        axios
-          .post("get-list-student", {
-            selectedClasses: selectedClasses.value,
-            nameFilter: nameFilter.value,
-            idFilter: idFilter.value,
-          })
-          .then((response) => {
-            data.value = response.data;
-            console.log("Danh sách sinh viên:", response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-            message.warn(error.response.data.message);
-          });
-      }
+      axios
+        .post("get-list-student", {
+          department: valueDepartment.value,
+          selectedClasses: selectedClasses.value,
+          nameFilter: nameFilter.value,
+        })
+        .then((response) => {
+          data.value = response.data.map((student, index) => ({
+            ...student,
+            stt: index + 1,
+          }));
+
+          // Lưu điều kiện tìm kiếm và dữ liệu vào sessionStorage
+          // sessionStorage.setItem(
+          //   "searchData",
+          //   JSON.stringify({
+          //     department: valueDepartment.value,
+          //     selectedClasses: selectedClasses.value,
+          //     nameFilter: nameFilter.value,
+          //     data: data.value,
+          //   })
+          // );
+        })
+        .catch((error) => {
+          console.log(error);
+          message.warn(error.response.data.message);
+        });
     };
     const handleOk = () => {
       open.value = false;
@@ -237,7 +258,6 @@ export default defineComponent({
           })
           .then((response) => {
             message.success(response.data.message);
-            // Thực hiện các thao tác tiếp theo sau khi import thành công
           })
           .catch((error) => {
             console.error("Lỗi khi import dữ liệu:", error);
@@ -266,7 +286,7 @@ export default defineComponent({
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "students.xlsx");
+          link.setAttribute("download", "Danh-sach-sinh-vien.xlsx");
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -283,51 +303,38 @@ export default defineComponent({
         title: "Mã SV",
         dataIndex: "ma_sv",
         key: "ma_sv",
-        width: 50,
+        width: 70,
         // fixed: "left",
       },
-      { title: "Tên SV", dataIndex: "ten_sv", key: "ten_sv", width: 80 },
+      { title: "Tên SV", dataIndex: "ten_sv", key: "ten_sv", width: 100 },
       {
         title: "Ngày sinh",
         dataIndex: "ngay_sinh",
         key: "ngay_sinh",
-        width: 50,
+        width: 60,
       },
-      { title: "Tên lớp", dataIndex: "ten_lop", key: "ten_lop", width: 50 },
+      { title: "Giới tinh", dataIndex: "phai", key: "phai", width: 50 },
+      { title: "Tên lớp", dataIndex: "ten_lop", key: "ten_lop", width: 60 },
       { title: "Tên khoa", dataIndex: "ten_khoa", key: "ten_khoa", width: 150 },
+      { title: "", dataIndex: "action", key: "action", width: 50 },
     ];
 
-    //Tìm kiếm theo tên
-    const searchName = () => {
-      if (data.value.length === 0) {
-        message.warn("Không tồn tại danh sách sinh viên");
-        return;
-      }
-      if (!nameFilter.value) {
-        message.warn("Vui lòng nhập thông tin");
-      }
-      idFilter.value = "";
-      search();
-    };
-    // Tim kiem theo ma_sv
-    const searchID = () => {
-      if (data.value.length === 0) {
-        message.warn("Không tồn tại danh sách sinh viên");
-        return;
-      }
-      if (!idFilter.value) {
-        message.warn("Vui lòng nhập thông tin");
-      }
-      nameFilter.value = "";
-      search();
-    };
-
-    //lop
-    const handleChangeClass = (value) => {
-      console.log(`selected ${value}`);
-    };
-
+    //Lop
     onMounted(() => {
+      // const savedSearchData = sessionStorage.getItem("searchData");
+      // if (savedSearchData) {
+      //   const {
+      //     department,
+      //     selectedClasses: savedClasses,
+      //     nameFilter: savedNameFilter,
+      //     data: savedData,
+      //   } = JSON.parse(savedSearchData);
+      //   valueDepartment.value = department;
+      //   selectedClasses.value = savedClasses;
+      //   nameFilter.value = savedNameFilter;
+      //   data.value = savedData;
+      // }
+
       // lay danh sách khoa, lop
       axios
         .get("/get-department-class")
@@ -345,9 +352,11 @@ export default defineComponent({
           console.error("Error fetching data:", error);
         });
     });
+    const test = (ma_sv) => {
+      console.log(ma_sv);
+    };
     return {
       handleChangeDepartment,
-      handleChangeClass,
       departmentList,
       classList,
       valueDepartment,
@@ -356,17 +365,21 @@ export default defineComponent({
       search,
       data,
       columns,
-      searchName,
-      searchID,
       nameFilter,
-      idFilter,
       exportData,
       importData,
       addStudent,
       showModal,
       open,
       handleOk,
+      test,
     };
   },
 });
 </script>
+<style>
+/* CSS for the search button */
+.ant-input-search-button {
+  background-color: darkcyan;
+}
+</style>

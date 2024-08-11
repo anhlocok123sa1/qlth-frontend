@@ -275,7 +275,7 @@ export default defineComponent({
     const changeAvatar = () => {
       avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
       // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
-    }
+    };
     const handleAvatarChange = async (file) => {
       const formData = new FormData();
       formData.append("avatar", file);
@@ -348,7 +348,7 @@ export default defineComponent({
       readonly,
       avatarUrl,
       taikhoangv,
-      handleAvatarChange
+      handleAvatarChange,
     };
   },
 });

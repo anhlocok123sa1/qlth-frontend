@@ -37,13 +37,22 @@
 
     <!-- Nhóm môn học -->
     <a-form-item label="Nhóm môn học">
-      <a-radio-group v-model:value="subjectGroup">
+      <a-input-number
+        v-model:value="subjectGroup"
+        min="1"
+        max="100"
+        placeholder="15"
+        style="width: 60px"
+      />
+      <br />
+      <small v-if="errors.nmh" class="text-danger">{{ errors.nmh[0] }}</small>
+      <!-- <a-radio-group v-model:value="subjectGroup">
         <a-radio :value="1">1</a-radio>
         <a-radio :value="2">2</a-radio>
         <a-radio :value="3">3</a-radio>
         <a-radio :value="4">4</a-radio>
         <a-radio :value="5">5</a-radio>
-      </a-radio-group>
+      </a-radio-group> -->
     </a-form-item>
 
     <!-- Phòng học -->
@@ -71,7 +80,7 @@
           :key="semester"
           :value="semester"
         >
-          {{ semester }}
+          Học kỳ {{ semester[0] }} năm học 20{{ semester[1] }}{{ semester[2] }}
         </a-select-option>
       </a-select>
       <br />
@@ -164,6 +173,15 @@
       style="margin-left: 5px; margin-bottom: 20px"
       >Đăng ký</a-button
     >
+    <router-link
+      :to="{
+        name: 'admin-lichgiangday',
+      }"
+    >
+      <span class="item-link">
+        <a-button style="margin-left: 2px">Hủy</a-button>
+      </span>
+    </router-link>
   </a-form>
 </template>
 
@@ -178,7 +196,7 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const store = useMenu();
-    const subjectGroup = ref(1);
+    const subjectGroup = ref(null);
     const valueDayStartEndDay = ref("");
     const value1 = ref(dayjs());
     const options = ref([]);

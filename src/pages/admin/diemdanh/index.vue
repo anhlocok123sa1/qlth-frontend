@@ -77,7 +77,7 @@
             >
             <!-- Quét mã điểm danh -->
             <a-button
-              style="background-color: white"
+              style="background-color: darkcyan; color: white"
               class="me-2 mb-2"
               @click="showModalScanQR"
               @ok="handleOk"
@@ -113,12 +113,12 @@
                     @change="togglePermission(record, 'cophep')"
                   ></a-checkbox>
                 </template>
-                <template v-if="column.key === 'khongphep'">
+                <!-- <template v-if="column.key === 'khongphep'">
                   <a-checkbox
                     v-model:checked="record.khongphep"
                     @change="togglePermission(record, 'khongphep')"
                   ></a-checkbox>
-                </template>
+                </template> -->
                 <template v-if="column.key === 'ghichu'">
                   <a-input
                     v-model:value="record.ghichu"
@@ -237,7 +237,7 @@ export default defineComponent({
     const selectedDate = ref(dayjs());
     const getListMH = ref([]);
     const selectedTabs = ref([]);
-    const activeKey = ref("");
+    const activeKey = ref(null);
     const keyATab = ref("");
     const users = ref([]);
     const idTKB = ref([]);
@@ -299,7 +299,7 @@ export default defineComponent({
     };
     const onOffCamera = () => {
       if (users.value.length == 0) {
-        message.warn("Vui lòng chọn đầy đủ thông tin và Tìm lịch học");
+        message.warn("Không tìm thấy danh sách sinh viên");
       } else {
         result.value = "";
         statusCamera.value = !statusCamera.value;
@@ -376,7 +376,7 @@ export default defineComponent({
         modalVisible.value = true;
         setQR.value = false;
       } else {
-        message.warn("Vui lòng chọn đầy đủ thông tin để khởi tạo mã QR.");
+        message.warn("Không tìm thấy danh sách sinh viên.");
       }
     };
 
@@ -403,8 +403,14 @@ export default defineComponent({
       }
     };
 
-    const onSelectChange = (changableRowKeys) => {
+    const onSelectChange = (changableRowKeys, selectedRows) => {
       selectedRowKeys.value = changableRowKeys;
+      selectedRows.forEach((row) => {
+        row.comat = true;
+        if (row.cophep) {
+          row.cophep = false;
+        }
+      });
     };
 
     const onSelected = (record, selected) => {
@@ -418,19 +424,18 @@ export default defineComponent({
       }
     };
 
-    //Check sinh viên có mặt
-    const rowSelection = computed(() => {
-      return {
-        selectedRowKeys: unref(selectedRowKeys),
-        onChange: onSelectChange,
-        onSelect: onSelected,
-        hideDefaultSelections: false,
-        hideSelectAll: true,
-      };
-    });
+    const rowSelection = computed(() => ({
+      selectedRowKeys: selectedRowKeys.value,
+      onChange: onSelectChange,
+      onSelect: onSelected,
+    }));
 
     //Gửi danh sách sinh viên điểm danh
     const sendLish = async () => {
+      if (users.value.length == 0) {
+        message.warn("Không tìm thấy danh sách sinh viên");
+        return;
+      }
       const students = users.value.map((user) => ({
         ma_sv: user.ma_sv,
         ma_gd: ma_gd_diemdanh.value,
@@ -488,6 +493,10 @@ export default defineComponent({
       });
 
       hocKy.value = transformedHocKy;
+      // Đặt giá trị đầu tiên của hocKy vào selectedHocKy
+      if (transformedHocKy.length > 0) {
+        selectedHocKy.value = transformedHocKy[0].value;
+      }
       const seen = new Set();
       const uniqueMonHoc = lichValue
         .filter((item) => {
@@ -561,6 +570,13 @@ export default defineComponent({
       selectedTabs.value = getListMH.value.filter(
         (item) => item.ma_mh === newMonHoc
       );
+      // Tự động chọn tab đầu tiên nếu có tab
+      if (selectedTabs.value.length > 0) {
+        keyATab.value = selectedTabs.value[0].ma_gd;
+        activeKey.value = selectedTabs.value[0].ma_gd;
+      } else {
+        activeKey.value = null; // Nếu không có tab nào, đặt activeKey là null
+      }
     });
 
     watch(magv, (newMagv) => {
@@ -617,12 +633,12 @@ export default defineComponent({
         key: "cophep",
         width: 100,
       },
-      {
-        title: "Không phép",
-        dataIndex: "khongphep",
-        key: "khongphep",
-        width: 100,
-      },
+      // {
+      //   title: "Không phép",
+      //   dataIndex: "khongphep",
+      //   key: "khongphep",
+      //   width: 100,
+      // },
       {
         title: "Ghi chú",
         dataIndex: "ghichu",

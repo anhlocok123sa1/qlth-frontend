@@ -1,32 +1,41 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12"><h2>Thêm khoa</h2></div>
+      <div class="col-sm-12"><h2>THÊM MÔN HỌC</h2></div>
     </div>
 
     <div v-if="successMessage" class="row">
       <a-alert :message="`${successMessage}`" type="success" show-icon />
     </div>
     <div v-if="errorMessage" class="row">
-      <a-alert :message="`${errorMessage.ma_khoa}`" type="error" show-icon />
+      <a-alert :message="`${errorMessage.ma_mh}`" type="error" show-icon />
     </div>
     <!-- mã khoa -->
     <div class="row mt-3">
-      <div class="col-sm-12"><span>Mã khoa</span><span>*</span></div>
+      <div class="col-sm-12"><span>Mã Môn học</span><span>*</span></div>
       <div class="col-sm-12">
-        <a-input v-model:value="ma_khoa" placeholder="Nhập mã khoa" />
-        <small v-if="errors.ma_khoa" class="text-danger">{{
-          errors.ma_khoa[0]
+        <a-input v-model:value="ma_mh" placeholder="Nhập mã môn học" />
+        <small v-if="errors.ma_mh" class="text-danger">{{
+          errors.ma_mh[0]
         }}</small>
       </div>
     </div>
     <div class="row mt-3">
-      <div class="col-sm-12"><span>Tên khoa</span><span>*</span></div>
+      <div class="col-sm-12"><span>Tên môn học</span><span>*</span></div>
       <div class="col-sm-12">
-        <a-input v-model:value="ten_khoa" placeholder="Nhập tên khoa" />
-        <small v-if="errors.ten_khoa" class="text-danger">{{
-          errors.ten_khoa[0]
+        <a-input v-model:value="ten_mh" placeholder="Nhập tên môn học" />
+        <small v-if="errors.ten_mh" class="text-danger">{{
+          errors.ten_mh[0]
         }}</small>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-sm-12"><span>Số tiết</span><span>*</span></div>
+      <div class="col-sm-12">
+        <a-input-number v-model:value="so_tiet" :min="20" :max="45" />
+
+        <!-- <a-input v-model:value="so_tiet" placeholder="Nhập số tiết" /> -->
       </div>
     </div>
 
@@ -55,27 +64,29 @@ export default defineComponent({
     const errorMessage = ref("");
     const errors = ref("");
 
-    const department = reactive({
-      ma_khoa: "",
-      ten_khoa: "",
+    const subject = reactive({
+      ma_mh: "",
+      ten_mh: "",
+      so_tiet: 45,
     });
 
     const save = () => {
-      if (!department.ma_khoa || !department.ten_khoa) {
+      if (!subject.ma_mh || !subject.ten_mh || !subject.so_tiet) {
         message.warn("vui lòng nhập đầy đủ thông tin");
         return;
       }
       axios
-        .post("/create-department", {
-          ma_khoa: department.ma_khoa,
-          ten_khoa: department.ten_khoa,
+        .post("/create-subject", {
+          ma_mh: subject.ma_mh,
+          ten_mh: subject.ten_mh,
+          so_tiet: subject.so_tiet,
         })
         .then((response) => {
           if (response.data.message) {
             message.success(response.data.message);
             errorMessage.value = "";
             setTimeout(() => {
-              router.push({ name: "department" });
+              router.push({ name: "subject" });
             }, 800);
           }
         })
@@ -87,18 +98,18 @@ export default defineComponent({
           ) {
             errors.value = error.response.data.errors;
           }
-          // errorMessage.value = error.response.data.errors;
+          //   errorMessage.value = error.response.data.errors;
         });
     };
 
     const back = () => {
-      router.push({ name: "department" });
+      router.push({ name: "subject" });
     };
-    store.onSelectedKeys(["department"]);
+    store.onSelectedKeys(["subject"]);
     return {
       save,
       back,
-      ...toRefs(department),
+      ...toRefs(subject),
       errorMessage,
       errors,
     };

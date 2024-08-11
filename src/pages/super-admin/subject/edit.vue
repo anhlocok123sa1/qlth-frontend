@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12"><h2>Sửa đổi thông tin khoa</h2></div>
+      <div class="col-sm-12"><h2>SỬA ĐỔI THÔNG TIN MÔN HỌC</h2></div>
     </div>
 
     <div v-if="successMessage" class="row">
@@ -12,22 +12,22 @@
     </div>
     <!-- mã khoa -->
     <div class="row mt-3">
-      <div class="col-sm-12"><span>Mã khoa</span><span>*</span></div>
+      <div class="col-sm-12"><span>Mã môn học</span><span>*</span></div>
       <div class="col-sm-12">
         <a-input
           disabled
+          v-model:value="ma_mh"
+          placeholder="Nhập Mã môn học"
           :readonly="true"
-          v-model:value="ma_khoa"
-          placeholder="Nhập mã khoa"
         />
       </div>
     </div>
     <div class="row mt-3">
-      <div class="col-sm-12"><span>Tên khoa</span><span>*</span></div>
+      <div class="col-sm-12"><span>Tên môn học</span><span>*</span></div>
       <div class="col-sm-12">
-        <a-input v-model:value="ten_khoa" placeholder="Nhập tên khoa" />
-        <small v-if="errors.ten_khoa" class="text-danger">{{
-          errors.ten_khoa[0]
+        <a-input v-model:value="ten_mh" placeholder="Nhập tên môn học" />
+        <small v-if="errors.ten_mh" class="text-danger">{{
+          errors.ten_mh[0]
         }}</small>
       </div>
     </div>
@@ -37,9 +37,7 @@
         <a-button type="primary" style="margin-right: 3px" @click="save"
           >Lưu thông tin</a-button
         >
-        <a-button type="primary" danger @click="backDepartment"
-          >Hủy bỏ</a-button
-        >
+        <a-button type="primary" danger @click="backSubject">Hủy bỏ</a-button>
       </div>
     </div>
   </div>
@@ -57,13 +55,13 @@ export default defineComponent({
     const store = useMenu();
     const route = useRoute();
     const router = useRouter();
-    const changeKeyDepartment = ref("");
-    const changeNameDepartment = ref("");
+    const changeKeySubject = ref("");
+    const changeNameSubject = ref("");
     const errors = ref("");
 
-    const department = reactive({
-      ma_khoa: "",
-      ten_khoa: "",
+    const subject = reactive({
+      ma_mh: "",
+      ten_mh: "",
     });
     const successMessage = ref("");
     const errorMessage = ref("");
@@ -71,26 +69,25 @@ export default defineComponent({
     // lưu dữ liệu
     const save = () => {
       if (
-        department.ma_khoa == changeKeyDepartment.value &&
-        department.ten_khoa == changeNameDepartment.value
+        subject.ma_mh == changeKeySubject.value &&
+        subject.ten_mh == changeNameSubject.value
       ) {
         message.warn("Vui lòng thay đổi dữ liệu cần cập nhật");
         return;
       }
       axios
-        .put(`list-department/save/${department.ma_khoa}`, {
-          ten_khoa: department.ten_khoa,
+        .put(`list-subject/save/${subject.ma_mh}`, {
+          ten_mh: subject.ten_mh,
         })
         .then((response) => {
           if (response.data.message) {
             successMessage.value = response.data.message;
             errorMessage.value = "";
-            changeKeyDepartment.value = department.ma_khoa;
-            changeNameDepartment.value = department.ten_khoa;
+            changeKeySubject.value = subject.ma_mh;
+            changeNameSubject.value = subject.ten_mh;
             setTimeout(() => {
               successMessage.value = "";
-              location.reload();
-            }, 1000);
+            }, 3000);
           }
         })
         .catch((error) => {
@@ -101,44 +98,44 @@ export default defineComponent({
           ) {
             errors.value = error.response.data.errors;
           }
-          // errorMessage.value = error.response.data.error;
+          errorMessage.value = error.response.data.error;
           successMessage.value = "";
-          changeKeyDepartment.value = department.ma_khoa;
-          changeNameDepartment.value = department.ten_khoa;
+          changeKeySubject.value = subject.ma_mh;
+          changeNameSubject.value = subject.ten_mh;
           setTimeout(() => {
             errorMessage.value = "";
           }, 3000);
         });
     };
-    const backDepartment = () => {
-      router.push({ name: `department` });
+    const backSubject = () => {
+      router.push({ name: `subject` });
     };
     // lấy thông tin department
-    const getDepartment = () => {
+    const getSubject = () => {
       axios
-        .get(`/list-department/${route.params.ma_khoa}`)
+        .get(`/list-subject/${route.params.ma_mh}`)
         .then((response) => {
-          department.ma_khoa = response.data.ma_khoa;
-          department.ten_khoa = response.data.ten_khoa;
-          changeKeyDepartment.value = response.data.ma_khoa;
-          changeNameDepartment.value = response.data.ten_khoa;
+          subject.ma_mh = response.data.ma_mh;
+          subject.ten_mh = response.data.ten_mh;
+          changeKeySubject.value = response.data.ma_mh;
+          changeNameSubject.value = response.data.ten_mh;
         })
         .catch((error) => {
           console.log(error);
         });
     };
 
-    getDepartment();
-    store.onSelectedKeys(["department"]);
+    getSubject();
+    store.onSelectedKeys(["subject"]);
 
     return {
-      ...toRefs(department),
+      ...toRefs(subject),
       save,
       successMessage,
       errorMessage,
-      backDepartment,
-      changeKeyDepartment,
-      changeNameDepartment,
+      backSubject,
+      changeKeySubject,
+      changeNameSubject,
       errors,
     };
   },

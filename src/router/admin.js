@@ -73,6 +73,18 @@ const admin = [
         name: "admin-lichgiangday/edit",
         component: () => import("../pages/admin/lichgd/edit.vue"),
       },
+      //Tra cuu thong tin sinh vien
+      {
+        path: "look-up-information/see-details-student/:ma_sv",
+        name: "admin-tracuuthongtin/see-details-student",
+        component: () => import("../pages/admin/information-student/see-details-student.vue"),
+      },
+      // xem chi tiet thong tin
+      {
+        path: "look-up-information",
+        name: "admin-tracuuthongtin",
+        component: () => import("../pages/admin/information-student/index.vue"),
+      },
       //Thông tin cá nhân
       {
         path: "information",

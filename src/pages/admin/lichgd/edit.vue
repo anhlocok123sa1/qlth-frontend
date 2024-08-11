@@ -70,6 +70,7 @@
     >
       <a-button type="primary">Thêm</a-button>
     </a-popconfirm>
+    <a-button @click="back" style="margin-left: 2px">Edit</a-button>
   </a-modal>
   <!-- modal thêm nhập thêm sinh viên -->
   <a-modal
@@ -170,7 +171,10 @@ export default defineComponent({
     const studentsTest = ref([]);
     const openAddStudents = ref(false);
     const router = useRouter();
-
+    const back = () => {
+      openAddStudent.value = true;
+      openStudentsTest.value = false;
+    };
     const delelteStudent = (ma_sv) => {
       return new Promise((resolve) => {
         setTimeout(() => resolve(true), 1000, {});
@@ -292,6 +296,7 @@ export default defineComponent({
       openAddStudents,
       confirm,
       delelteStudent,
+      back,
     };
   },
 });
