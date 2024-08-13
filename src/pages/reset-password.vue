@@ -114,9 +114,9 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          message.error(error.response.data.error);
+          console.log(error);
+          message.error(error.response.data.message);
         });
-      console.log(user.emailUser);
     };
     return {
       user,

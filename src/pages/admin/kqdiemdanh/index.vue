@@ -21,11 +21,17 @@
 
     <a-button
       type="primary"
-      dange
+      danger
+
       key="test"
       @click="handleExportListAttendance()"
       >Xuất danh sách điểm danh</a-button
     >
+
+    <spin style="margin-left: 10px" v-if="loading" tip="Đang tải...">
+      <!-- Nội dung của bạn có thể ở đây -->
+    </spin>
+
   </a-card>
   <a-modal
     v-model:open="modalVisible"
@@ -108,6 +114,9 @@
       danger
       >Xuất Excel</a-button
     >
+    <spin style="margin-left: 10px" v-if="loading1" tip="Đang tải...">
+      <!-- Nội dung của bạn có thể ở đây -->
+    </spin>
   </a-modal>
 </template>
 
@@ -117,7 +126,9 @@ import { onMounted, reactive, ref } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import { useMenu } from "../../../stores/use-menu";
 import { parse } from "date-fns/fp";
-
+import { message, Spin } from "ant-design-vue";
+const loading = ref(false);
+const loading1 = ref(false);
 const store = useMenu();
 store.onSelectedKeys(["admin-kqdiemdanh"]);
 const state = reactive({
@@ -216,6 +227,7 @@ const handleOk = (e) => {
   modalVisible.value = false;
 };
 const handleExport = async () => {
+  loading1.value = true;
   try {
     const response = await axios.get(`exportDiemDanh/${maGD.value}`, {
       headers: {
@@ -249,10 +261,17 @@ const handleExport = async () => {
   } catch (error) {
     message.error("Không có dữ liệu");
     console.log(error);
+
+  } finally {
+    loading1.value = false; 
+
   }
 };
 
 const handleExportListAttendance = () => {
+
+  loading.value = true; // Bật spin
+
   axios
     .get("/exportListAttendance", {
       responseType: "blob",
@@ -261,7 +280,9 @@ const handleExportListAttendance = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
+
       link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -269,6 +290,11 @@ const handleExportListAttendance = () => {
     .catch((error) => {
       console.error("Error exporting data:", error);
       message.error("Failed to export data.");
+
+    })
+    .finally(() => {
+      loading.value = false; // Tắt spin sau khi tải xong
+
     });
 };
 </script>

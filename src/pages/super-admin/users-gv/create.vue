@@ -272,7 +272,7 @@ export default defineComponent({
 
     const errors = ref({});
 
-    const createGiaoVien = () => {
+  const createGiaoVien = () => {
       axios
         .post("/taikhoangv", {
           ma_gv: taikhoangv.ma_gv,

@@ -129,13 +129,32 @@
     title="Import Data"
     @ok="handleOk"
   >
+    <a-spin
+      style="margin-left: 10px; display: flex; justify-content: center"
+      tip="Quá trình import đang diễn ra vui lòng chờ"
+      v-if="loading"
+      size="large"
+    />
+    <div
+      class="div"
+      style="display: flex; justify-content: center; align-items: center"
+    ></div>
     <div class="div">
       <b>1. Đảm bảo File excel có định dạng như bên dưới</b>
 
       <img src="../../../assets/hdsd.png" alt="" width="100%" />
       <br />
       <br />
-      <b>2. Chỉ hỗ trợ file .xlsx, .xls</b>
+      <b>3. Một số lưu ý: </b>
+      <ul>
+        <li>Các cột không được để trống</li>
+        <li>ma_sv: không được trùng</li>
+        <li>sdt: không được trùng</li>
+        <li>email: không được trùng</li>
+        <li>ma_lop: ma_lop đã tồn tại</li>
+      </ul>
+      <br />
+      <b>2. Chỉ hỗ trợ file .xlsx</b>
       <br />
       <br />
       <b>3. Tải xuống file mẫu: </b
@@ -151,6 +170,8 @@
       >
         <i class="fa-solid fa-upload"></i><label> import</label></a-button
       >
+
+      <!-- Hiển thị thông báo khi thành công hoặc thất bại -->
     </div>
   </a-modal>
 </template>
@@ -158,7 +179,7 @@
 <script>
 import { defineComponent, onMounted, ref } from "vue";
 import axios from "../../../axios.js";
-import { message } from "ant-design-vue";
+import { message, notification } from "ant-design-vue";
 import { format, max } from "date-fns";
 import { useMenu } from "../../../stores/use-menu.js";
 import { useRouter } from "vue-router";
@@ -176,7 +197,7 @@ export default defineComponent({
     const valueDepartment = ref(undefined);
     const data = ref("");
     const nameFilter = ref("");
-
+    const loading = ref(false);
     const router = useRouter();
 
     // Thêm sinh viên
@@ -248,6 +269,12 @@ export default defineComponent({
       fileInput.accept = ".xlsx, .xls, .csv";
       fileInput.onchange = () => {
         const file = fileInput.files[0];
+        if (!file) {
+          // Nếu không có file được chọn, dừng lại
+          return;
+        }
+
+        loading.value = true; // Bật Spin khi người dùng chọn file
         const formData = new FormData();
         formData.append("file", file);
         axios
@@ -262,6 +289,9 @@ export default defineComponent({
           .catch((error) => {
             console.error("Lỗi khi import dữ liệu:", error);
             message.error(error.response.data.message);
+          })
+          .finally(() => {
+            loading.value = false; // Tắt spin sau khi tải xong
           });
       };
 
@@ -373,6 +403,7 @@ export default defineComponent({
       open,
       handleOk,
       test,
+      loading,
     };
   },
 });

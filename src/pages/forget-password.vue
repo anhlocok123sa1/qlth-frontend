@@ -2,6 +2,8 @@
   <div class="login">
     <div class="container container-login">
       <div class="row center-image">
+        <a-spin tip="Đang gửi ..." v-if="loading" size="large" />
+
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
           <form v-if="isUserLogin" @submit.prevent="forgetpassworduser">
@@ -66,13 +68,12 @@
                   class="col-12 d-grid d-sm-flex justify-content-sm-end mx-auto"
                 >
                   <a href="/login" class="forget-password">Login</a>
-
                   <a-button
                     type="primary"
                     html-type="submit"
                     class="ms-0 ms-sm-2 mt-3 mt-sm-0"
                   >
-                    <span>Gửi</span>
+                    <span>Submit</span>
                   </a-button>
                 </div>
               </div>
@@ -99,12 +100,11 @@
 </template>
 
 <script>
-import { message } from "ant-design-vue";
+import { Spin, message } from "ant-design-vue";
 import { defineComponent, reactive, ref, toRefs } from "vue";
 import axios from "../axios"; // Import axios instance
 import "../css/login.css";
 import { useRouter } from "vue-router";
-
 export default defineComponent({
   setup() {
     const user = reactive({
@@ -115,12 +115,13 @@ export default defineComponent({
     });
     const isUserLogin = ref(true);
     const errors = ref({});
-
+    const loading = ref(false);
     const toggleLogin = (isUser) => {
       isUserLogin.value = isUser;
     };
 
     const forgetpassworduser = () => {
+      loading.value = true;
       axios
         .post("/forget-password-user", {
           email: user.emailUser,
@@ -131,9 +132,13 @@ export default defineComponent({
         .catch((error) => {
           console.log(error.response.data.message);
           message.error(error.response.data.message);
+        })
+        .finally(() => {
+          loading.value = false; // Tắt spin sau khi tải xong
         });
     };
     const forgetpasswordadmin = () => {
+      loading.value = true;
       console.log(admin.emailAdmin);
       axios
         .post("/forget-password-admin", {
@@ -146,6 +151,9 @@ export default defineComponent({
         .catch((error) => {
           console.log(error.response.data.message);
           message.error(error.response.data.message);
+        })
+        .finally(() => {
+          loading.value = false; // Tắt spin sau khi tải xong
         });
     };
     return {
@@ -156,6 +164,7 @@ export default defineComponent({
       toggleLogin,
       isUserLogin,
       forgetpasswordadmin,
+      loading,
     };
   },
 });

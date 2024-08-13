@@ -60,6 +60,7 @@ export default {
           if (response.data && response.data.length > 0) {
             attendance.value = response.data.map((item, index) => ({
               ...item,
+              stt: index + 1,
               ten_mh: record.ten_mh,
               ma_sv: item.diem_danh.ma_sv,
               diem_danh1: item.diem_danh.diem_danh1,
@@ -111,11 +112,7 @@ export default {
     ];
 
     const columnsAttendance = [
-      // {
-      //   title: "STT",
-      //   key: "index",
-      //   render: (text, record, index) => index + 1,
-      // },
+      { title: "STT", dataIndex: "stt", key: "stt" },
       { title: "MSSV", dataIndex: "ma_sv", key: "ma_sv" },
       { title: "Tên môn học", dataIndex: "ten_mh", key: "ten_mh" },
       { title: "Điểm danh lần 1", dataIndex: "diem_danh1", key: "diem_danh1" },
