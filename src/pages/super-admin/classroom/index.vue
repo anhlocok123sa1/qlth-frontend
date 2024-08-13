@@ -83,13 +83,19 @@
     title="Danh Sách Lớp"
     @ok="handleOk"
   >
-    <a-table :data-source="students" :pagination="false">
-      <a-table-column key="stt" title="STT" data-index="stt" />
-      <a-table-column key="ma_sv" title="Mã sinh viên" data-index="ma_sv" />
-      <a-table-column key="ten_sv" title="Tên Sinh Viên" data-index="ten_sv" />
-      <a-table-column key="phai" title="Phái" data-index="phai" />
-      <a-table-column key="ten_lop" title="Tên lớp" data-index="ten_lop" />
-      <a-table-column key="email" title="Email" data-index="email" />
+    <a-table :data-source="students" :pagination="false" :columns="columns">
+      <!-- <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <a-button
+            type="primary"
+            danger
+            class="mt-2"
+            @click="deleteSinhVien(record.ma_sv)"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </a-button>
+        </template>
+      </template> -->
     </a-table>
   </a-modal>
 </template>
@@ -156,7 +162,43 @@ export default defineComponent({
       });
     };
     //=====================*===============
-
+    const columns = [
+      {
+        title: "STT",
+        dataIndex: "stt",
+        key: "stt",
+      },
+      {
+        title: "Mã sinh viên",
+        dataIndex: "ma_sv",
+        key: "ma_sv",
+      },
+      {
+        title: "Tên sinh viên",
+        dataIndex: "ten_sv",
+        key: "ten_sv",
+      },
+      {
+        title: "Phái",
+        dataIndex: "phai",
+        key: "phai",
+      },
+      {
+        title: "Tên lớp",
+        dataIndex: "ten_lop",
+        key: "ten_lop",
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
+      },
+      // {
+      //   title: "Action",
+      //   dataIndex: "action",
+      //   key: "action",
+      // },
+    ];
     // Hiển thị danh sách lớp
     const openModal = (maLop) => {
       open.value = true;
@@ -179,6 +221,11 @@ export default defineComponent({
       console.log(e);
       open.value = false;
     };
+    //Delete sinh vien
+    const deleteSinhVien = (ma_sv) => {
+      console.log(ma_sv);
+      
+    }
     //
     store.onSelectedKeys(["classroom"]);
     getListDepartment();
@@ -193,6 +240,8 @@ export default defineComponent({
       handleOk,
       open,
       students,
+      columns,
+      deleteSinhVien
     };
   },
 });

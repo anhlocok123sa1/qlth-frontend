@@ -28,6 +28,7 @@
           :pagination="pagination"
           :loading="loading"
           :scroll="{ x: 576 }"
+          size=small
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, index, record }">
@@ -132,6 +133,7 @@ export default defineComponent({
       axios
         .get("taikhoansvs", {
           params: {
+            ...params,
             nameOrID: data.value,
           },
         })
@@ -196,6 +198,7 @@ export default defineComponent({
       console.log(data.value);
       getUsers();
     };
+
     getUsers({ page: currentPage.value, per_page: pageSize.value });
 
     return {
