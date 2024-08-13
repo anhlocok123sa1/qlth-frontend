@@ -19,8 +19,13 @@
       </div>
     </div>
 
-    <a-button type="primary" dange key="test" @click="handleExportListAttendance()">Xuất danh sách điểm danh</a-button>
-
+    <a-button
+      type="primary"
+      dange
+      key="test"
+      @click="handleExportListAttendance()"
+      >Xuất danh sách điểm danh</a-button
+    >
   </a-card>
   <a-modal
     v-model:open="modalVisible"
@@ -99,10 +104,8 @@
       style="margin-right: 3px"
       type="primary"
       key="pdf"
-
       @click="handleExport()"
       danger
-
       >Xuất Excel</a-button
     >
   </a-modal>
@@ -218,49 +221,56 @@ const handleExport = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      responseType: "json",
     });
 
-    const { fileName, fileData } = response.data;
+    const { filename, file } = response.data;
 
-    const blob = new Blob([fileData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link); 
+    if (filename && file) {
+      const blob = new Blob(
+        [
+          new Uint8Array(
+            atob(file)
+              .split("")
+              .map((char) => char.charCodeAt(0))
+          ),
+        ],
+        {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }
+      );
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   } catch (error) {
-    console.log("Error downloading the file:", error);
+    message.error("Không có dữ liệu");
+    console.log(error);
   }
 };
 
-
 const handleExportListAttendance = () => {
-      axios
-        .get(
-          "/exportListAttendance",
-          {
-            responseType: "blob",
-          }
-        )
-        .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        })
-        .catch((error) => {
-          console.error("Error exporting data:", error);
-          message.error("Failed to export data.");
-        });
-    };
-
-
+  axios
+    .get("/exportListAttendance", {
+      responseType: "blob",
+    })
+    .then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      console.error("Error exporting data:", error);
+      message.error("Failed to export data.");
+    });
+};
 </script>
 
 <style></style>
