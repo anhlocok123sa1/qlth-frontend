@@ -52,7 +52,7 @@
                 </router-link>
                 <a>
                   <a-popconfirm
-                    :title="`Bạn có muốn xóa mã khoa ${record.ma_mh}`"
+                    :title="`Bạn có muốn xóa mã môn học ${record.ma_mh}`"
                     ok-text="Yes"
                     cancel-text="No"
                     @confirm="() => confirm(record.ma_mh)"

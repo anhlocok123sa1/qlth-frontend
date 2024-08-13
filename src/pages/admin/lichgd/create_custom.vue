@@ -1,6 +1,6 @@
 <template>
-  <h2>Đăng ký lịch giảng dạy</h2>
-
+  <h3>TẠO LỊCH ĐIỂM DANH</h3>
+  <br />
   <a-form
     :label-col="labelCol"
     :wrapper-col="wrapperCol"
@@ -171,7 +171,7 @@
       @click="createTeachingSchedule()"
       type="primary"
       style="margin-left: 5px; margin-bottom: 20px"
-      >Đăng ký</a-button
+      >Tạo lịch</a-button
     >
     <router-link
       :to="{
@@ -179,7 +179,7 @@
       }"
     >
       <span class="item-link">
-        <a-button style="margin-left: 2px">Hủy</a-button>
+        <a-button style="margin-left: 5px">Hủy</a-button>
       </span>
     </router-link>
   </a-form>
