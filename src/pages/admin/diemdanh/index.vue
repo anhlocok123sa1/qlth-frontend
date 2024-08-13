@@ -133,8 +133,9 @@
     </a-card>
   </a-card>
   <a-modal
+    footer=""
     v-model:open="modalVisible"
-    :title="value.value.value"
+    :title="'(Còn lại: ' + countdown + ' giây)'"
     @ok="handleOk"
   >
     <div class="qr-container">
@@ -147,7 +148,12 @@
     </div>
   </a-modal>
   <!-- Modal Khởi tạo QR -->
-  <a-modal v-model:open="setQR" title="Khởi Tạo QR Điểm danh" @ok="handleOk">
+  <a-modal
+    footer=""
+    v-model:open="setQR"
+    title="Khởi Tạo QR Điểm danh"
+    @ok="handleOk"
+  >
     <div>
       <table>
         <tr>
@@ -156,7 +162,7 @@
             <a-select
               v-model:value="value"
               label-in-value
-              style="width: 120px"
+              style="width: 90px"
               :options="options"
               @change="handleChange"
             ></a-select>
@@ -168,11 +174,11 @@
             <a-input-number
               id="inputNumber"
               v-model:value="valueExpires"
-              :min="1"
+              :min="0.3"
               :max="10"
             />
           </td>
-          <td></td>
+          <td><span>Phút</span></td>
         </tr>
       </table>
       <div>
@@ -187,6 +193,7 @@
   </a-modal>
   <!-- Modal Quét mã điểm danh -->
   <a-modal
+    footer=""
     v-model:open="scanQR"
     :title="`Quét mã điểm danh lần ${valueAttendance}`"
     @ok="handleOk"
@@ -242,9 +249,9 @@ export default defineComponent({
     const users = ref([]);
     const idTKB = ref([]);
     const qrValue = ref("");
-    const valueExpires = ref(2);
+    const valueExpires = ref(1);
     const tkb = ref("");
-
+    const countdown = ref(valueExpires.value * 60); // Thời gian đếm ngược (giây)
     //Diem danh
     const selectedRowKeys = ref([]);
     const ma_gd_diemdanh = ref("");
@@ -351,17 +358,20 @@ export default defineComponent({
           })
           .then((response) => {
             idTKB.value = response.data;
+
+            // Chuyển đổi giá trị từ phút sang giây
+            const expiresInSeconds = valueExpires.value * 60;
             const now = new Date();
-            now.setMinutes(now.getMinutes() + valueExpires.value);
+            now.setSeconds(now.getSeconds() + expiresInSeconds);
             const expires_at = format(now, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+
             qrValue.value = `${idTKB.value.ma_tkb}-${value.value.value}-${expires_at}`;
             const code = qrValue.value;
 
-            // lưu mã qr vào local nếu muons hiển thị lại
             localStorage.setItem("code", code);
             localStorage.setItem(
               "timeExpires",
-              new Date().getTime() + valueExpires.value * 60 * 1000
+              new Date().getTime() + expiresInSeconds * 1000
             );
             //Gửi qr đến server
             axios
@@ -372,6 +382,14 @@ export default defineComponent({
                 console.error("Lỗi khi gửi mã Qr:", error);
                 message.error(error.response.data.message);
               });
+            countdown.value = valueExpires.value * 60;
+            const interval = setInterval(() => {
+              countdown.value--;
+              if (countdown.value <= 0) {
+                clearInterval(interval);
+                modalVisible.value = false; // Ẩn modal
+              }
+            }, 1000);
           });
         modalVisible.value = true;
         setQR.value = false;
@@ -688,6 +706,7 @@ export default defineComponent({
       handleTabChange,
       showModalScanQR,
       togglePermission,
+      countdown,
     };
   },
 });
