@@ -305,6 +305,7 @@ export default defineComponent({
     // Edit
     const edit = () => {
       readonly.value = !readonly.value;
+      taikhoangv.change_password = !readonly.value;
       // console.log(readonly.value);
     };
     const save = () => {
