@@ -54,7 +54,7 @@
           <router-link :to="{ name: 'student' }">
             <span class="menu-item-content">
               <i class="fa-solid fa-user" />
-              <span class="menu-item-text">Sinh Viên</span>
+              <span class="menu-item-text">Tra cứu thông tin sinh viên</span>
             </span>
           </router-link>
         </a-menu-item>

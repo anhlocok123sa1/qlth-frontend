@@ -18,9 +18,16 @@
         </a-table>
       </div>
     </div>
-
-    <a-button type="primary" dange key="test" @click="handleExportListAttendance()">Xuất danh sách điểm danh</a-button>
-
+    <a-button
+      type="primary"
+      danger
+      key="test"
+      @click="handleExportListAttendance()"
+      >Xuất danh sách điểm danh</a-button
+    >
+    <spin style="margin-left: 10px" v-if="loading" tip="Đang tải...">
+      <!-- Nội dung của bạn có thể ở đây -->
+    </spin>
   </a-card>
   <a-modal
     v-model:open="modalVisible"
@@ -99,12 +106,13 @@
       style="margin-right: 3px"
       type="primary"
       key="pdf"
-
       @click="handleExport()"
       danger
-
       >Xuất Excel</a-button
     >
+    <spin style="margin-left: 10px" v-if="loading1" tip="Đang tải...">
+      <!-- Nội dung của bạn có thể ở đây -->
+    </spin>
   </a-modal>
 </template>
 
@@ -114,7 +122,9 @@ import { onMounted, reactive, ref } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import { useMenu } from "../../../stores/use-menu";
 import { parse } from "date-fns/fp";
-
+import { message, Spin } from "ant-design-vue";
+const loading = ref(false);
+const loading1 = ref(false);
 const store = useMenu();
 store.onSelectedKeys(["admin-kqdiemdanh"]);
 const state = reactive({
@@ -213,54 +223,68 @@ const handleOk = (e) => {
   modalVisible.value = false;
 };
 const handleExport = async () => {
+  loading1.value = true;
   try {
     const response = await axios.get(`exportDiemDanh/${maGD.value}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      responseType: "json",
     });
 
-    const { fileName, fileData } = response.data;
+    const { filename, file } = response.data;
 
-    const blob = new Blob([fileData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link); 
+    if (filename && file) {
+      const blob = new Blob(
+        [
+          new Uint8Array(
+            atob(file)
+              .split("")
+              .map((char) => char.charCodeAt(0))
+          ),
+        ],
+        {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }
+      );
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   } catch (error) {
-    console.log("Error downloading the file:", error);
+    message.error("Không có dữ liệu");
+    console.log(error);
+  } finally {
+    loading1.value = false; // Tắt spin sau khi tải xong
   }
 };
 
-
 const handleExportListAttendance = () => {
-      axios
-        .get(
-          "/exportListAttendance",
-          {
-            responseType: "blob",
-          }
-        )
-        .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        })
-        .catch((error) => {
-          console.error("Error exporting data:", error);
-          message.error("Failed to export data.");
-        });
-    };
-
-
+  loading.value = true; // Bật spin
+  axios
+    .get("/exportListAttendance", {
+      responseType: "blob",
+    })
+    .then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Danh-sach-diem-danh-mon-hoc.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      console.error("Error exporting data:", error);
+      message.error("Failed to export data.");
+    })
+    .finally(() => {
+      loading.value = false; // Tắt spin sau khi tải xong
+    });
+};
 </script>
 
 <style></style>

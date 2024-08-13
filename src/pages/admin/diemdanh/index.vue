@@ -639,12 +639,12 @@ export default defineComponent({
       //   key: "khongphep",
       //   width: 100,
       // },
-      {
-        title: "Ghi chú",
-        dataIndex: "ghichu",
-        key: "ghichu",
-        width: 300,
-      },
+      // {
+      //   title: "Ghi chú",
+      //   dataIndex: "ghichu",
+      //   key: "ghichu",
+      //   width: 300,
+      // },
     ];
     watch(scanQR, (newVal) => {
       if (!newVal) {

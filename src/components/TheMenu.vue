@@ -48,7 +48,7 @@
           <router-link :to="{ name: 'admin-lichgiangday' }">
             <span class="menu-item-content">
               <i class="fa-solid fa-chalkboard" />
-              <span class="menu-item-text">Quản lý giảng dạy</span>
+              <span class="menu-item-text">Phân công lịch giảng dạy</span>
             </span>
           </router-link>
         </a-menu-item>

@@ -1,11 +1,11 @@
 <template>
-  <a-card title="DANH SÁCH LỊCH GIẢNG DẠY" style="width: 100%">
+  <a-card title="PHÂN CÔNG LỊCH GIẢNG DẠY" style="width: 100%">
     <div class="container">
       <div class="row">
         <div class="col-sm-12 d-sm-flex justify-content-sm-end">
           <router-link :to="{ name: 'admin-lichgiangday/create' }">
             <a-button type="primary" class="d-flex" style="margin-right: 2px">
-              <p>Tạo lịch cố định</p>
+              <p>Tạo lịch</p>
             </a-button>
           </router-link>
           <router-link :to="{ name: 'admin-lichgiangday/create-custom' }">
