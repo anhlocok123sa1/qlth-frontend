@@ -202,6 +202,7 @@ import { useMenu, useUser } from "../../../stores/use-menu";
 import axios from "../../../axios";
 import { message } from "ant-design-vue";
 import { useRoute } from "vue-router";
+import constants from "../../../constants";
 
 export default defineComponent({
   setup() {
@@ -248,7 +249,8 @@ export default defineComponent({
         student.value = response.data.student;
         teachingSchedules.value = response.data.teachingSchedules;
         if (student.value.avatar) {
-          avatarUrl.value = `http://127.0.0.1:8000/storage/${student.value.avatar}`;
+          avatarUrl.value = `${constants.BASE_AVATAR_URL}${student.value.avatar}`;
+          // avatarUrl.value = `http://127.0.0.1:8000/storage/${student.value.avatar}`;
 
           // avatarUrl.value = `http://127.0.0.1:8000/storage/app/public/${student.value.avatar}`;
           console.log(avatarUrl.value);

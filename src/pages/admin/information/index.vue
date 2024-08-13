@@ -227,6 +227,7 @@ import { defineComponent, ref, reactive } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useMenu } from "../../../stores/use-menu.js";
+import constants from "../../../constants.js";
 
 export default defineComponent({
   setup() {
@@ -273,7 +274,8 @@ export default defineComponent({
       }
     });
     const changeAvatar = () => {
-      avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
+      avatarUrl.value = `${constants.BASE_AVATAR_URL}${imageUrl.value}`;
+      // avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
       // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
     };
     const handleAvatarChange = async (file) => {

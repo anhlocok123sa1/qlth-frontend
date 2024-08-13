@@ -18,16 +18,20 @@
         </a-table>
       </div>
     </div>
+
     <a-button
       type="primary"
       danger
+
       key="test"
       @click="handleExportListAttendance()"
       >Xuất danh sách điểm danh</a-button
     >
+
     <spin style="margin-left: 10px" v-if="loading" tip="Đang tải...">
       <!-- Nội dung của bạn có thể ở đây -->
     </spin>
+
   </a-card>
   <a-modal
     v-model:open="modalVisible"
@@ -257,13 +261,17 @@ const handleExport = async () => {
   } catch (error) {
     message.error("Không có dữ liệu");
     console.log(error);
+
   } finally {
-    loading1.value = false; // Tắt spin sau khi tải xong
+    loading1.value = false; 
+
   }
 };
 
 const handleExportListAttendance = () => {
+
   loading.value = true; // Bật spin
+
   axios
     .get("/exportListAttendance", {
       responseType: "blob",
@@ -272,7 +280,9 @@ const handleExportListAttendance = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Danh-sach-diem-danh-mon-hoc.xlsx");
+
+      link.setAttribute("download", "DanhSachDiemDanhSinhVien.xlsx");
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -280,9 +290,11 @@ const handleExportListAttendance = () => {
     .catch((error) => {
       console.error("Error exporting data:", error);
       message.error("Failed to export data.");
+
     })
     .finally(() => {
       loading.value = false; // Tắt spin sau khi tải xong
+
     });
 };
 </script>

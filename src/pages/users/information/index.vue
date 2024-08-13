@@ -222,6 +222,7 @@ import { ref, reactive } from "vue";
 import "../../../css/users/information.css";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import constants from "../../../constants.js";
 
 export default {
   setup() {
@@ -233,7 +234,7 @@ export default {
     const avatarUrl = ref("");
 
     const imageUrl = ref("");
-
+    
     const taikhoansv = reactive({
       email: "",
       sdt: "",
@@ -269,8 +270,7 @@ export default {
       readonly.value = !readonly.value;
     };
     const changeAvatar = () => {
-      avatarUrl.value = `http://127.0.0.1:8000/storage/${imageUrl.value}`;
-      // avatarUrl.value = `https://backend.quanlytruonghoc.id.vn/storage/app/public/${imageUrl.value}`;
+      avatarUrl.value = `${constants.BASE_AVATAR_URL}${imageUrl.value}`;
       console.log(avatarUrl.value);
     };
 
